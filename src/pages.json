@@ -9,23 +9,24 @@
   },
   "pages": [
     {
-      "path": "pages/tab/home/index",
+      "path": "pages/home/index",
       "style": {
-        "navigationBarTitleText": "首页"
-      }
-    },
-    {
-      "path": "pages/tab/list/index",
-      "style": {
-        "navigationBarTitleText": "列表"
-      }
-    },
-    {
-      "path": "pages/tab/user/index",
-      "style": {
+        "navigationBarTitleText": "高歌",
         "navigationStyle": "custom"
-      },
-      "needLogin": true
+      }
+    },
+    {
+      "path": "pages/star/index",
+      "style": {
+        "navigationBarTitleText": "球星"
+      }
+    },
+    {
+      "path": "pages/team/index",
+      "style": {
+        "navigationBarTitleText": "球队",
+        "navigationStyle": "custom"
+      }
     }
   ],
   "subPackages": [
@@ -56,37 +57,38 @@
     }
   ],
   "preloadRule": {
-    "pages/tab/home/index": {
+    "pages/home/index": {
       "network": "all",
       "packages": ["pages/common"]
     }
   },
   "tabBar": {
-    "color": "#1b233b",
-    "selectedColor": "#21d59d",
+    "color": "#fcfcfc",
+    "selectedColor": "#F6C18F",
     "borderStyle": "black",
-    "backgroundColor": "#ffffff",
+    "backgroundColor": "#232831",
     "list": [{
       "iconPath": "static/images/tabbar/icon_home.png",
       "selectedIconPath": "static/images/tabbar/icon_home_selected.png",
-      "pagePath": "pages/tab/home/index",
-      "text": "首页"
+      "pagePath": "pages/home/index",
+      "text": "高歌"
     }, {
       "iconPath": "static/images/tabbar/icon_list.png",
       "selectedIconPath": "static/images/tabbar/icon_list_selected.png",
-      "pagePath": "pages/tab/list/index",
-      "text": "列表"
+      "pagePath": "pages/star/index",
+      "text": "球星"
     }, {
       "iconPath": "static/images/tabbar/icon_me.png",
       "selectedIconPath": "static/images/tabbar/icon_me_selected.png",
-      "pagePath": "pages/tab/user/index",
-      "text": "我的"
+      "pagePath": "pages/team/index",
+      "text": "球队"
     }]
   },
   "globalStyle": {
-    "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "uni-app",
-    "navigationBarBackgroundColor": "#F8F8F8",
-    "backgroundColor": "#F8F8F8"
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "高歌",
+    "navigationBarBackgroundColor": "#161b26",
+    "navigationBarColor": "#fcfcfc",
+    "backgroundColor": "#161b26"
   }
 }

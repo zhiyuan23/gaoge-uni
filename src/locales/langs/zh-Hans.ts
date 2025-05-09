@@ -5,7 +5,7 @@ export default {
     'zh-hans': '中文',
   },
   home: {
-    'intro': '欢迎来到uni-app演示',
+    'intro': '欢迎来到高歌体育',
     'toggle-langs': '切换语言',
   },
 }

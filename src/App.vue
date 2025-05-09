@@ -1,8 +1,13 @@
 <script setup lang='ts'>
+import { useAppStore } from '@/store'
 import { mpUpdate } from '@/utils/index'
 
 onLaunch(() => {
   console.log('App Launch')
+  // 获取系统信息
+  const appStore = useAppStore()
+  appStore.initSystemInfo()
+
   // #ifdef MP-WEIXIN
   mpUpdate()
   // #endif

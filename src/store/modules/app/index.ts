@@ -1,35 +1,29 @@
-import type { AppState } from './types'
-import { defineStore } from 'pinia'
+export const useAppStore = defineStore(
+  'app',
+  () => {
+    const systemInfo = reactive<UniApp.GetSystemInfoResult>({} as UniApp.GetSystemInfoResult)
 
-const useAppStore = defineStore('app', {
-  state: (): AppState => ({
-    systemInfo: {} as UniApp.GetSystemInfoResult,
-  }),
-  getters: {
-    getSystemInfo(): UniApp.GetSystemInfoResult {
-      return this.systemInfo
-    },
-  },
-  actions: {
-    setSystemInfo(info: UniApp.GetSystemInfoResult) {
-      this.systemInfo = info
-    },
-    initSystemInfo() {
+    const getSystemInfo = computed(() => systemInfo)
+
+    function setSystemInfo(info: UniApp.GetSystemInfoResult) {
+      Object.assign(systemInfo, info)
+    }
+
+    function initSystemInfo() {
       uni.getSystemInfo({
-        success: (res: UniApp.GetSystemInfoResult) => {
-          this.setSystemInfo(res)
+        success(res: UniApp.GetSystemInfoResult) {
+          setSystemInfo(res)
         },
-        fail: (err: any) => {
-          console.error(err)
+        fail(err) {
+          console.error('获取系统信息失败:', err)
         },
       })
-    },
-    checkUpdate() {
+    }
+
+    function checkUpdate() {
       const updateManager = uni.getUpdateManager()
       updateManager.onCheckForUpdate((res: UniApp.OnCheckForUpdateResult) => {
-        // 请求完新版本信息的回调
-
-        console.log(res.hasUpdate)
+        console.log('有无新版本:', res.hasUpdate)
       })
       updateManager.onUpdateReady(() => {
         uni.showModal({
@@ -37,22 +31,24 @@ const useAppStore = defineStore('app', {
           content: '新版本已经准备好，是否重启应用?',
           success(res) {
             if (res.confirm) {
-              // 新的版本已经下载好，调用 applyUpdate 应用新版本并重启
               updateManager.applyUpdate()
             }
           },
         })
       })
-      updateManager.onUpdateFailed((res: any) => {
-        console.error(res)
-        // 新的版本下载失败
-        uni.showToast({
-          title: '更新失败',
-          icon: 'error',
-        })
+      updateManager.onUpdateFailed((err) => {
+        console.error('更新下载失败:', err)
+        uni.showToast({ title: '更新失败', icon: 'error' })
       })
-    },
+    }
+
+    return {
+      systemInfo,
+      getSystemInfo,
+      initSystemInfo,
+      checkUpdate,
+    }
   },
-})
+)
 
 export default useAppStore

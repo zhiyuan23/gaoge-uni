@@ -5,7 +5,7 @@ export default {
     'zh-hans': 'Chinese',
   },
   home: {
-    'intro': 'Welcome to uni-app demo',
+    'intro': 'Welcome to GaoGe Sports',
     'toggle-langs': 'Change languages',
   },
 }
