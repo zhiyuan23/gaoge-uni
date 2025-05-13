@@ -67,19 +67,20 @@
     "selectedColor": "#F6C18F",
     "borderStyle": "black",
     "backgroundColor": "#232831",
+    "fontSize": "12px",
     "list": [{
       "iconPath": "static/images/tabbar/icon_home.png",
-      "selectedIconPath": "static/images/tabbar/icon_home_selected.png",
+      "selectedIconPath": "static/images/tabbar/icon_home_h.png",
       "pagePath": "pages/home/index",
       "text": "高歌"
     }, {
-      "iconPath": "static/images/tabbar/icon_list.png",
-      "selectedIconPath": "static/images/tabbar/icon_list_selected.png",
+      "iconPath": "static/images/tabbar/icon_star.png",
+      "selectedIconPath": "static/images/tabbar/icon_star_h.png",
       "pagePath": "pages/star/index",
       "text": "球星"
     }, {
-      "iconPath": "static/images/tabbar/icon_me.png",
-      "selectedIconPath": "static/images/tabbar/icon_me_selected.png",
+      "iconPath": "static/images/tabbar/icon_team.png",
+      "selectedIconPath": "static/images/tabbar/icon_team_h.png",
       "pagePath": "pages/team/index",
       "text": "球队"
     }]

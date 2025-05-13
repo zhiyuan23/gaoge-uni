@@ -1,8 +1,8 @@
 <template>
   <view class="page-wrap">
     <view :style="{ height: `${navbarTotalHeight}px` }" />
-    <view class="h-200rpx">
-      111
+    <view class="panel">
+      <view>球队资产</view>
     </view>
   </view>
 </template>

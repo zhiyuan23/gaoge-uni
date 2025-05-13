@@ -29,9 +29,13 @@ export default defineConfig({
    * 自定义快捷语句
    * @see https://github.com/unocss/unocss#shortcuts
    */
+  rules: [
+    ['text-theme', { color: '#ff0000' }],
+  ],
   shortcuts: {
     'border-base': 'border border-gray-500_10',
     'center': 'flex justify-center items-center',
+    'panel': 'mx-24rpx p-20rpx rounded-xl bg-#242831',
   },
   transformers: [
     // 启用 @apply 功能
