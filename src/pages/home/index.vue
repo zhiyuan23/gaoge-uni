@@ -1,8 +1,6 @@
 <template>
   <view class="flex flex-col items-center justify-center">
-    <view
-      class="h-400rpx w-750rpx"
-    >
+    <view class="h-400rpx w-750rpx">
       <u-swiper
         height="400rpx"
         :list="bannerImgs"
@@ -14,11 +12,7 @@
         duration="500"
       />
     </view>
-    <view class="flex justify-center">
-      <text>
-        {{ $t('home.intro') }}
-      </text>
-    </view>
+    <view class="h-400rpx w-750rpx" />
 
     <!-- #ifdef MP-WEIXIN -->
     <!-- 隐私协议组件 -->
