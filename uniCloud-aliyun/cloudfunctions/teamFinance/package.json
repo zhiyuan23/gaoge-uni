@@ -1,0 +1,7 @@
+{
+  "name": "teamFinance",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

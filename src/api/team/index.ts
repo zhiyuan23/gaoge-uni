@@ -1,0 +1,27 @@
+import type { AssetListParams } from './types'
+import { callCloudObj } from '@/utils/cloud'
+
+/**
+ * 获取资产列表（业务语义化封装）
+ */
+export async function fetchAssetList(params: AssetListParams = {}) {
+  return callCloudObj<{ list: any[]; total: number }>('teamAsset', 'getList', {
+    page: 1,
+    pageSize: 10,
+    ...params, // 允许覆盖默认参数
+  })
+}
+
+/**
+ * 获取资产详情
+ */
+export async function fetchAssetDetail(id: string) {
+  return callCloudObj('teamAsset', 'getDetail', { id })
+}
+
+/**
+ * 获取财务详情
+ */
+export async function fetchFinanceDetail() {
+  return callCloudObj('teamFinance', 'getDetail')
+}

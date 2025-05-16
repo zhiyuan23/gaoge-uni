@@ -12,6 +12,14 @@ import { darkTheme, lightTheme } from './themes'
 const { presetWeappAttributify, transformerAttributify } = extractorAttributify()
 
 export default defineConfig({
+  content: {
+    pipeline: {
+      include: [
+        /\.(vue|svelte|[jt]sx|mdx?|astro|elm|php|phtml|html)($|\?)/,
+        'src/**/*.{js,ts}',
+      ],
+    },
+  },
   presets: [
     presetWeapp() as any,
     presetWeappAttributify() as any,
