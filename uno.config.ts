@@ -62,6 +62,7 @@ export default defineConfig({
     colors: {
       primary: '#161b26',
       panel: '#242831',
+      line: '#343a4e',
     },
     spacing: {
       row: {

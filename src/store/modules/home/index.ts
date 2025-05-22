@@ -8,15 +8,11 @@ const useUserStore = defineStore(
       banner_imgs.value = [
         {
           id: 1,
-          url: '/static/images/logo.jpg',
+          url: '/static/images/poster/cartoon_3team.jpg',
         },
         {
           id: 2,
-          url: '/static/images/logo.jpg',
-        },
-        {
-          id: 3,
-          url: '/static/images/logo.jpg',
+          url: '/static/images/poster/pixel_2team.jpg',
         },
       ]
     }

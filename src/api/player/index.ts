@@ -7,7 +7,7 @@ import { callCloudObj } from '@/utils/cloud'
 export async function fetchPlayerList(params: PlayerListParams = {}) {
   return callCloudObj<{ list: any[]; total: number }>('player', 'getList', {
     page: 1,
-    pageSize: 10,
+    pageSize: 50,
     ...params, // 允许覆盖默认参数
   })
 }

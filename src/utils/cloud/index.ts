@@ -46,7 +46,12 @@ function handleCloudError(error: any) {
   console.error('[Cloud Error]', error)
 
   const errMsg = error.message || '网络请求失败'
-  uni.showToast({ title: errMsg, icon: 'none' })
+  uni.showModal({
+    title: '请求失败',
+    content: errMsg,
+    showCancel: false,
+    confirmText: '确定',
+  })
 
   // 特殊错误处理（如登录过期）
   if (error.code === 401) {

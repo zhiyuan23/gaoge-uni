@@ -1,8 +1,8 @@
 <template>
-  <view class="flex flex-col items-center justify-center">
-    <view class="h-400rpx w-750rpx">
+  <view class="flex-col-center">
+    <view class="w-750rpx overflow-hidden rounded">
       <u-swiper
-        height="400rpx"
+        height="550rpx"
         :list="bannerImgs"
         indicator
         indicator-mode="line"
