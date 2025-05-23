@@ -12,7 +12,26 @@
         duration="500"
       />
     </view>
-    <view class="h-400rpx w-750rpx" />
+    <view class="mt-20rpx w-full flex-center-around">
+      <view class="w-250rpx flex-col-center-center text-center">
+        <view>
+          皇家高歌
+        </view>
+        <view class="mt-10rpx h-10rpx w-100rpx rounded bg-real" />
+      </view>
+      <view class="w-250rpx flex-col-center-center text-center">
+        <view>
+          高歌国际
+          <view class="mt-10rpx h-10rpx w-100rpx rounded bg-inter" />
+        </view>
+      </view>
+      <view class="w-250rpx flex-col-center-center text-center">
+        <view>
+          高歌联
+          <view class="mt-10rpx h-10rpx w-100rpx rounded bg-united" />
+        </view>
+      </view>
+    </view>
 
     <!-- #ifdef MP-WEIXIN -->
     <!-- 隐私协议组件 -->

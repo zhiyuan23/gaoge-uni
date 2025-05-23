@@ -9,7 +9,12 @@ const usePlayerStore = defineStore(
 
     async function getPlayerList(params?: PlayerListParams) {
       const { data } = await fetchPlayerList(params)
-      player_list.value = data?.list?.sort((a, b) => a.number - b.number)
+      player_list.value = data?.list
+        ?.map(item => ({
+          ...item,
+          team: item.team?.split(',') ?? [], // 👈 字符串转数组
+        }))
+        ?.sort((a, b) => a.number - b.number)
     }
 
     return {

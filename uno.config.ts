@@ -63,6 +63,11 @@ export default defineConfig({
       primary: '#161b26',
       panel: '#242831',
       line: '#343a4e',
+      male: '#3b82f6',
+      female: '#f87171',
+      real: '#eab308', // 皇家高歌
+      inter: '#3b82f6', // 国际高歌
+      united: '#ef4444', // 高歌联
     },
     spacing: {
       row: {
