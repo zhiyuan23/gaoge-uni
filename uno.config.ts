@@ -11,6 +11,7 @@ import { darkTheme, lightTheme } from './themes'
 
 const { presetWeappAttributify, transformerAttributify } = extractorAttributify()
 
+// 设置rpx为默认单位
 function createRpxRules(prefix: string, properties: string[]): any[] {
   return [
     [

@@ -9,7 +9,7 @@
               <image
                 src="@/static/images/icons/avatar.png"
                 mode="scaleToFill"
-                class="w-50 h-50"
+                class="size-50"
               />
               <view class="ml-20 text-32">
                 {{ player.name }}
@@ -38,13 +38,13 @@
             <image
               src="@/static/images/icons/clothes.png"
               mode="scaleToFill"
-              class="w-100 h-100"
+              class="size-110"
             />
             <view class="absolute text-gray-800 font-bold top-0 right-0 bottom-0 left-0">
-              <view class="pt-20 text-14">
+              <view class="pt-22 text-14">
                 {{ player.code }}
               </view>
-              <view class="leading-4 text-30">
+              <view class="leading-5 text-32">
                 {{ player.number }}
               </view>
             </view>

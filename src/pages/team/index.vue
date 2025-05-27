@@ -2,12 +2,12 @@
   <view class="page-wrap">
     <!-- 导航栏占位 -->
     <view :style="{ height: `${navbarTotalHeight}px` }" />
-    <view class="bg">
-      <image src="/static/images/bg_team.png" mode="widthFix" />
+    <view class="absolute z-10 h-380 top-0 right-0 left-0">
+      <image class="size-full" src="/static/images/bg_team.png" mode="widthFix" />
     </view>
-    <view class="container">
+    <view class="relative z-20">
       <!-- 队名 -->
-      <view class="team-name">
+      <view class="m-24 px-24">
         <text>辽宁高歌足球俱乐部</text>
       </view>
       <!-- 财务面板 -->
@@ -107,51 +107,38 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-.bg {
-  @apply absolute top-0 left-0 right-0 h-380 z-10;
-  image {
-    @apply w-full h-full;
+.asset-panel {
+  @apply mx-24 mb-20 px-24 py-20 rounded-lg bg-panel;
+
+  &__title {
+    @apply h-50 bg-[length:115rpx_15rpx] bg-gradient-to-r from-[#d2a783] bg-left-bottom bg-no-repeat pt-10 text-36;
+  }
+
+  &__content {
+    @apply flex items-center justify-between mt-25 pb-10 min-h-90;
   }
 }
-.container {
-  @apply relative z-20;
 
-  .team-name {
-    @apply m-24 px-24;
-  }
-  .asset-panel {
-    @apply mx-24 mb-20 px-24 py-20 rounded-lg bg-panel;
-
-    &__title {
-      @apply h-50 bg-[length:115rpx_15rpx] bg-gradient-to-r from-[#d2a783] bg-left-bottom bg-no-repeat pt-10 text-36;
-    }
-
-    &__content {
-      @apply flex items-center justify-between mt-25 pb-10 min-h-90;
-    }
+.asset-item {
+  @apply flex-1 text-center;
+  &__value {
+    @apply flex items-baseline justify-center text-38 font-bold;
   }
 
-  .asset-item {
-    @apply flex-1 text-center;
-    &__value {
-      @apply flex items-baseline justify-center text-38 font-bold;
-    }
-
-    &__unit {
-      @apply text-22 font-normal pl-5;
-    }
-
-    &__label {
-      @apply mt-10 text-26 text-gray-400;
-    }
+  &__unit {
+    @apply text-22 font-normal pl-5;
   }
 
-  .asset-divider {
-    @apply h-40 w-2 bg-[#343a4e];
+  &__label {
+    @apply mt-10 text-26 text-gray-400;
   }
+}
 
-  .asset-divider:last-of-type {
-    @apply hidden;
-  }
+.asset-divider {
+  @apply h-40 w-2 bg-line;
+}
+
+.asset-divider:last-of-type {
+  @apply hidden;
 }
 </style>
