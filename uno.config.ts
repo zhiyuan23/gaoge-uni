@@ -11,6 +11,28 @@ import { darkTheme, lightTheme } from './themes'
 
 const { presetWeappAttributify, transformerAttributify } = extractorAttributify()
 
+function createRpxRules(prefix: string, properties: string[]): any[] {
+  return [
+    [
+      new RegExp(`^${prefix}-(-?[\\d.]+)$`),
+      (match: string[]) => {
+        const value = match[1]
+        return Object.fromEntries(properties.map(prop => [prop, `${value}rpx`]))
+      },
+      { autocomplete: `${prefix}-<num>` },
+    ],
+    // 支持负值写法（如 -ml-20）
+    [
+      new RegExp(`^-${prefix}-(-?[\\d.]+)$`),
+      (match: string[]) => {
+        const value = match[1]
+        return Object.fromEntries(properties.map(prop => [prop, `-${value}rpx`]))
+      },
+      { autocomplete: `-${prefix}-<num>` },
+    ],
+  ]
+}
+
 export default defineConfig({
   content: {
     pipeline: {
@@ -37,7 +59,41 @@ export default defineConfig({
    * @see https://github.com/unocss/unocss#shortcuts
    */
   rules: [
-    ['text-theme', { color: '#ff0000' }],
+    // 边距
+    ...createRpxRules('m', ['margin']),
+    ...createRpxRules('mx', ['margin-left', 'margin-right']),
+    ...createRpxRules('my', ['margin-top', 'margin-bottom']),
+    ...createRpxRules('ml', ['margin-left']),
+    ...createRpxRules('mr', ['margin-right']),
+    ...createRpxRules('mt', ['margin-top']),
+    ...createRpxRules('mb', ['margin-bottom']),
+
+    // 内边距
+    ...createRpxRules('p', ['padding']),
+    ...createRpxRules('px', ['padding-left', 'padding-right']),
+    ...createRpxRules('py', ['padding-top', 'padding-bottom']),
+    ...createRpxRules('pl', ['padding-left']),
+    ...createRpxRules('pr', ['padding-right']),
+    ...createRpxRules('pt', ['padding-top']),
+    ...createRpxRules('pb', ['padding-bottom']),
+
+    // 尺寸
+    ...createRpxRules('w', ['width']),
+    ...createRpxRules('h', ['height']),
+    ...createRpxRules('min-w', ['min-width']),
+    ...createRpxRules('max-w', ['max-width']),
+    ...createRpxRules('min-h', ['min-height']),
+    ...createRpxRules('max-h', ['max-height']),
+
+    // 定位
+    ...createRpxRules('top', ['top']),
+    ...createRpxRules('right', ['right']),
+    ...createRpxRules('bottom', ['bottom']),
+    ...createRpxRules('left', ['left']),
+    ...createRpxRules('inset', ['top', 'right', 'bottom', 'left']),
+
+    // 字体大小（可选）
+    [/^text-(\d+)$/, ([, d]) => ({ 'font-size': `${d}rpx` })],
   ],
   shortcuts: [
     [/^flex-?(col)?-(start|end|center|baseline|stretch)-?(start|end|center|between|around|evenly|left|right)?$/, ([, col, items, justify]) => {

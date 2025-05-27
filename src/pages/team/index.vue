@@ -108,7 +108,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .bg {
-  @apply absolute top-0 left-0 right-0 h-380rpx z-10;
+  @apply absolute top-0 left-0 right-0 h-380 z-10;
   image {
     @apply w-full h-full;
   }
@@ -117,37 +117,37 @@ onMounted(() => {
   @apply relative z-20;
 
   .team-name {
-    @apply m-24rpx px-24rpx;
+    @apply m-24 px-24;
   }
   .asset-panel {
-    @apply mx-24rpx mb-20rpx px-24rpx py-20rpx rounded-lg bg-panel;
+    @apply mx-24 mb-20 px-24 py-20 rounded-lg bg-panel;
 
     &__title {
-      @apply h-50rpx bg-[length:115rpx_15rpx] bg-gradient-to-r from-[#d2a783] bg-left-bottom bg-no-repeat pt-10rpx text-36rpx;
+      @apply h-50 bg-[length:115rpx_15rpx] bg-gradient-to-r from-[#d2a783] bg-left-bottom bg-no-repeat pt-10 text-36;
     }
 
     &__content {
-      @apply flex items-center justify-between mt-25rpx pb-10rpx min-h-90rpx;
+      @apply flex items-center justify-between mt-25 pb-10 min-h-90;
     }
   }
 
   .asset-item {
     @apply flex-1 text-center;
     &__value {
-      @apply flex items-baseline justify-center text-38rpx font-bold;
+      @apply flex items-baseline justify-center text-38 font-bold;
     }
 
     &__unit {
-      @apply text-22rpx font-normal pl-5rpx;
+      @apply text-22 font-normal pl-5;
     }
 
     &__label {
-      @apply mt-10rpx text-26rpx text-gray-400;
+      @apply mt-10 text-26 text-gray-400;
     }
   }
 
   .asset-divider {
-    @apply h-40rpx w-2rpx bg-[#343a4e];
+    @apply h-40 w-2 bg-[#343a4e];
   }
 
   .asset-divider:last-of-type {

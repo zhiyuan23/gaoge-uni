@@ -1,6 +1,6 @@
 <template>
   <view class="flex-col-center">
-    <view class="w-750rpx overflow-hidden rounded">
+    <view class="overflow-hidden rounded w-750">
       <u-swiper
         height="550rpx"
         :list="bannerImgs"
@@ -12,23 +12,23 @@
         duration="500"
       />
     </view>
-    <view class="mt-20rpx w-full flex-center-around">
-      <view class="w-250rpx flex-col-center-center text-center">
+    <view class="w-full flex-center-around mt-20">
+      <view class="flex-col-center-center text-center w-250">
         <view>
           皇家高歌
         </view>
-        <view class="mt-10rpx h-10rpx w-100rpx rounded bg-real" />
+        <view class="rounded bg-real mt-10 w-100 h-10" />
       </view>
-      <view class="w-250rpx flex-col-center-center text-center">
+      <view class="flex-col-center-center text-center w-250">
         <view>
           高歌国际
-          <view class="mt-10rpx h-10rpx w-100rpx rounded bg-inter" />
+          <view class="rounded bg-inter mt-10 w-100 h-10" />
         </view>
       </view>
-      <view class="w-250rpx flex-col-center-center text-center">
+      <view class="flex-col-center-center text-center w-250">
         <view>
           高歌联
-          <view class="mt-10rpx h-10rpx w-100rpx rounded bg-united" />
+          <view class="rounded bg-united mt-10 w-100 h-10" />
         </view>
       </view>
     </view>
