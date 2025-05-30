@@ -1,20 +1,27 @@
 <script setup lang='ts'>
-import { useAppStore } from '@/store'
+import { useAppStore, usePlayerStore, useTeamStore } from '@/store'
 import { mpUpdate } from '@/utils/index'
 
+const appStore = useAppStore()
+const playerStore = usePlayerStore()
+const teamStore = useTeamStore()
+
 onLaunch(() => {
-  console.log('App Launch')
-  // 获取系统信息
-  const appStore = useAppStore()
   appStore.initSystemInfo()
+  playerStore.getPlayerList()
+
+  teamStore.getAssetList()
+  teamStore.getFinanceDetail()
 
   // #ifdef MP-WEIXIN
   mpUpdate()
   // #endif
 })
+
 onShow(() => {
   console.log('App Show')
 })
+
 onHide(() => {
   console.log('App Hide')
 })

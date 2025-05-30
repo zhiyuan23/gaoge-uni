@@ -101,8 +101,7 @@ const teamAssets = computed(() => teamStore.team_assets)
 const teamFinance = computed(() => teamStore.team_finance)
 
 onMounted(() => {
-  teamStore.getAssetList()
-  teamStore.getFinanceDetail()
+
 })
 </script>
 

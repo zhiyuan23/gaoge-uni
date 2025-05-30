@@ -5,7 +5,7 @@ import { callCloudObj } from '@/utils/cloud'
  * 获取资产列表（业务语义化封装）
  */
 export async function fetchAssetList(params: AssetListParams = {}) {
-  return callCloudObj<{ list: any[]; total: number }>('teamAsset', 'getList', {
+  return callCloudObj<{ list: any[]; total: number }>('team-asset', 'getList', {
     page: 1,
     pageSize: 10,
     ...params, // 允许覆盖默认参数
@@ -16,12 +16,12 @@ export async function fetchAssetList(params: AssetListParams = {}) {
  * 获取资产详情
  */
 export async function fetchAssetDetail(id: string) {
-  return callCloudObj('teamAsset', 'getDetail', { id })
+  return callCloudObj('team-asset', 'getDetail', { id })
 }
 
 /**
  * 获取财务详情
  */
 export async function fetchFinanceDetail() {
-  return callCloudObj('teamFinance', 'getDetail')
+  return callCloudObj('team-finance', 'getDetail')
 }

@@ -1,0 +1,1 @@
+{"bsonType":"object","required":[],"permission":{},"properties":{"total_income":{"description":"总收入","type":"number","defaultValue":0},"total_expense":{"description":"总支出","type":"number","defaultValue":0},"balance":{"description":"当前余额","type":"number","defaultValue":0}}}

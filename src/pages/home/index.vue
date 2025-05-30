@@ -12,7 +12,7 @@
         duration="500"
       />
     </view>
-    <view class="w-full flex-center-around mt-20">
+    <view class="w-full flex-center-around mt-30">
       <view class="flex-col-center-center text-center w-250">
         <view>
           皇家高歌
@@ -22,14 +22,14 @@
       <view class="flex-col-center-center text-center w-250">
         <view>
           高歌国际
-          <view class="rounded bg-inter mt-10 w-100 h-10" />
         </view>
+        <view class="rounded bg-inter mt-10 w-100 h-10" />
       </view>
       <view class="flex-col-center-center text-center w-250">
         <view>
           高歌联
-          <view class="rounded bg-united mt-10 w-100 h-10" />
         </view>
+        <view class="rounded bg-united mt-10 w-100 h-10" />
       </view>
     </view>
 
@@ -44,7 +44,7 @@
 // #ifdef MP-WEIXIN
 import { useShare } from '@/hooks'
 // #endif
-import { useHomeStore, useUserStore } from '@/store'
+import { useHomeStore } from '@/store'
 
 // #ifdef MP-WEIXIN
 // 分享使用示例
@@ -65,9 +65,6 @@ const homeStore = useHomeStore()
 const bannerImgs = computed(() => homeStore.banner_imgs)
 
 const showAgreePrivacy = ref(false)
-
-const userStore = useUserStore()
-console.log('userStore.user_name', userStore.user_name)
 
 // 同意隐私协议
 function handleAgree() {

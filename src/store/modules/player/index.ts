@@ -12,7 +12,7 @@ const usePlayerStore = defineStore(
       player_list.value = data?.list
         ?.map(item => ({
           ...item,
-          team: item.team?.split(',') ?? [], // 👈 字符串转数组
+          team: item.team?.split(',') ?? [],
         }))
         ?.sort((a, b) => a.number - b.number)
     }

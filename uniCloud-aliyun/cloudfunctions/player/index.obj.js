@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 module.exports = {
-  // 获取资产列表
+  // 获取球员列表
   async getList(params) {
     const db = uniCloud.database()
     const collection = db.collection('players')
@@ -33,10 +33,8 @@ module.exports = {
     }
   },
 
-  // 获取单个资产详情
+  // 获取球员详情
   async getDetail() {
-    const db = uniCloud.database()
-    const { data } = await db.collection('players').limit(1).get()
-    return data ? { code: 200, data: data[0] } : { code: 404, message: '现金不存在' }
+
   },
 }
