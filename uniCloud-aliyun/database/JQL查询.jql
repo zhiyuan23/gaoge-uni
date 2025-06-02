@@ -12,7 +12,15 @@
 db.collection('players').get();
 
 db.collection('players')
-  .where({})  // 空条件表示匹配所有文档
+  .where({})
   .update({
-    name_size: 'normal'  // 默认值
+    nickname: ''
   });
+
+db.collection('players')
+  .where({})
+  .update({
+    $unset: {
+      name_size: true
+    }
+  })

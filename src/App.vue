@@ -1,14 +1,23 @@
 <script setup lang='ts'>
-import { useAppStore, usePlayerStore, useTeamStore } from '@/store'
+import {
+  useAppStore,
+  usePlayerStore,
+  useTeamStore,
+  useUserStore,
+} from '@/store'
 import { mpUpdate } from '@/utils/index'
 
 const appStore = useAppStore()
+const userStore = useUserStore()
 const playerStore = usePlayerStore()
 const teamStore = useTeamStore()
 
 onLaunch(() => {
   appStore.initSystemInfo()
+  userStore.authLogin()
+
   playerStore.getPlayerList()
+  playerStore.getPlayerDetail()
 
   teamStore.getAssetList()
   teamStore.getFinanceDetail()

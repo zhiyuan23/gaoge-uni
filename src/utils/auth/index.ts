@@ -1,4 +1,4 @@
-const TokenKey = 'admin-token'
+const TokenKey = 'openid'
 const TokenPrefix = 'Bearer '
 function isLogin() {
   return !!uni.getStorageSync(TokenKey)

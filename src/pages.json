@@ -22,6 +22,12 @@
       }
     },
     {
+      "path": "pages/star/edit",
+      "style": {
+        "navigationBarTitleText": "修改"
+      }
+    },
+    {
       "path": "pages/team/index",
       "style": {
         "navigationBarTitleText": "球队",

@@ -12,11 +12,19 @@ const useTeamStore = defineStore(
       balance: 0,
     })
 
+    /**
+     * 球队资金
+     * @param params
+     */
     async function getAssetList(params?: AssetListParams) {
       const { data } = await fetchAssetList(params)
       team_assets.value = data?.list
     }
 
+    /**
+     * 球队资产
+     * @param params
+     */
     async function getFinanceDetail() {
       const { data } = await fetchFinanceDetail()
       team_finance.value = data

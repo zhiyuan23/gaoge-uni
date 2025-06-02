@@ -1,6 +1,7 @@
 import type { providerType, UserState } from './types'
-import { UserApi } from '@/api'
-import { clearToken, setToken } from '@/utils/auth'
+import { DemoApi } from '@/api'
+import { fetchOpenid } from '@/api/user'
+import { clearToken, isLogin, setToken } from '@/utils/auth'
 
 export const useUserStore = defineStore(
   'user',
@@ -36,13 +37,13 @@ export const useUserStore = defineStore(
     }
 
     async function info() {
-      const result = await UserApi.profile()
+      const result = await DemoApi.profile()
       setInfo(result)
     }
 
     async function login(loginForm: any) {
       try {
-        const res = await UserApi.login(loginForm)
+        const res = await DemoApi.login(loginForm)
         const t = res.token
         if (t) setToken(t)
         return res
@@ -53,34 +54,24 @@ export const useUserStore = defineStore(
     }
 
     async function logout() {
-      await UserApi.logout()
+      await DemoApi.logout()
       resetInfo()
       clearToken()
     }
 
     function authLogin(provider: providerType = 'weixin') {
-      return new Promise((resolve, reject) => {
-        uni.login({
-          provider,
-          success: async (result: UniApp.LoginRes) => {
-            if (result.code) {
-              try {
-                const res = await UserApi.loginByCode({ code: result.code })
-                resolve(res)
-              }
-              catch (err) {
-                reject(err)
-              }
-            }
-            else {
-              reject(new Error(result.errMsg))
-            }
-          },
-          fail: (err: any) => {
-            console.error(`login error: ${err}`)
-            reject(err)
-          },
-        })
+      if (isLogin()) return
+
+      uni.login({
+        provider,
+        success: async ({ code }) => {
+          const res = await fetchOpenid(code)
+          const t = res.openid
+          if (t) setToken(t)
+        },
+        fail: (err: any) => {
+          console.error(`login error: ${err}`)
+        },
       })
     }
 

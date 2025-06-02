@@ -1,4 +1,4 @@
 import * as CommonApi from './common'
-import * as UserApi from './user'
+import * as DemoApi from './demo'
 
-export { CommonApi, UserApi }
+export { CommonApi, DemoApi }
