@@ -3,8 +3,9 @@ const useUserStore = defineStore(
   'home',
   () => {
     const banner_imgs = ref() // 轮播图
+    const playing_team = ref()
 
-    function fetchBannerImgs() {
+    function getBannerImgs() {
       banner_imgs.value = [
         {
           id: 1,
@@ -17,9 +18,28 @@ const useUserStore = defineStore(
       ]
     }
 
+    function getPlayingTeam() {
+      playing_team.value = [
+        {
+          code: 'real',
+          name: '皇家高歌',
+        },
+        {
+          code: 'inter',
+          name: '高歌国际',
+        },
+        {
+          code: 'united',
+          name: '高歌联',
+        },
+      ]
+    }
+
     return {
       banner_imgs,
-      fetchBannerImgs,
+      playing_team,
+      getBannerImgs,
+      getPlayingTeam,
     }
   },
 )
