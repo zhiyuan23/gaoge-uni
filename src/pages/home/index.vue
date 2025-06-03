@@ -2,7 +2,7 @@
   <view class="flex-col-center">
     <view class="overflow-hidden rounded w-750">
       <u-swiper
-        height="550rpx"
+        height="600rpx"
         :list="bannerImgs"
         indicator
         indicator-mode="line"
@@ -13,23 +13,14 @@
       />
     </view>
     <view class="w-full flex-center-around mt-30">
-      <view class="flex-col-center-center text-center w-250">
-        <view>
-          皇家高歌
+      <view v-for="team in playingTeam" :key="team.code" class="flex-col-center-center text-center w-250">
+        <view class="text-30">
+          {{ team.name }}
         </view>
-        <view class="rounded bg-real mt-10 w-100 h-10" />
-      </view>
-      <view class="flex-col-center-center text-center w-250">
-        <view>
-          高歌国际
+        <view class="text-gray-400 text-22">
+          {{ team.code.toUpperCase() }}
         </view>
-        <view class="rounded bg-inter mt-10 w-100 h-10" />
-      </view>
-      <view class="flex-col-center-center text-center w-250">
-        <view>
-          高歌联
-        </view>
-        <view class="rounded bg-united mt-10 w-100 h-10" />
+        <view class="rounded mt-10 w-120 h-10" :class="`bg-${team.code}`" />
       </view>
     </view>
 
@@ -47,11 +38,10 @@ import { useShare } from '@/hooks'
 import { useHomeStore } from '@/store'
 
 // #ifdef MP-WEIXIN
-// 分享使用示例
 const { onShareAppMessage, onShareTimeline } = useShare({
-  title: '高歌体育',
+  title: '高歌超级杯',
   path: 'pages/home/index',
-  imageUrl: '',
+  imageUrl: '/static/images/img_share_1.jpg',
 })
 onShareAppMessage()
 onShareTimeline()
@@ -63,6 +53,7 @@ title.value = import.meta.env.VITE_APP_TITLE
 // 首页数据
 const homeStore = useHomeStore()
 const bannerImgs = computed(() => homeStore.banner_imgs)
+const playingTeam = computed(() => homeStore.playing_team)
 
 const showAgreePrivacy = ref(false)
 
@@ -72,6 +63,7 @@ function handleAgree() {
 }
 
 onMounted(() => {
-  homeStore.fetchBannerImgs()
+  homeStore.getBannerImgs()
+  homeStore.getPlayingTeam()
 })
 </script>

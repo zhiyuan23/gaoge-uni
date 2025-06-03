@@ -185,7 +185,21 @@
 </template>
 
 <script setup lang='ts'>
+// #ifdef MP-WEIXIN
+// 分享使用示例
+import { useShare } from '@/hooks'
+// #endif
 import { usePlayerStore } from '@/store'
+
+// #ifdef MP-WEIXIN
+const { onShareAppMessage, onShareTimeline } = useShare({
+  title: '高歌球星',
+  path: 'pages/star/index',
+  imageUrl: '/static/images/img_share_2.jpg',
+})
+onShareAppMessage()
+onShareTimeline()
+// #endif
 
 const playerStore = usePlayerStore()
 const playerList = computed(() => playerStore.player_list)
