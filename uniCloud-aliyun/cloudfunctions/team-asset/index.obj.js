@@ -1,10 +1,11 @@
-const { teamsAssetsCollection } = require('../common/utils/db')
+const db = uniCloud.database()
+const collection = db.collection('team_assets')
 
 module.exports = {
   // 获取资产列表
   async getList(params) {
     // 基础查询（可根据 params 扩展条件）
-    let query = teamsAssetsCollection
+    let query = collection
 
     // 示例：按类型过滤
     if (params.type) {
@@ -33,7 +34,7 @@ module.exports = {
 
   // 获取单个资产详情
   async getDetail(id) {
-    const query = teamsAssetsCollection
+    const query = collection
     const { data } = await query.doc(id).get()
     return data ? { code: 200, data } : { code: 404, message: '资产不存在' }
   },

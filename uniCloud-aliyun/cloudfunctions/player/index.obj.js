@@ -1,9 +1,10 @@
-const { playersCollection } = require('../common/utils/db')
+const db = uniCloud.database()
+const collection = db.collection('players')
 
 module.exports = {
   // 获取球员列表
   async getList(params) {
-    let query = playersCollection
+    let query = collection
 
     if (params.team) {
       query = query.where({ team: params.team })
@@ -42,7 +43,7 @@ module.exports = {
       }
     }
 
-    const res = await playersCollection.where(query).get()
+    const res = await collection.where(query).get()
 
     // 处理查询结果
     // if (res.data.length === 0) {
@@ -58,7 +59,7 @@ module.exports = {
 
   // 获取未绑定 openid 的号码列表
   async getPlayerNumbers() {
-    const res = await playersCollection
+    const res = await collection
       .where({
         openid: ''
       })
@@ -84,13 +85,13 @@ module.exports = {
       return { code: 400, message: '无效的球员号码' }
     }
 
-    const { data } = await playersCollection.where({ number }).get()
+    const { data } = await collection.where({ number }).get()
     if (data.length === 0) {
       return { code: 404, message: '球员不存在' }
     }
 
     // 绑定 openid
-    await playersCollection.where({ number }).update({ openid })
+    await collection.where({ number }).update({ openid })
 
     return { code: 200, message: '绑定成功' }
   },
@@ -101,7 +102,7 @@ module.exports = {
       return { code: 401, message: '未登录，缺少 openid' }
     }
     // 解除绑定 openid
-    await playersCollection.where({ openid }).update({ openid: '' })
+    await collection.where({ openid }).update({ openid: '' })
 
     return { code: 200, message: '解除绑定成功' }
   },
@@ -120,7 +121,7 @@ module.exports = {
     if (updateFields.code) {
       updateFields.code = updateFields.code.toUpperCase()
     }
-    const res = await playersCollection.where({ openid }).update(updateFields)
+    const res = await collection.where({ openid }).update(updateFields)
 
     return {
       code: 200,
