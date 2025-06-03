@@ -13,7 +13,13 @@
       <!-- 财务面板 -->
       <view class="asset-panel">
         <view class="asset-panel__title">
-          球队财务
+          <view>
+            球队财务
+          </view>
+          <view class="asset-panel__title__btn" @click="toFinance">
+            <text>全部</text>
+            <u-icon name="arrow-right" bold color="text-gray-400" size="12" />
+          </view>
         </view>
 
         <view class="asset-panel__content">
@@ -64,7 +70,13 @@
       <!-- 资产面板 -->
       <view class="asset-panel">
         <view class="asset-panel__title">
-          球队资产
+          <view>
+            球队资产
+          </view>
+          <view class="asset-panel__title__btn" @click="toAsset">
+            <text>全部</text>
+            <u-icon name="arrow-right" bold color="text-gray-400" size="12" />
+          </view>
         </view>
 
         <view class="asset-panel__content">
@@ -91,7 +103,22 @@
 </template>
 
 <script setup lang="ts">
+// #ifdef MP-WEIXIN
+import { useModal, useShare } from '@/hooks'
+// #endif
 import { useAppStore, useTeamStore } from '@/store'
+
+const { showModal } = useModal()
+
+// #ifdef MP-WEIXIN
+const { onShareAppMessage, onShareTimeline } = useShare({
+  title: '球队财务',
+  path: 'pages/team/index',
+  imageUrl: '/static/images/img_share.jpg',
+})
+onShareAppMessage()
+onShareTimeline()
+// #endif
 
 const appStore = useAppStore()
 const navbarTotalHeight = computed(() => appStore.getSystemInfo.statusBarHeight + 44)
@@ -99,6 +126,16 @@ const navbarTotalHeight = computed(() => appStore.getSystemInfo.statusBarHeight 
 const teamStore = useTeamStore()
 const teamAssets = computed(() => teamStore.team_assets)
 const teamFinance = computed(() => teamStore.team_finance)
+
+// 查看财务明细
+const toFinance = () => {
+  showModal('功能开发中，敬请期待...')
+}
+
+// 查看资产明细
+const toAsset = () => {
+  showModal('功能开发中，敬请期待...')
+}
 
 onMounted(() => {
 
@@ -110,7 +147,10 @@ onMounted(() => {
   @apply mx-24 mb-20 px-24 py-20 rounded-lg bg-panel;
 
   &__title {
-    @apply h-50 bg-[length:115rpx_15rpx] bg-gradient-to-r from-[#d2a783] bg-left-bottom bg-no-repeat pt-10 text-36;
+    @apply h-50 bg-[length:115rpx_15rpx] bg-gradient-to-r from-[#d2a783] bg-left-bottom bg-no-repeat pt-10 text-36 flex-center-between;
+    &__btn {
+      @apply flex-center-between rounded-xl bg-#2c3039 text-gray-400 px-20 h-50 text-26
+    }
   }
 
   &__content {

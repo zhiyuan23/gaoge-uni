@@ -28,6 +28,7 @@
           <u--input
             v-model="playerDetail.name"
             color="text-white"
+            maxlength="8"
           />
         </u-form-item>
 
@@ -36,6 +37,7 @@
           <u--input
             v-model="playerDetail.code"
             color="text-white"
+            maxlength="10"
           />
         </u-form-item>
 
@@ -45,6 +47,7 @@
             v-model="playerDetail.call_name"
             placeholder="你的称呼"
             color="text-white"
+            maxlength="5"
           />
         </u-form-item>
 
@@ -54,6 +57,7 @@
             v-model="playerDetail.nickname"
             placeholder="你的昵称"
             color="text-white"
+            maxlength="5"
           />
         </u-form-item>
 
@@ -62,6 +66,7 @@
           <u--input
             v-model="playerDetail.real_name"
             color="text-white"
+            maxlength="4"
           />
         </u-form-item>
       </u--form>

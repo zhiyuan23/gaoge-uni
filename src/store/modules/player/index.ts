@@ -50,6 +50,7 @@ const usePlayerStore = defineStore(
 
       await fetchUpdatePlayerInfo({ openid, ...params })
       getPlayerDetail()
+      getPlayerList()
     }
 
     /**
