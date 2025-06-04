@@ -11,6 +11,18 @@ import { darkTheme, lightTheme } from './themes'
 
 const { presetWeappAttributify, transformerAttributify } = extractorAttributify()
 
+// 创建安全列表生成器
+const generateColorSafelist = (prefixes = ['bg', 'text', 'border']) => {
+  const colors = ['real', 'inter', 'united', 'male', 'female']
+  const states = ['', 'hover:', 'active:', 'focus:', 'dark:']
+
+  return states.flatMap(state =>
+    prefixes.flatMap(prefix =>
+      colors.map(color => `${state}${prefix}-${color}`),
+    ),
+  )
+}
+
 // 设置rpx为默认单位
 function createRpxRules(prefix: string, properties: string[]): any[] {
   return [
@@ -132,6 +144,19 @@ export default defineConfig({
       },
     },
   },
+  safelist: [
+    ...generateColorSafelist(),
+    // 添加所有可能的组合
+    ...generateColorSafelist(['bg', 'text', 'border', 'fill', 'stroke']),
+    // 确保透明度变体
+    ...Array.from({ length: 10 }, (_, i) => i * 10).flatMap(opacity =>
+      ['real', 'inter', 'united', 'male', 'female'].flatMap(color => [
+        `bg-${color}/${opacity}`,
+        `text-${color}/${opacity}`,
+        `border-${color}/${opacity}`,
+      ]),
+    ),
+  ],
   preflights: [
     {
       getCSS: () => {
