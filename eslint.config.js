@@ -17,9 +17,7 @@ export default antfu(
   {
     rules: {
       // vue顶级标签的顺序
-      'vue/block-order': ['error', {
-        order: ['template', 'script', 'style'],
-      }],
+      'vue/block-order': ['error', { order: ['template', 'script', 'style'] }],
       // 需要尾随逗号
       'comma-dangle': ['error', 'only-multiline'],
       // 允许console
@@ -45,6 +43,10 @@ export default antfu(
           requireLast: false,
         },
         multilineDetection: 'brackets',
+      }],
+      'object-curly-newline': ['error', {
+        multiline: true,
+        minProperties: 4, // 超过3个属性强制换行
       }],
       // if 语句后需要换行
       'antfu/if-newline': 'off',
