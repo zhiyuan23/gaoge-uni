@@ -84,7 +84,7 @@
         </view>
         <block v-else>
           <picker
-            :range="numberOptions"
+            :range="playerNumbers"
             class="w-full"
             @change="selectNumber"
           >
@@ -202,9 +202,7 @@ onShareTimeline()
 // #endif
 
 const playerStore = usePlayerStore()
-const playerList = computed(() => playerStore.player_list)
-const playerDetail = computed(() => playerStore.player_detail)
-const numberOptions = computed(() => playerStore.player_numbers)
+const { playerList, playerDetail, playerNumbers } = storeToRefs(playerStore)
 
 const selectNumber = ({ detail }: any) => {
   playerStore.bindPlayerOpenid(Number(detail.value))

@@ -1,11 +1,11 @@
 import type { PlayerListParams } from '@/api/player/types'
 import {
-  fetchBindPlayerOpenid,
-  fetchPlayerDetail,
-  fetchPlayerList,
-  fetchPlayerNumbers,
-  fetchUnbindPlayerOpenid,
-  fetchUpdatePlayerInfo,
+  getBindPlayerOpenidApi,
+  getPlayerDetailApi,
+  getPlayerListApi,
+  getPlayerNumbersApi,
+  getUnbindPlayerOpenidApi,
+  updatePlayerInfoApi,
 } from '@/api/player'
 import { getToken } from '@/utils/auth'
 
@@ -13,17 +13,17 @@ const usePlayerStore = defineStore(
   // 唯一ID
   'player',
   () => {
-    const player_detail = ref()
-    const player_list = ref()
-    const player_numbers = ref()
+    const playerDetail = ref()
+    const playerList = ref()
+    const playerNumbers = ref()
 
     /**
      * 获取球员列表
      * @param params
      */
     async function getPlayerList(params?: PlayerListParams) {
-      const { data } = await fetchPlayerList(params)
-      player_list.value = data?.list
+      const { data } = await getPlayerListApi(params)
+      playerList.value = data?.list
         ?.map(item => ({
           ...item,
           team: item.team?.split(',') ?? [],
@@ -35,11 +35,11 @@ const usePlayerStore = defineStore(
      */
     async function getPlayerDetail() {
       const openid = getToken()
-      const { data } = await fetchPlayerDetail({ openid })
+      const { data } = await getPlayerDetailApi({ openid })
       if (data) {
         data.team = data.team?.split(',') ?? []
       }
-      player_detail.value = data
+      playerDetail.value = data
     }
 
     /**
@@ -48,7 +48,7 @@ const usePlayerStore = defineStore(
     async function updatePlayerInfo(params?: any) {
       const openid = getToken()
 
-      await fetchUpdatePlayerInfo({ openid, ...params })
+      await updatePlayerInfoApi({ openid, ...params })
       getPlayerDetail()
       getPlayerList()
     }
@@ -57,9 +57,9 @@ const usePlayerStore = defineStore(
      * 获取未绑定的球员号码
      */
     async function getPlayerNumbers() {
-      const { data } = await fetchPlayerNumbers()
+      const { data } = await getPlayerNumbersApi()
 
-      player_numbers.value = data
+      playerNumbers.value = data
     }
 
     /**
@@ -67,7 +67,7 @@ const usePlayerStore = defineStore(
      */
     async function bindPlayerOpenid(number: number) {
       const openid = getToken()
-      await fetchBindPlayerOpenid({ number, openid })
+      await getBindPlayerOpenidApi({ number, openid })
 
       getPlayerDetail()
     }
@@ -77,15 +77,15 @@ const usePlayerStore = defineStore(
      */
     async function unbindPlayerOpenid() {
       const openid = getToken()
-      await fetchUnbindPlayerOpenid({ openid })
+      await getUnbindPlayerOpenidApi({ openid })
 
       getPlayerDetail()
     }
 
     return {
-      player_detail,
-      player_list,
-      player_numbers,
+      playerDetail,
+      playerList,
+      playerNumbers,
       getPlayerDetail,
       getPlayerList,
       getPlayerNumbers,

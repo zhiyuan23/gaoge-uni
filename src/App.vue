@@ -12,7 +12,7 @@ const userStore = useUserStore()
 const playerStore = usePlayerStore()
 const teamStore = useTeamStore()
 
-onLaunch(() => {
+const initApp = () => {
   appStore.initSystemInfo()
   userStore.authLogin()
 
@@ -21,6 +21,10 @@ onLaunch(() => {
 
   teamStore.getAssetList()
   teamStore.getFinanceDetail()
+}
+
+onLaunch(() => {
+  initApp()
 
   // #ifdef MP-WEIXIN
   mpUpdate()

@@ -91,7 +91,7 @@ import { uploadToCloud } from '@/api/common'
 import { usePlayerStore } from '@/store'
 
 const playerStore = usePlayerStore()
-const playerDetail = computed(() => playerStore.player_detail)
+const { playerDetail } = storeToRefs(playerStore)
 
 const submitLoading = ref(false)
 const unbindLoading = ref(false)

@@ -1,12 +1,15 @@
 import type { AssetListParams } from '@/api/team/types'
-import { fetchAssetList, fetchFinanceDetail } from '@/api/team'
+import {
+  getAssetListApi,
+  getFinanceDetailApi,
+} from '@/api/team'
 
 const useTeamStore = defineStore(
   // 唯一ID
   'team',
   () => {
-    const team_assets = ref()
-    const team_finance = ref({
+    const teamAssets = ref()
+    const teamFinance = ref({
       total_income: 0,
       total_expense: 0,
       balance: 0,
@@ -17,8 +20,8 @@ const useTeamStore = defineStore(
      * @param params
      */
     async function getAssetList(params?: AssetListParams) {
-      const { data } = await fetchAssetList(params)
-      team_assets.value = data?.list
+      const { data } = await getAssetListApi(params)
+      teamAssets.value = data?.list
     }
 
     /**
@@ -26,13 +29,13 @@ const useTeamStore = defineStore(
      * @param params
      */
     async function getFinanceDetail() {
-      const { data } = await fetchFinanceDetail()
-      team_finance.value = data
+      const { data } = await getFinanceDetailApi()
+      teamFinance.value = data
     }
 
     return {
-      team_assets,
-      team_finance,
+      teamAssets,
+      teamFinance,
       getAssetList,
       getFinanceDetail,
     }

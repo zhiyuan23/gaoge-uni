@@ -1,6 +1,6 @@
 import type { providerType, UserState } from './types'
 import { DemoApi } from '@/api'
-import { fetchOpenid } from '@/api/user'
+import { getOpenidApi } from '@/api/user'
 import { clearToken, isLogin, setToken } from '@/utils/auth'
 
 export const useUserStore = defineStore(
@@ -65,7 +65,7 @@ export const useUserStore = defineStore(
       uni.login({
         provider,
         success: async ({ code }) => {
-          const res = await fetchOpenid(code)
+          const res = await getOpenidApi(code)
           const t = res.openid
           if (t) setToken(t)
         },

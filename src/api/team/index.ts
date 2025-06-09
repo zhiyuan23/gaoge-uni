@@ -4,7 +4,7 @@ import { callCloudObj } from '@/utils/cloud'
 /**
  * 获取资产列表（业务语义化封装）
  */
-export async function fetchAssetList(params: AssetListParams = {}) {
+export async function getAssetListApi(params: AssetListParams = {}) {
   return callCloudObj<{ list: any[]; total: number }>('team-asset', 'getList', {
     page: 1,
     pageSize: 10,
@@ -15,13 +15,13 @@ export async function fetchAssetList(params: AssetListParams = {}) {
 /**
  * 获取资产详情
  */
-export async function fetchAssetDetail(id: string) {
+export async function getAssetDetailApi(id: string) {
   return callCloudObj('team-asset', 'getDetail', { id })
 }
 
 /**
  * 获取财务详情
  */
-export async function fetchFinanceDetail() {
+export async function getFinanceDetailApi() {
   return callCloudObj('team-finance', 'getDetail')
 }

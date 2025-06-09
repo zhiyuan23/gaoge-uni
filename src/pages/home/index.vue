@@ -52,8 +52,7 @@ title.value = import.meta.env.VITE_APP_TITLE
 
 // 首页数据
 const homeStore = useHomeStore()
-const bannerImgs = computed(() => homeStore.banner_imgs)
-const playingTeam = computed(() => homeStore.playing_team)
+const { bannerImgs, playingTeam } = storeToRefs(homeStore)
 
 const showAgreePrivacy = ref(false)
 

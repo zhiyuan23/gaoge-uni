@@ -124,8 +124,7 @@ const appStore = useAppStore()
 const navbarTotalHeight = computed(() => appStore.getSystemInfo.statusBarHeight + 44)
 
 const teamStore = useTeamStore()
-const teamAssets = computed(() => teamStore.team_assets)
-const teamFinance = computed(() => teamStore.team_finance)
+const { teamAssets, teamFinance } = storeToRefs(teamStore)
 
 // 查看财务明细
 const toFinance = () => {

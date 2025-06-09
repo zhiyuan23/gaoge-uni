@@ -2,11 +2,11 @@ const useUserStore = defineStore(
   // 唯一ID
   'home',
   () => {
-    const banner_imgs = ref() // 轮播图
-    const playing_team = ref()
+    const bannerImgs = ref() // 轮播图
+    const playingTeam = ref()
 
     function getBannerImgs() {
-      banner_imgs.value = [
+      bannerImgs.value = [
         {
           id: 1,
           url: '/static/images/poster/cartoon_3team.jpg',
@@ -19,7 +19,7 @@ const useUserStore = defineStore(
     }
 
     function getPlayingTeam() {
-      playing_team.value = [
+      playingTeam.value = [
         {
           code: 'real',
           name: '皇家高歌',
@@ -36,8 +36,8 @@ const useUserStore = defineStore(
     }
 
     return {
-      banner_imgs,
-      playing_team,
+      bannerImgs,
+      playingTeam,
       getBannerImgs,
       getPlayingTeam,
     }
