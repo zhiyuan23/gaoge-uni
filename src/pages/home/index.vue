@@ -1,5 +1,5 @@
 <template>
-  <view class="flex-col-center">
+  <view>
     <view class="overflow-hidden rounded w-750">
       <u-swiper
         height="600rpx"
@@ -12,15 +12,76 @@
         duration="500"
       />
     </view>
-    <view class="w-full flex-center-around mt-30">
-      <view v-for="team in playingTeam" :key="team.code" class="flex-col-center-center text-center w-250">
-        <view class="text-30">
-          {{ team.name }}
-        </view>
-        <view class="text-gray-400 text-22">
-          {{ team.code.toUpperCase() }}
-        </view>
-        <view class="rounded mt-10 w-120 h-10" :class="`bg-${team.code}`" />
+    <!-- <view class="w-full flex-center-around mt-30">
+      <view
+        v-for="team in playingTeam"
+        :key="team.code"
+        class="flex-col-center-center text-center w-250"
+      >
+        <image
+          :src="team.logoUrl"
+          class="w-164 h-67"
+        />
+        <view class="rounded mt-15 w-120 h-10" :class="`bg-${team.code}`" />
+      </view>
+    </view> -->
+
+    <!-- 杯赛信息 -->
+    <view v-if="recentCupMatch" class="rounded-lg bg-panel shadow-md mx-24 mt-30 p-20">
+      <view class="text-center leading-7 mb-15 text-34">
+        {{ recentCupMatch.title }}
+      </view>
+      <view class="flex-center-around mb-20 pb-10">
+        <block
+          v-for="(team, index) in recentCupMatch.teams"
+          :key="team"
+        >
+          <view class="w-auto flex-col-center-center text-center">
+            <image
+              :src="`/static/images/team/logo_${team}.png`"
+              class="w-164 h-67"
+              mode="aspectFit"
+            />
+            <view class="rounded mt-15 w-120 h-10" :class="`bg-${team}`" />
+          </view>
+          <image
+            v-if="index !== recentCupMatch.teams.length - 1"
+            src="/static/images/icons/icon_vs.png"
+            class="w-50 h-36"
+            mode="aspectFit"
+          />
+        </block>
+      </view>
+      <view class="flex-center-start h-50 text-26">
+        <u-icon name="map" color="#fff" size="24" />
+        <text class="pl-15">
+          {{ recentCupMatch.venue }}
+        </text>
+      </view>
+      <view class="flex-center-start h-50 text-26">
+        <u-icon name="clock" color="#fff" size="22" />
+        <text class="pl-15">
+          {{ cupMatchTime }}
+        </text>
+      </view>
+    </view>
+
+    <!-- 联赛信息 -->
+    <view v-if="recentLeagueMatch" class="rounded-lg bg-panel shadow-md mx-24 mt-30 p-20">
+      <view class="text-center leading-7 pb-10 text-34">
+        {{ recentLeagueMatch.title }}
+      </view>
+      <view class="flex-center-start h-50 text-26">
+        <u-icon name="map" color="#fff" size="24" />
+        <text class="pl-15">
+          {{ recentLeagueMatch.venue }}
+        </text>
+      </view>
+      <view class="flex-center-start h-50 text-26">
+        <u-icon name="clock" color="#fff" size="22" />
+        <text class="pl-15">
+          {{ leagueMatchTime }}
+        </text>
       </view>
     </view>
 
@@ -35,7 +96,8 @@
 // #ifdef MP-WEIXIN
 import { useShare } from '@/hooks'
 // #endif
-import { useHomeStore } from '@/store'
+import { useHomeStore, useMatchStore } from '@/store'
+import { formatTime } from '@/utils/time'
 
 // #ifdef MP-WEIXIN
 const { onShareAppMessage, onShareTimeline } = useShare({
@@ -52,7 +114,11 @@ title.value = import.meta.env.VITE_APP_TITLE
 
 // 首页数据
 const homeStore = useHomeStore()
-const { bannerImgs, playingTeam } = storeToRefs(homeStore)
+const matchStore = useMatchStore()
+const { bannerImgs } = storeToRefs(homeStore)
+const { recentCupMatch, recentLeagueMatch } = storeToRefs(matchStore)
+const cupMatchTime = computed(() => formatTime(recentCupMatch.value.match_time))
+const leagueMatchTime = computed(() => formatTime(recentLeagueMatch.value.match_time))
 
 const showAgreePrivacy = ref(false)
 
@@ -63,6 +129,7 @@ function handleAgree() {
 
 onMounted(() => {
   homeStore.getBannerImgs()
-  homeStore.getPlayingTeam()
+  matchStore.getRecentMatch({ latestTime: 'latest', type: 'cup' })
+  matchStore.getRecentMatch({ latestTime: 'latest', type: 'league' })
 })
 </script>

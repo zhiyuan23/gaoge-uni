@@ -23,14 +23,17 @@ const useUserStore = defineStore(
         {
           code: 'real',
           name: '皇家高歌',
+          logoUrl: '/static/images/team/logo_real.png',
         },
         {
           code: 'inter',
           name: '高歌国际',
+          logoUrl: '/static/images/team/logo_inter.png',
         },
         {
           code: 'united',
           name: '高歌联',
+          logoUrl: '/static/images/team/logo_united.png',
         },
       ]
     }

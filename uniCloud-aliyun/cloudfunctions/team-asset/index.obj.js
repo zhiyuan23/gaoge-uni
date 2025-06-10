@@ -1,5 +1,5 @@
 const db = uniCloud.database()
-const collection = db.collection('team_assets')
+const collection = db.collection('team-assets')
 
 module.exports = {
   // 获取资产列表
