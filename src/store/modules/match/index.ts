@@ -4,8 +4,9 @@ import { getMatchListApi } from '@/api/match'
 const useMatchStore = defineStore(
   'match',
   () => {
-    const recentCupMatch = ref()
     const recentLeagueMatch = ref()
+    const recentChampionMatch = ref()
+    const recentCupMatch = ref()
     const cupMatchList = ref()
     const leagueMatchList = ref()
     const matchList = ref()
@@ -21,6 +22,9 @@ const useMatchStore = defineStore(
       }
       else if (params?.type === 'league') {
         leagueMatchList.value = data
+      }
+      else if (params?.type === 'champion') {
+        recentChampionMatch.value = data
       }
       else {
         matchList.value = data
@@ -41,17 +45,21 @@ const useMatchStore = defineStore(
 
       const { data } = await getMatchListApi(finalParams)
       const match = data?.list[0]
-      if (rest.type === 'cup') {
-        recentCupMatch.value = match
-      }
-      else if (rest.type === 'league') {
+      if (rest.type === 'league') {
         recentLeagueMatch.value = match
+      }
+      else if (rest.type === 'champion') {
+        recentChampionMatch.value = match
+      }
+      else if (rest.type === 'cup') {
+        recentCupMatch.value = match
       }
     }
 
     return {
-      recentCupMatch,
       recentLeagueMatch,
+      recentChampionMatch,
+      recentCupMatch,
       cupMatchList,
       leagueMatchList,
       matchList,

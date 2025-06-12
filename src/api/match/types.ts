@@ -1,7 +1,7 @@
 export interface MatchListParams {
   page?: number;
   pageSize?: number;
-  type?: 'cup' | 'league';
+  type?: 'cup' | 'league' | 'champion';
   latestTime?: 'latest' | 'previous';
   status?: 'scheduled' | 'in_progress' | 'completed' | 'canceled';
 }

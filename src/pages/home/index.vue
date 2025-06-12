@@ -24,16 +24,10 @@
         />
         <view class="rounded mt-15 w-120 h-10" :class="`bg-${team.code}`" />
       </view>
-    </view> -->
 
-    <!-- 杯赛信息 -->
-    <view v-if="recentCupMatch" class="rounded-lg bg-panel shadow-md mx-24 mt-30 p-20">
-      <view class="text-center leading-7 mb-15 text-34">
-        {{ recentCupMatch.title }}
-      </view>
-      <view class="flex-center-around mb-20 pb-10">
+      <view v-if="false" class="flex-center-around mb-20 pb-10">
         <block
-          v-for="(team, index) in recentCupMatch.teams"
+          v-for="(team, index) in recentChampionMatch.teams"
           :key="team"
         >
           <view class="w-auto flex-col-center-center text-center">
@@ -45,31 +39,22 @@
             <view class="rounded mt-15 w-120 h-10" :class="`bg-${team}`" />
           </view>
           <image
-            v-if="index !== recentCupMatch.teams.length - 1"
+            v-if="index !== recentChampionMatch.teams.length - 1"
             src="/static/images/icons/icon_vs.png"
             class="w-50 h-36"
             mode="aspectFit"
           />
         </block>
       </view>
-      <view class="flex-center-start h-50 text-26">
-        <u-icon name="map" color="#fff" size="24" />
-        <text class="pl-15">
-          {{ recentCupMatch.venue }}
-        </text>
-      </view>
-      <view class="flex-center-start h-50 text-26">
-        <u-icon name="clock" color="#fff" size="22" />
-        <text class="pl-15">
-          {{ cupMatchTime }}
-        </text>
-      </view>
-    </view>
+    </view> -->
 
     <!-- 联赛信息 -->
     <view v-if="recentLeagueMatch" class="rounded-lg bg-panel shadow-md mx-24 mt-30 p-20">
-      <view class="text-center leading-7 pb-10 text-34">
-        {{ recentLeagueMatch.title }}
+      <view class="flex-col-center-center mb-20">
+        <view class="leading-6.5 text-34">
+          {{ recentLeagueMatch.title }}
+        </view>
+        <view class="rounded from-red-500 to-yellow-500 bg-gradient-to-r w-200 h-10" />
       </view>
       <view class="flex-center-start h-50 text-26">
         <u-icon name="map" color="#fff" size="24" />
@@ -81,6 +66,50 @@
         <u-icon name="clock" color="#fff" size="22" />
         <text class="pl-15">
           {{ leagueMatchTime }}
+        </text>
+      </view>
+    </view>
+
+    <!-- 冠军赛信息 -->
+    <view v-if="recentChampionMatch" class="rounded-lg bg-panel shadow-md mx-24 mt-30 p-20">
+      <view class="flex-col-center-center mb-20">
+        <view class="leading-6.5 text-34">
+          {{ recentChampionMatch.title }}
+        </view>
+        <view class="rounded from-yellow-500 to-blue-500 bg-gradient-to-r w-200 h-10" />
+      </view>
+      <view class="flex-center-start h-50 text-26">
+        <u-icon name="map" color="#fff" size="24" />
+        <text class="pl-15">
+          {{ recentChampionMatch.venue }}
+        </text>
+      </view>
+      <view class="flex-center-start h-50 text-26">
+        <u-icon name="clock" color="#fff" size="22" />
+        <text class="pl-15">
+          {{ championMatchTime }}
+        </text>
+      </view>
+    </view>
+
+    <!-- 杯赛信息 -->
+    <view v-if="recentCupMatch" class="rounded-lg bg-panel shadow-md mx-24 mt-30 p-20">
+      <view class="flex-col-center-center mb-20">
+        <view class="leading-6.5 text-34">
+          {{ recentCupMatch.title }}
+        </view>
+        <view class="rounded bg-violet-500 w-200 h-10" />
+      </view>
+      <view class="flex-center-start h-50 text-26">
+        <u-icon name="map" color="#fff" size="24" />
+        <text class="pl-15">
+          {{ recentCupMatch.venue }}
+        </text>
+      </view>
+      <view class="flex-center-start h-50 text-26">
+        <u-icon name="clock" color="#fff" size="22" />
+        <text class="pl-15">
+          {{ recentCupMatch.match_time ? cupMatchTime : '-' }}
         </text>
       </view>
     </view>
@@ -101,7 +130,7 @@ import { formatTime } from '@/utils/time'
 
 // #ifdef MP-WEIXIN
 const { onShareAppMessage, onShareTimeline } = useShare({
-  title: '高歌超级杯',
+  title: '赛事信息',
   path: 'pages/home/index',
   imageUrl: '/static/images/img_share_1.jpg',
 })
@@ -116,9 +145,11 @@ title.value = import.meta.env.VITE_APP_TITLE
 const homeStore = useHomeStore()
 const matchStore = useMatchStore()
 const { bannerImgs } = storeToRefs(homeStore)
-const { recentCupMatch, recentLeagueMatch } = storeToRefs(matchStore)
-const cupMatchTime = computed(() => formatTime(recentCupMatch.value.match_time))
+const { recentChampionMatch, recentLeagueMatch, recentCupMatch } = storeToRefs(matchStore)
+
 const leagueMatchTime = computed(() => formatTime(recentLeagueMatch.value.match_time))
+const championMatchTime = computed(() => formatTime(recentChampionMatch.value.match_time))
+const cupMatchTime = computed(() => formatTime(recentCupMatch.value.match_time))
 
 const showAgreePrivacy = ref(false)
 
@@ -129,7 +160,8 @@ function handleAgree() {
 
 onMounted(() => {
   homeStore.getBannerImgs()
-  matchStore.getRecentMatch({ latestTime: 'latest', type: 'cup' })
   matchStore.getRecentMatch({ latestTime: 'latest', type: 'league' })
+  matchStore.getRecentMatch({ latestTime: 'latest', type: 'champion' })
+  matchStore.getRecentMatch({ latestTime: 'latest', type: 'cup' })
 })
 </script>

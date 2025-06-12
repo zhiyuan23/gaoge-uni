@@ -16,11 +16,3 @@ db.collection('players')
   .update({
     nickname: ''
   });
-
-db.collection('players')
-  .where({})
-  .update({
-    $unset: {
-      name_size: true
-    }
-  })
