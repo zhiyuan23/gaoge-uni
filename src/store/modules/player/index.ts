@@ -13,6 +13,7 @@ const usePlayerStore = defineStore(
   // 唯一ID
   'player',
   () => {
+    const myPlayerInfo = ref()
     const playerDetail = ref()
     const playerList = ref()
     const playerNumbers = ref()
@@ -31,15 +32,28 @@ const usePlayerStore = defineStore(
     }
 
     /**
+     * 获取我的球员详情
+     */
+    async function getPlayerDetail(number?: number) {
+      const { data } = await getPlayerDetailApi({ number })
+      if (data) {
+        data.team = data.team?.split(',') ?? []
+      }
+
+      playerDetail.value = data
+    }
+
+    /**
      * 获取球员详情
      */
-    async function getPlayerDetail() {
+    async function getMyPlayerInfo() {
       const openid = getToken()
       const { data } = await getPlayerDetailApi({ openid })
       if (data) {
         data.team = data.team?.split(',') ?? []
       }
-      playerDetail.value = data
+
+      myPlayerInfo.value = data
     }
 
     /**
@@ -69,23 +83,25 @@ const usePlayerStore = defineStore(
       const openid = getToken()
       await getBindPlayerOpenidApi({ number, openid })
 
-      getPlayerDetail()
+      getMyPlayerInfo()
     }
 
     /**
      * 解除绑定
      */
-    async function unbindPlayerOpenid() {
-      const openid = getToken()
-      await getUnbindPlayerOpenidApi({ openid })
+    async function unbindPlayerOpenid(number: number) {
+      await getUnbindPlayerOpenidApi({ number })
 
-      getPlayerDetail()
+      getMyPlayerInfo()
+      getPlayerNumbers()
     }
 
     return {
+      myPlayerInfo,
       playerDetail,
       playerList,
       playerNumbers,
+      getMyPlayerInfo,
       getPlayerDetail,
       getPlayerList,
       getPlayerNumbers,

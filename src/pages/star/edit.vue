@@ -78,7 +78,7 @@
         </u-button>
       </view>
       <view class="w-600">
-        <u-button shape="circle" :loading="unbindLoading" @click="unbind">
+        <u-button shape="circle" :loading="unbindLoading" @click="unbind(playerDetail.number)">
           解除绑定
         </u-button>
       </view>
@@ -118,9 +118,7 @@ const updateInfo = async (params: any, showToast = false) => {
   await playerStore.updatePlayerInfo(params)
 
   if (showToast) {
-    uni.showToast({
-      title: '修改成功',
-    })
+    uni.showToast({ title: '修改成功' })
     setTimeout(() => {
       uni.navigateBack()
     }, 1500)
@@ -132,14 +130,13 @@ const onChooseAvatar = async (e: any) => {
   const res = await uploadToCloud(e.detail.avatarUrl, 'avatar')
   console.log(res)
 
-  const params = {
-    avatar_url: res,
-  }
+  const params = { avatar_url: res }
   updateInfo(params)
 }
 
 const submit = async () => {
   const {
+    number,
     name,
     call_name,
     real_name,
@@ -149,6 +146,7 @@ const submit = async () => {
   } = playerDetail.value
 
   const params = {
+    number,
     name,
     call_name,
     real_name,
@@ -159,7 +157,7 @@ const submit = async () => {
   updateInfo(params, true)
 }
 
-const unbind = async () => {
+const unbind = async (number: number) => {
   const { confirm } = await uni.showModal({
     title: '提示',
     content: '如号码选择错误可通过解绑后重新选择自己的号码绑定',
@@ -167,12 +165,13 @@ const unbind = async () => {
   })
   if (confirm) {
     unbindLoading.value = true
-    await playerStore.unbindPlayerOpenid()
+    await playerStore.unbindPlayerOpenid(number)
     uni.navigateBack()
   }
 }
 
-onMounted(() => {
-
+onLoad((query?: AnyObject) => {
+  const number = Number(query?.number || 0)
+  playerStore.getPlayerDetail(number)
 })
 </script>

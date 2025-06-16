@@ -16,8 +16,8 @@ const initApp = () => {
   appStore.initSystemInfo()
   userStore.authLogin()
 
+  playerStore.getMyPlayerInfo()
   playerStore.getPlayerList()
-  playerStore.getPlayerDetail()
 
   teamStore.getAssetList()
   teamStore.getFinanceDetail()

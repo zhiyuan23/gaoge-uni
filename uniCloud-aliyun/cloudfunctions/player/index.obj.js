@@ -97,21 +97,21 @@ module.exports = {
   },
 
   // 解除绑定 openid 到指定号码的球员信息
-  async unbindPlayerOpenid({ openid }) {
-    if (!openid) {
-      return { code: 401, message: '未登录，缺少 openid' }
+  async unbindPlayerOpenid({ number }) {
+    if (!number) {
+      return { code: 401, message: '未登录，缺少 number' }
     }
     // 解除绑定 openid
-    await collection.where({ openid }).update({ openid: '' })
+    await collection.where({ number }).update({ openid: '' })
 
     return { code: 200, message: '解除绑定成功' }
   },
 
   // 根据 openid 修改球员信息
   async updatePlayerInfo(params) {
-    const { openid, ...updateFields } = params
+    const { openid, number, ...updateFields } = params
 
-    if (!openid) {
+    if (!openid || !number) {
       return { code: 400, message: '缺少 openid' }
     }
 
