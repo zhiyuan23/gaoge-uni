@@ -59,19 +59,33 @@ export const useUserStore = defineStore(
       clearToken()
     }
 
-    function authLogin(provider: providerType = 'weixin') {
+    async function authLogin(provider: providerType = 'weixin') {
       if (isLogin()) return
 
-      uni.login({
-        provider,
-        success: async ({ code }) => {
-          const res = await getOpenidApi(code)
-          const t = res.openid
-          if (t) setToken(t)
-        },
-        fail: (err: any) => {
-          console.error(`login error: ${err}`)
-        },
+      return new Promise((resolve, reject) => {
+        uni.login({
+          provider,
+          success: async ({ code }) => {
+            try {
+              const res = await getOpenidApi(code)
+              const t = res.openid
+              if (t) {
+                setToken(t)
+                resolve(t)
+              }
+              else {
+                reject(new Error('No openid received'))
+              }
+            }
+            catch (err) {
+              reject(err)
+            }
+          },
+          fail: (err: any) => {
+            console.error(`login error: ${err}`)
+            reject(err)
+          },
+        })
       })
     }
 
@@ -89,9 +103,7 @@ export const useUserStore = defineStore(
       authLogin,
     }
   },
-  {
-    persist: true,
-  },
+  { persist: true },
 )
 
 export default useUserStore

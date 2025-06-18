@@ -30,9 +30,9 @@ module.exports = {
 
   // 获取球员详情（动态字段查询）
   async getDetail(params) {
-    if (!params || Object.keys(params).length === 0) {
-      return { code: 400, message: '缺少查询参数' }
-    }
+    // if (!params || Object.keys(params).length === 0) {
+    //   return { code: 400, message: '缺少查询参数' }
+    // }
 
     const query = {}
 
@@ -109,11 +109,11 @@ module.exports = {
 
   // 根据 openid 修改球员信息
   async updatePlayerInfo(params) {
-    const { openid, number, ...updateFields } = params
+    const { number, ...updateFields } = params
 
-    if (!openid || !number) {
-      return { code: 400, message: '缺少 openid' }
-    }
+    // if (!number) {
+    //   return { code: 400, message: '请选择号码修改' }
+    // }
 
     if (Object.keys(updateFields).length === 0) {
       return { code: 400, message: '缺少要更新的字段' }
@@ -121,10 +121,11 @@ module.exports = {
     if (updateFields.code) {
       updateFields.code = updateFields.code.toUpperCase()
     }
-    const res = await collection.where({ openid }).update(updateFields)
+    const res = await collection.where({ number }).update(updateFields)
 
     return {
       code: 200,
+      data: { number },
       message: '更新成功',
     }
   }

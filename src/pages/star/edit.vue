@@ -154,6 +154,8 @@ const submit = async () => {
     code,
     avatar_url,
   }
+  console.log('提交修改', params)
+
   updateInfo(params, true)
 }
 

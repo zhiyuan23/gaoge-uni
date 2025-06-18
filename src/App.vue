@@ -12,9 +12,9 @@ const userStore = useUserStore()
 const playerStore = usePlayerStore()
 const teamStore = useTeamStore()
 
-const initApp = () => {
+const initApp = async () => {
   appStore.initSystemInfo()
-  userStore.authLogin()
+  await userStore.authLogin()
 
   playerStore.getMyPlayerInfo()
   playerStore.getPlayerList()
