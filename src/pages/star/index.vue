@@ -205,7 +205,9 @@ const playerStore = usePlayerStore()
 const { playerList, myPlayerInfo, playerNumbers } = storeToRefs(playerStore)
 
 const selectNumber = ({ detail }: any) => {
-  playerStore.bindPlayerOpenid(Number(detail.value))
+  const number = playerNumbers.value[Number(detail.value)]
+
+  playerStore.bindPlayerOpenid(number)
 }
 
 interface EditType {
