@@ -113,6 +113,7 @@
         </text>
       </view>
     </view>
+    <view class="w-full h-30" />
 
     <!-- #ifdef MP-WEIXIN -->
     <!-- 隐私协议组件 -->
