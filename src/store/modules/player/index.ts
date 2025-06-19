@@ -60,7 +60,8 @@ const usePlayerStore = defineStore(
      * 修改个人信息
      */
     async function updatePlayerInfo(params?: any) {
-      await updatePlayerInfoApi(params)
+      const { data } = await updatePlayerInfoApi(params)
+      getPlayerDetail(data.number)
       getMyPlayerInfo()
       getPlayerList()
     }

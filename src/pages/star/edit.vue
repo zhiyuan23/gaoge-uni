@@ -128,9 +128,12 @@ const updateInfo = async (params: any, showToast = false) => {
 // 修改头像
 const onChooseAvatar = async (e: any) => {
   const res = await uploadToCloud(e.detail.avatarUrl, 'avatar')
-  console.log(res)
 
-  const params = { avatar_url: res }
+  const { number } = playerDetail.value
+  const params = {
+    number,
+    avatar_url: res,
+  }
   updateInfo(params)
 }
 
