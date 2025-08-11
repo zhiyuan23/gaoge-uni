@@ -46,8 +46,6 @@ export default defineConfig(({ command, mode }): UserConfig => {
       },
     },
     plugins: createVitePlugins(isBuild),
-    esbuild: {
-      drop: JSON.parse(env.VITE_DROP_CONSOLE) ? ['console', 'debugger'] : [],
-    },
+    esbuild: { drop: JSON.parse(env.VITE_DROP_CONSOLE) ? ['console', 'debugger'] : [] },
   }
 })

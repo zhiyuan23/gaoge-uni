@@ -138,11 +138,7 @@ export default defineConfig({
       inter: '#3b82f6', // 国际高歌
       united: '#ef4444', // 高歌联
     },
-    spacing: {
-      row: {
-        base: '20rpx', // 同步 $u-spacing-row-base
-      },
-    },
+    spacing: { row: { base: '20rpx' } },
   },
   safelist: [
     ...generateColorSafelist(),
@@ -176,9 +172,7 @@ export default defineConfig({
   ],
   transformers: [
     // 启用 @apply 功能
-    transformerDirectives({
-      enforce: 'pre',
-    }),
+    transformerDirectives({ enforce: 'pre' }),
     // 启用 () 分组功能
     transformerVariantGroup(),
     transformerAttributify() as any,

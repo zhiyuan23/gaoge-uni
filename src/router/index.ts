@@ -10,7 +10,7 @@ export const ERROR404_PATH = '/pages/common/404/index'
  * @param {object} pagesJson
  * @returns [{"path": "/pages/home/index","needLogin": false},...]
  */
-function parseRoutes(pagesJson = {} as any) {
+function parseRoutes(pagesJson: any = {}) {
   if (!pagesJson.pages) {
     pagesJson.pages = []
   }

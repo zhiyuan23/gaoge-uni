@@ -26,7 +26,6 @@ const useTeamStore = defineStore(
 
     /**
      * 球队资产
-     * @param params
      */
     async function getFinanceDetail() {
       const { data } = await getFinanceDetailApi()

@@ -16,13 +16,13 @@
       }
     },
     {
-      "path": "pages/star/index",
+      "path": "pages/player/index",
       "style": {
         "navigationBarTitleText": "大名单"
       }
     },
     {
-      "path": "pages/star/edit",
+      "path": "pages/player/edit",
       "style": {
         "navigationBarTitleText": "修改"
       }
@@ -82,7 +82,7 @@
     }, {
       "iconPath": "static/images/tabbar/icon_star.png",
       "selectedIconPath": "static/images/tabbar/icon_star_h.png",
-      "pagePath": "pages/star/index",
+      "pagePath": "pages/player/index",
       "text": "球星"
     }, {
       "iconPath": "static/images/tabbar/icon_team.png",

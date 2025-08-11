@@ -51,7 +51,12 @@
 
 <script setup lang='ts'>
 import type { CSSProperties } from 'vue'
-import { HOME_PATH, isTabBarPath, LOGIN_PATH, removeQueryString } from '@/router'
+import {
+  HOME_PATH,
+  isTabBarPath,
+  LOGIN_PATH,
+  removeQueryString,
+} from '@/router'
 import { setToken } from '@/utils/auth'
 import uCode from 'uview-plus/components/u-code/u-code.vue'
 // import { useUserStore } from '@/store';
@@ -79,9 +84,7 @@ function codeChange(text: string) {
 function getCode() {
   if (uCodeRef.value?.canGetCode) {
     // 模拟向后端请求验证码
-    uni.showLoading({
-      title: '正在获取验证码',
-    })
+    uni.showLoading({ title: '正在获取验证码' })
     setTimeout(() => {
       uni.hideLoading()
       uni.$u.toast('验证码已发送')

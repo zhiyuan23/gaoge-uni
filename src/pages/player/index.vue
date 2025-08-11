@@ -194,7 +194,7 @@ import { usePlayerStore } from '@/store'
 // #ifdef MP-WEIXIN
 const { onShareAppMessage, onShareTimeline } = useShare({
   title: '高歌球星',
-  path: 'pages/star/index',
+  path: 'pages/player/index',
   imageUrl: '/static/images/img_share_2.jpg',
 })
 onShareAppMessage()
@@ -218,7 +218,7 @@ interface EditType {
 const edit = (type: EditType['type'], number: EditType['number']) => {
   const { is_admin } = playerStore.myPlayerInfo
   if (type === 'personal' || is_admin) {
-    uni.navigateTo({ url: `/pages/star/edit?number=${number}` })
+    uni.navigateTo({ url: `/pages/player/edit?number=${number}` })
   }
 }
 

@@ -50,9 +50,7 @@ export function callCloudFn<T = any>(
   data: Record<string, any> = {},
   options: Record<string, any> = {},
 ): Promise<T> {
-  const requestData = {
-    ...data,
-  }
+  const requestData = { ...data }
 
   return new Promise((resolve, reject) => {
     uniCloud.callFunction({
