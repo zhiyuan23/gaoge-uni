@@ -1,0 +1,39 @@
+page {
+  font-size: $u-font-base;
+  color: $u-main-color;
+  background-color: $u-bg-color;
+  min-height: 100vh;
+}
+
+image {
+  display: block;
+  width: 100%;
+}
+
+uni-image {
+  width: 100% !important;
+  display: block !important;
+  object-fit: cover;
+}
+
+uni-page-body {
+  min-height: auto !important;
+}
+
+.button {
+  background-color: $u-primary !important;
+  border-radius: 100rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+}
+
+.u-button::after {
+  border: 0;
+  border-radius: 100rpx;
+}
+
+.u-button--default::after {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}

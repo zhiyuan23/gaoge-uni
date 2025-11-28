@@ -1,0 +1,96 @@
+{
+  "easycom": {
+    "custom": {
+      "^u--(.*)": "uview-plus/components/u-$1/u-$1.vue",
+      "^up-(.*)": "uview-plus/components/u-$1/u-$1.vue",
+      "^u-([^-].*)": "uview-plus/components/u-$1/u-$1.vue",
+      "^(?!z-paging-refresh|z-paging-load-more)z-paging(.*)": "z-paging/components/z-paging$1/z-paging$1.vue"
+    }
+  },
+  "pages": [
+    {
+      "path": "pages/home/index",
+      "style": {
+        "navigationBarTitleText": "怡宝家园"
+      }
+    },
+    {
+      "path": "pages/series/index",
+      "style": {
+        "navigationBarTitleText": ""
+      }
+    },
+    {
+      "path": "pages/series/list",
+      "style": {
+        "navigationBarTitleText": "怡宝家园"
+      }
+    },
+    {
+      "path": "pages/series/ml/index",
+      "style": {
+        "navigationBarTitleText": "1元畅饮赢大奖",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/series/zbqr/index",
+      "style": {
+        "navigationBarTitleText": "1元畅饮赢大奖",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/series/zwcs/index",
+      "style": {
+        "navigationBarTitleText": "1元畅饮赢大奖",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    {
+      "path": "pages/demo/index",
+      "style": {
+        "navigationBarTitleText": "demo示例"
+      }
+    }
+  ],
+  "subPackages": [
+    {
+      "root": "pages/common",
+      "pages": [
+        {
+          "path": "login/index",
+          "style": {
+            "navigationBarTitleText": "登录授权"
+          }
+        },
+        {
+          "path": "webview/index",
+          "style": {
+            "navigationBarTitleText": "网页"
+          }
+        },
+        {
+          "path": "404/index",
+          "style": {
+            "navigationBarTitleText": "404",
+            "navigationStyle": "custom"
+          }
+        }
+      ]
+    }
+  ],
+  "preloadRule": {
+    "pages/home/index": {
+      "network": "all",
+      "packages": ["pages/common"]
+    }
+  },
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "怡宝家园",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarColor": "#202020",
+    "backgroundColor": "#f5f5f5"
+  }
+}
