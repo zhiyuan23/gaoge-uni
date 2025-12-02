@@ -30,13 +30,13 @@
   <!-- 小程序缓存 storage 使用 -->
   <view class="flex-col-center mx-40 mb-40 gap-10">
     <view>小程序缓存 storage 使用</view>
-    <u-button @click="getArea">
+    <u-button type="primary" shape="circle" @click="getArea">
       获取地址
     </u-button>
-    <u-button @click="setArea">
+    <u-button type="primary" shape="circle" @click="setArea">
       保存地址
     </u-button>
-    <u-button @click="removeArea">
+    <u-button type="primary" shape="circle" @click="removeArea">
       清除地址
     </u-button>
   </view>
@@ -44,16 +44,16 @@
   <!-- 提示框 使用 -->
   <view class="flex-col-center mx-40 mb-40 gap-10">
     <view>提示框 使用</view>
-    <u-button @click="showLoading">
+    <u-button type="primary" shape="circle" @click="showLoading">
       加载提示
     </u-button>
-    <u-button @click="showToast">
+    <u-button type="primary" shape="circle" @click="showToast">
       轻提示
     </u-button>
-    <u-button @click="showModal">
+    <u-button type="primary" shape="circle" @click="showModal">
       确认提示
     </u-button>
-    <u-button @click="showConfirm">
+    <u-button type="primary" shape="circle" @click="showConfirm">
       确认/取消提示
     </u-button>
   </view>

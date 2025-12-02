@@ -125,6 +125,7 @@
       <image
         src="/static/images/result-dialog/ic-cart.png"
         mode="aspectFit"
+        class="w-150"
         @click="handleGoToShop"
       />
     </view>

@@ -84,9 +84,9 @@ function goUserPage() {
 function goDetail(type: string) {
   seriesStore.seriesCode = type
 
-  // uni.navigateTo({
-  //   url: `/pages/series/${type}/index`,
-  // })
+  uni.navigateTo({
+    url: `/pages/series/${type}/index`,
+  })
 }
 
 onLoad(() => {
