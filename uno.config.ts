@@ -102,6 +102,13 @@ export default defineConfig({
 
     // 字体大小（可选）
     [/^text-(\d+)$/, ([, d]) => ({ 'font-size': `${d}rpx` })],
+
+    // 边框
+    [/^border-(\d+)-(solid|dashed|dotted)-(.+)$/, ([, w, style, color]) => ({
+      'border-width': `${w}rpx`,
+      'border-style': style,
+      'border-color': color,
+    })],
   ],
   shortcuts: [
     [/^flex-?(col)?-(start|end|center|baseline|stretch)-?(start|end|center|between|around|evenly|left|right)?$/, ([, col, items, justify]) => {
