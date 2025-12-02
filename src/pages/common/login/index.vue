@@ -52,7 +52,10 @@
 
 <script lang='ts' setup>
 import AgreePrivacy from '@/components/agree-privacy/index.vue'
-import { reLaunch } from '@/utils/navigate'
+import { useAppStore } from '@/store'
+import { reLaunch } from '@/utils'
+
+const appStore = useAppStore()
 
 const loading = ref(false)
 const isAgree = ref([''])
@@ -74,6 +77,8 @@ function onAgree() {
 
 function handleSubmit() {
   loading.value = true
+  appStore.sessionKey = '123'
+
   setTimeout(() => {
     reLaunch('/pages/home/index')
   }, 1000)

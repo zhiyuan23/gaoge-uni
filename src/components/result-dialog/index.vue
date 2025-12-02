@@ -134,7 +134,7 @@
 
 <script setup lang='ts'>
 import { defaultPrizeInfo, type PrizeInfo } from '@/types/modules/prize'
-import { navigateToMiniApp } from '@/utils/navigate'
+import { navigateToMiniApp } from '@/utils'
 
 const props = withDefaults(
   defineProps<{

@@ -5,7 +5,7 @@
       class="h-100% w-100%"
       src="@/static/images/home/bg-main.png"
     />
-    <view class="border-2-solid-white relative flex-center-between rounded-1.5 mx-25 w-694 h-160 -mt-204">
+    <view class="relative flex-center-between rounded-1.5 mx-25 w-694 h-160 border-2-solid-white -mt-204">
       <!-- 个人信息 -->
       <view class="flex-center-start color-white" @click="goUserPage">
         <image
@@ -24,7 +24,7 @@
           class="h-100% w-100%"
           src="@/static/images/home/ic-wdjp.png"
         />
-        <view class="flext-center absolute color-primary h-40 leading-40 top-0 right-14 text-22">
+        <view class="flext-center absolute color-primary h-40 top-0 right-14 leading-40 text-22">
           我的奖品
         </view>
       </view>
@@ -56,9 +56,9 @@
 </template>
 
 <script setup lang='ts'>
-import { seriesList } from '@/constants/modules/serices'
-import useSeriesStore from '@/store/modules/series'
-import { goto } from '@/utils/navigate'
+import { seriesList } from '@/constants'
+import { useSeriesStore } from '@/store'
+import { goto } from '@/utils'
 
 const seriesStore = useSeriesStore()
 
@@ -83,6 +83,7 @@ function goUserPage() {
 // 跳转系列页
 function goDetail(type: string) {
   seriesStore.seriesCode = type
+  seriesStore.seriesInfo = userInfo.value
 
   uni.navigateTo({
     url: `/pages/series/${type}/index`,
