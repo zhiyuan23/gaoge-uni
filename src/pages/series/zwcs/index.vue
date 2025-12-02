@@ -1,5 +1,5 @@
 <template>
-  <view class="h-100vh overflow-hidden">
+  <view class="relative h-100vh overflow-hidden">
     <!-- 背景图 -->
     <image
       class="relative w-100vw"
@@ -7,8 +7,8 @@
       mode="widthFix"
     />
     <!-- 扫一扫按钮 -->
-    <view class="relative w-100vw flex-center-center">
-      <view class="button fixed top-80% w-540 h-100" @click="scanCode">
+    <view class="absolute w-100vw flex-center-center mt-1100 top-0">
+      <view class="button w-540 h-100" @click="scanCode">
         <image class="size-72" src="@/static/images/icons/ic-scan.png" />
         <text class="font-bold pl-8 text-46">
           点击扫一扫
@@ -32,3 +32,9 @@ onLoad(() => {
   console.log('query')
 })
 </script>
+
+<style scoped>
+:deep(uni-page-wrapper) {
+  overflow: hidden;
+}
+</style>

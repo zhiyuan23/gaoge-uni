@@ -1,13 +1,12 @@
 <template>
-  <div class="not-found">
-    <u-navbar left-icon-size="40rpx" @left-click="handleBack" />
+  <div class="h-100vh flex-col-center">
+    <u-navbar @left-click="handleBack" />
     <u-empty
       mode="page"
-      text-size="20"
       text="页面不存在"
-      icon="/static/images/404.png`"
-      width="380"
-      height="380"
+      icon="/static/images/404.png"
+      width="300"
+      heigth="300"
     />
   </div>
 </template>
@@ -22,14 +21,3 @@ function handleBack() {
   })
 }
 </script>
-
-<style lang="scss" scoped>
-.not-found {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  overflow: auto;
-}
-</style>

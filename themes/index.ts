@@ -22,7 +22,7 @@ export const lightTheme = {
   // 背景色
   '--bg-page': '#ffffff', // 页面背景
   '--bg-container': '#ffffff', // 容器背景
-  '--bg-secondary': '#f5f5f5', // 次要背景
+  '--bg-secondary': '#F3F4F6', // 次要背景
   '--bg-disabled': '#f7f8fa', // 禁用状态背景
 
   // 边框与分割线

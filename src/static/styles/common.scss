@@ -5,19 +5,16 @@ page {
   min-height: 100vh;
 }
 
-image {
-  display: block;
-  width: 100%;
+uni-page-body {
+  min-height: auto !important;
 }
 
 uni-image {
-  width: 100% !important;
   display: block !important;
-  object-fit: cover;
 }
 
-uni-page-body {
-  min-height: auto !important;
+image {
+  display: block;
 }
 
 .button {

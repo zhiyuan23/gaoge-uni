@@ -1,5 +1,5 @@
 <template>
-  <view class="h-100vh overflow-hidden">
+  <view class="relative h-100vh overflow-hidden">
     <!-- 背景图 -->
     <image
       class="relative w-100vw"
@@ -7,11 +7,9 @@
       mode="widthFix"
     />
     <!-- 扫一扫按钮 -->
-    <view class="relative w-100vw flex-center-center">
-      <view class="button fixed top-80% w-540 h-100" @click="scanCode">
-        <view class="size-72">
-          <image src="@/static/images/icons/ic-scan.png" mode="widthFix" />
-        </view>
+    <view class="absolute w-100vw flex-center-center mt-1100 top-0">
+      <view class="button w-540 h-100" @click="scanCode">
+        <image class="size-72" src="@/static/images/icons/ic-scan.png" />
         <text class="font-bold pl-8 text-46">
           点击扫一扫
         </text>
@@ -30,7 +28,7 @@
 import ResultDialog from '@/components/result-dialog/index.vue'
 import { defaultPrizeInfo } from '@/types/modules/prize'
 
-const showDialog = ref(true)
+const showDialog = ref(false)
 
 const prizeInfo = ref(defaultPrizeInfo)
 
@@ -53,3 +51,9 @@ onLoad(() => {
   prizeInfo.value = data
 })
 </script>
+
+<style scoped>
+:deep(uni-page-wrapper) {
+  overflow: hidden;
+}
+</style>

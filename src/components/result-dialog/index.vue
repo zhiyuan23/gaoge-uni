@@ -10,22 +10,23 @@
     <view class="flex-col-center -mt-80">
       <!-- 关闭按钮 -->
       <view class="w-660">
-        <view class="float-right w-64">
-          <image
-            src="/static/images/result-dialog/ic-close.png"
-            mode="widthFix"
-            @click="handleClose"
-          />
-        </view>
+        <image
+          src="/static/images/result-dialog/ic-close.png"
+          mode="widthFix"
+          class="float-right w-64"
+          @click="handleClose"
+        />
       </view>
 
       <view class="relative z-2 flex-col-center overflow-hidden rounded-xl bg-background w-660 h-420">
         <!-- 中奖提示 -->
         <block v-if="prizeInfo?.status === 'won'">
           <view class="flex-start">
-            <view class="relative w-370 left-0">
-              <image src="https://img14.360buyimg.com/n7/jfs/t1/23011/18/29173/54148/665ee53cF87ed7142/f325fb2464ec72bb.png" mode="aspectFit" />
-            </view>
+            <image
+              src="https://img14.360buyimg.com/n7/jfs/t1/23011/18/29173/54148/665ee53cF87ed7142/f325fb2464ec72bb.png"
+              mode="aspectFit"
+              class="relative w-370 left-0"
+            />
             <view class="relative h-100% flex-col-center text-center color-#F00A0A w-370 -ml-80">
               <!-- 实物奖 -->
               <block v-if="prizeInfo?.type === 'physical'">
@@ -93,6 +94,8 @@
         <block v-if="!prizeInfo?.isExchanged">
           <view class="h-100">
             <u-button
+              type="primary"
+              shape="circle"
               color="#88CC34"
               :custom-style="{
                 width: '540rpx',

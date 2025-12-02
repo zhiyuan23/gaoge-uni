@@ -1,14 +1,16 @@
 <template>
   <!-- 背景图 -->
   <view class="relative w-750">
-    <image src="/static/images/login/bg.png" mode="widthFix" />
+    <image class="w-750" src="/static/images/login/bg.png" mode="widthFix" />
   </view>
 
   <!-- 主体内容 -->
   <view class="absolute flex-col-center-start w-750 top-105">
-    <view class="w-300">
-      <image src="/static/images/login/logo.png" mode="widthFix" />
-    </view>
+    <image
+      src="/static/images/login/logo.png"
+      mode="widthFix"
+      class="w-300"
+    />
     <view class="pt-24 leading-32 text-34">
       你我的怡宝+
     </view>
@@ -17,24 +19,69 @@
         type="primary"
         shape="circle"
         :loading="loading"
-        @click="onLogin"
+        loading-text="登录中"
+        @click="handleLogin"
       >
         登录
       </u-button>
     </view>
+    <u-checkbox-group
+      v-model="isAgree"
+      shape="circle"
+      active-color="#007E41"
+    >
+      <view class="flex-center-center mt-160 text-24">
+        <u-checkbox
+          label="已阅读并同意"
+          name="1"
+          :custom-style="{ fontSize: '22rpx' }"
+        />
+        <text class="color-primary">
+          《服务协议》
+        </text>
+        <text class="color-primary">
+          《隐私政策》
+        </text>
+      </view>
+    </u-checkbox-group>
   </view>
 
   <!-- 隐私协议组件 -->
-  <PrivacyPopup v-model="showPrivacy" />
+  <AgreePrivacy v-model="showPrivacy" @agree="onAgree" />
 </template>
 
 <script lang='ts' setup>
-import PrivacyPopup from '@/components/agree-privacy/index.vue'
+import AgreePrivacy from '@/components/agree-privacy/index.vue'
+import { reLaunch } from '@/utils/navigate'
 
 const loading = ref(false)
-const showPrivacy = ref(true)
+const isAgree = ref([''])
+const showPrivacy = ref(false)
 
-function onLogin() {
-  showPrivacy.value = true
+function handleLogin() {
+  if (isAgree.value[0] !== '1') {
+    showPrivacy.value = true
+  }
+  else {
+    handleSubmit()
+  }
+}
+
+function onAgree() {
+  isAgree.value = ['1']
+  handleSubmit()
+}
+
+function handleSubmit() {
+  loading.value = true
+  setTimeout(() => {
+    reLaunch('/pages/home/index')
+  }, 1000)
 }
 </script>
+
+<style scpoed>
+:deep(.u-checkbox__label-wrap text) {
+  font-size: 24rpx !important;
+}
+</style>

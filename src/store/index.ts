@@ -6,6 +6,7 @@ import { createPersistedState } from 'pinia-plugin-persistedstate'
 // 导入子模块
 import useAppStore from './modules/app'
 import useHomeStore from './modules/home'
+import useSeriesStore from './modules/series'
 
 // 安装pinia状态管理插件
 function setupStore(app: App) {
@@ -26,5 +27,6 @@ function setupStore(app: App) {
 export {
   useAppStore,
   useHomeStore,
+  useSeriesStore,
 }
 export default setupStore

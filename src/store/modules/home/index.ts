@@ -1,5 +1,4 @@
 const useHomeStore = defineStore(
-  // 唯一ID
   'home',
   () => {
     const menuList = ref([])
