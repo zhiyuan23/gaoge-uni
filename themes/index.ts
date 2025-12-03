@@ -16,7 +16,7 @@ export const lightTheme = {
 
   // 文字颜色
   '--text-primary': '#353535', // 主文字颜色
-  '--text-secondary': '#878787', // 副文字颜色
+  '--text-secondary': '#909399', // 副文字颜色
   '--text-disabled': '#C8C9CC', // 禁用状态文字颜色
 
   // 背景色
@@ -26,7 +26,7 @@ export const lightTheme = {
   '--bg-disabled': '#f7f8fa', // 禁用状态背景
 
   // 边框与分割线
-  '--border-base': '#E0e0e0', // 基础边框
+  '--border-base': '#E6E6E6', // 基础边框
   '--border-light': '#EBEDF0', // 浅色边框
   '--divider': '#f2f2f2', // 分割线颜色
 

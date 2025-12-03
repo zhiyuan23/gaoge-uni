@@ -50,6 +50,12 @@
       }
     },
     {
+      "path": "pages/user/user-info/index",
+      "style": {
+        "navigationBarTitleText": "个人信息"
+      }
+    },
+    {
       "path": "pages/demo/index",
       "style": {
         "navigationBarTitleText": "demo示例"

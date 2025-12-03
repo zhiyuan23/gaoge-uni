@@ -23,33 +23,19 @@ export function formatTime(
   options: FormatTimeOptions = {},
 ): string {
   const {
-    format = 'YYYY-MM-DD HH:mm',
+    format = 'YYYY-MM-DD',
     placeholder = '',
     relative = false,
     locale = 'zh-cn',
-    status,
   } = options
 
-  if (!timestamp) return placeholder
+  if (typeof timestamp !== 'number' || Number.isNaN(timestamp)) {
+    return placeholder
+  }
 
-  const ts = timestamp < 1e12 ? timestamp * 1000 : timestamp
+  const ts = timestamp.toString().length === 10 ? timestamp * 1000 : timestamp
   const time = dayjs(ts).locale(locale)
 
-  // 比赛状态展示定制
-  if (status === 'scheduled') {
-    return `开赛时间：${time.format(format)}`
-  }
-  else if (status === 'completed') {
-    return `已结束：${time.format(format)}`
-  }
-  else if (status === 'in_progress') {
-    return `比赛进行中`
-  }
-  else if (status === 'canceled') {
-    return `比赛已取消`
-  }
-
-  // 相对时间
   if (relative) {
     return time.fromNow()
   }

@@ -1,8 +1,8 @@
-export const goto = (url: string) => {
+export const navigateTo = (url: string) => {
   return uni.navigateTo({ url })
 }
 
-export const replace = (url: string) => {
+export const redirectTo = (url: string) => {
   return uni.redirectTo({ url })
 }
 
@@ -14,6 +14,6 @@ export const reLaunch = (url: string) => {
   return uni.reLaunch({ url })
 }
 
-export const back = (delta = 1) => {
+export const navigateBack = (delta = 1) => {
   return uni.navigateBack({ delta })
 }

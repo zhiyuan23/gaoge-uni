@@ -47,9 +47,10 @@
       <view class="color-primary font-bold pl-14 text-34">
         {{ name }}1元畅饮赢大奖
       </view>
-      <view class="rounded-3 bg-primary color-white px-15 leading-48 text-22">
-        立即参与
-      </view>
+      <image
+        class="w-150 h-48"
+        src="@/static/images/home/ic-join-btn.png"
+      />
     </view>
   </view>
   <view class="pb-30" />
@@ -58,12 +59,12 @@
 <script setup lang='ts'>
 import { seriesList } from '@/constants'
 import { useSeriesStore } from '@/store'
-import { goto } from '@/utils'
+import { navigateTo } from '@/utils'
 
 const seriesStore = useSeriesStore()
 
 // 登录状态
-const isLogin = ref(false)
+const isLogin = ref(true)
 
 // 个人信息
 const userInfo = ref({
@@ -74,10 +75,10 @@ const userInfo = ref({
 // 查看个人信息
 function goUserPage() {
   const url = isLogin.value
-    ? '/pages/user/index'
+    ? '/pages/user/user-info/index'
     : '/pages/common/login/index'
 
-  goto(url)
+  navigateTo(url)
 }
 
 // 跳转系列页
