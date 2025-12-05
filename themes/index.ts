@@ -9,6 +9,12 @@ export const lightTheme = {
   '--primary-tint': '#d1eeda',
   '--primary-text': '#ffffff',
 
+  // 系列主题色
+  '--theme-zwcs': '#7FBE26',
+  '--theme-zbqr': '#7FBE26',
+  '--theme-ml': '#7FBE26',
+  '--text-theme': '#F77600',
+
   // 微信主题色
   '--wechat-primary': '#07C160',
   '--wechat-primary-tint': '#D2F5E3',
@@ -20,7 +26,7 @@ export const lightTheme = {
   '--text-disabled': '#C8C9CC', // 禁用状态文字颜色
 
   // 背景色
-  '--bg-page': '#ffffff', // 页面背景
+  '--bg-page': '#f5f5f5', // 页面背景
   '--bg-container': '#ffffff', // 容器背景
   '--bg-secondary': '#F3F4F6', // 次要背景
   '--bg-disabled': '#f7f8fa', // 禁用状态背景
@@ -58,6 +64,12 @@ export const darkTheme = {
   '--primary': '#00C456',
   '--primary-secondary': '#007E41',
   '--primary-text': '#ffffff',
+
+  // 系列主题色
+  '--theme-zwcs': '#7FBE26',
+  '--theme-zbqr': '#7FBE26',
+  '--theme-ml': '#7FBE26',
+  '--text-theme': '#F77600',
 
   // 微信主题色
   '--wechat-primary': '#0DBF5B',
