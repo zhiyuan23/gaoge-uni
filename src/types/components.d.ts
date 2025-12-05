@@ -12,8 +12,10 @@ declare module 'vue' {
     AreaPicker: typeof import('./../components/area-picker/index.vue')['default']
     Copyright: typeof import('./../components/copyright/index.vue')['default']
     LangSelect: typeof import('./../components/lang-select/index.vue')['default']
+    PopupResult: typeof import('./../components/lottery/popup-result.vue')['default']
+    PopupRule: typeof import('./../components/lottery/popup-rule.vue')['default']
+    PopupService: typeof import('./../components/lottery/popup-service.vue')['default']
     PrivacyPopup: typeof import('./../components/privacy-popup/index.vue')['default']
-    ResultDialog: typeof import('./../components/result-dialog/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

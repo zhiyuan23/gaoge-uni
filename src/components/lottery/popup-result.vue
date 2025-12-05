@@ -1,6 +1,6 @@
 <template>
   <u-popup
-    :show="showDialog"
+    :show="show"
     mode="center"
     bg-color="transparent"
     overlay-opacity="0.8"
@@ -11,7 +11,7 @@
       <!-- 关闭按钮 -->
       <view class="w-660">
         <image
-          src="/static/images/result-dialog/ic-close.png"
+          src="/static/images/lottery/ic-close.png"
           mode="widthFix"
           class="float-right w-64"
           @click="handleClose"
@@ -59,14 +59,14 @@
         <!-- 未中奖提示 -->
         <block v-else-if="prizeInfo?.status === 'lost'">
           <view class="flex-col-center-center h-140">
-            <view class="text-center color-#F77600 font-bold px-35 leading-90 text-48">
+            <view class="text-center color-textTheme font-bold px-35 leading-90 text-48">
               该瓶盖已中奖红包888元
             </view>
             <view class="font-bold leading-90 text-48">
               <text v-if="prizeInfo.isExchanged" class="color-#007E41">
                 已兑换
               </text>
-              <text v-else class="color-#F77600">
+              <text v-else class="color-textTheme">
                 尚未兑换
               </text>
             </view>
@@ -80,14 +80,14 @@
         <!-- 参与受限提示 -->
         <block v-else-if="prizeInfo?.status === 'fail'">
           <view class="flex-col-center-center h-140">
-            <view class="text-center color-#F77600 font-bold px-35 leading-90 text-48">
+            <view class="text-center color-textTheme font-bold px-35 leading-90 text-48">
               您累计参与次数已达上限， 无法参与活动
             </view>
           </view>
         </block>
       </view>
       <!-- 装饰条 -->
-      <view class="rounded-2xl bg-#88CC34 w-660 h-50 -mt-40" />
+      <view class="rounded-2xl bg-ml w-660 h-50 -mt-40" />
 
       <view class="mt-80 h-230">
         <!-- 操作按钮 -->
@@ -123,7 +123,7 @@
     <!-- 购物车图标 -->
     <view class="fixed top-50% mt-260 w-150 right-15">
       <image
-        src="/static/images/result-dialog/ic-cart.png"
+        src="/static/images/lottery/ic-cart.png"
         mode="aspectFit"
         class="w-150"
         @click="handleGoToShop"
@@ -148,13 +148,13 @@ const props = withDefaults(
 
 const emit = defineEmits(['update:modelValue', 'close', 'confirm'])
 
-const showDialog = computed({
+const show = computed({
   get: () => props.modelValue,
   set: (val: boolean) => emit('update:modelValue', val),
 })
 
 function handleClose() {
-  showDialog.value = false
+  show.value = false
   emit('close')
 }
 
