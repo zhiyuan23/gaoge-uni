@@ -46,7 +46,7 @@ const rpxPropsMap: Record<string, string[]> = {
 }
 
 // 设置rpx为默认单位
-function generateRpxRules(map: Record<string, string[]>) {
+const generateRpxRules = (map: Record<string, string[]>) => {
   const rules: any[] = []
 
   Object.entries(map).forEach(([prefix, props]) => {

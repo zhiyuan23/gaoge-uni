@@ -1,10 +1,14 @@
 import { hasPerm } from '@/plugins/permission'
 import { currentRoute } from '@/router'
 
-// 对某些特殊场景需要在页面onShow生命周期中校验权限:
-// 1.微信小程序端点击tabbar的底层逻辑不触发uni.switchTab
-// 2.h5在浏览器地址栏输入url后跳转不触发uni的路由api
-// 3.首次启动加载的页面不触发uni的路由api
-export default async function usePermission() {
+/**
+ * 页面 onShow 场景下的权限校验
+ * 1. 微信小程序 tabbar 点击不会触发 uni.switchTab
+ * 2. H5 浏览器地址栏输入 URL 不触发 uni 路由 API
+ * 3. 首次启动加载的页面不触发 uni 路由 API
+ */
+const usePermission = () => {
   return hasPerm(currentRoute())
 }
+
+export default usePermission

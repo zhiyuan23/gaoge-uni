@@ -23,7 +23,7 @@ export default antfu(
       // 允许console
       'no-console': 'off',
       // 需要分号
-      'style/semi': ['error', 'never'],
+      '@stylistic/semi': ['error', 'never'],
       // 块内的空行
       'padded-blocks': ['error', 'never'],
       // 顶级函数应使用 function 关键字声明
@@ -33,7 +33,7 @@ export default antfu(
       // 禁止未使用的捕获组
       'regexp/no-unused-capturing-group': 'off',
       // 允许接口和类型别名中的成员之间使用三个分隔符
-      'style/member-delimiter-style': ['error', {
+      '@stylistic/member-delimiter-style': ['error', {
         multiline: {
           delimiter: 'semi',
           requireLast: true,

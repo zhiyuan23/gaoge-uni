@@ -51,7 +51,18 @@ export default {
         ignorePseudoClasses: ['deep'],
       },
     ],
-    'selector-type-no-unknown': [true, { ignoreTypes: ['page', 'radio', 'checkbox', 'scroll-view'] }],
+    'selector-type-no-unknown': [
+      true,
+      {
+        ignoreTypes: [
+          '/^uni-/',
+          'page',
+          'radio',
+          'checkbox',
+          'scroll-view',
+        ],
+      },
+    ],
     'selector-class-pattern': '^[a-z][a-z0-9\\-]*(__[a-z0-9\\-]+)?$', // 允许 BEM
     'at-rule-no-deprecated': null,
     'declaration-property-value-no-unknown': null,

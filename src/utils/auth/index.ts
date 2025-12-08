@@ -1,15 +1,16 @@
 const TokenKey = 'yzOpenId'
 const TokenPrefix = 'Bearer '
-function isLogin() {
+
+const isLogin = () => {
   return !!uni.getStorageSync(TokenKey)
 }
-function getToken(key: string) {
+const getToken = (key: string) => {
   return uni.getStorageSync(key)
 }
-function setToken(key: string, token: string) {
+const setToken = (key: string, token: string) => {
   uni.setStorageSync(key, token)
 }
-function clearToken() {
+const clearToken = () => {
   uni.removeStorageSync(TokenKey)
 }
 export {

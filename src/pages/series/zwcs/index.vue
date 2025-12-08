@@ -22,7 +22,7 @@
 import { Dialog } from '@/utils/modals'
 
 // 扫一扫
-async function scanCode() {
+const scanCode = async () => {
   const { result } = await uni.scanCode()
   console.log('扫描结果：', result)
   Dialog(`请扫描正确的产品码`)

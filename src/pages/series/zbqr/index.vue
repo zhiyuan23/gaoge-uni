@@ -15,17 +15,10 @@
         </text>
       </view>
     </view>
-
-    <!-- 扫码结果弹窗 -->
-    <ResultDialog
-      v-model="showDialog"
-      :prize-info="prizeInfo"
-    />
   </view>
 </template>
 
 <script setup lang='ts'>
-import ResultDialog from '@/components/result-dialog/index.vue'
 import { defaultPrizeInfo } from '@/types/modules/prize'
 
 const showDialog = ref(false)
@@ -33,7 +26,7 @@ const showDialog = ref(false)
 const prizeInfo = ref(defaultPrizeInfo)
 
 // 扫一扫
-async function scanCode() {
+const scanCode = async () => {
   const { result } = await uni.scanCode()
   console.log('扫描结果：', result)
   showDialog.value = true

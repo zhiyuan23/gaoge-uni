@@ -153,16 +153,16 @@ const show = computed({
   set: (val: boolean) => emit('update:modelValue', val),
 })
 
-function handleClose() {
+const handleClose = () => {
   show.value = false
   emit('close')
 }
 
-function handleConfirm() {
+const handleConfirm = () => {
   emit('confirm')
 }
 
-function handleGoToShop() {
+const handleGoToShop = () => {
   navigateToMiniApp({
     appId: 'wx6fb110526c12fc40',
     path: 'sub1/pages/ys-Exchange/ys-Exchange',

@@ -13,7 +13,7 @@ const i18n = createI18n({
   },
 })
 
-function setupI18n(app: App) {
+const setupI18n = (app: App) => {
   app.use(i18n)
 }
 

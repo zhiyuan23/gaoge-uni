@@ -47,11 +47,10 @@
   </view>
 
   <!-- 隐私协议组件 -->
-  <AgreePrivacy v-model="showPrivacy" @agree="onAgree" />
+  <PrivacyPolicy v-model="showPrivacy" @agree="onAgree" />
 </template>
 
 <script lang='ts' setup>
-import AgreePrivacy from '@/components/agree-privacy/index.vue'
 import { useAppStore } from '@/store'
 import { reLaunch } from '@/utils'
 
@@ -61,7 +60,16 @@ const loading = ref(false)
 const isAgree = ref([''])
 const showPrivacy = ref(false)
 
-function handleLogin() {
+const handleSubmit = () => {
+  loading.value = true
+  appStore.sessionKey = '123'
+
+  setTimeout(() => {
+    reLaunch('/pages/home/index')
+  }, 1000)
+}
+
+const handleLogin = () => {
   if (isAgree.value[0] !== '1') {
     showPrivacy.value = true
   }
@@ -70,18 +78,9 @@ function handleLogin() {
   }
 }
 
-function onAgree() {
+const onAgree = () => {
   isAgree.value = ['1']
   handleSubmit()
-}
-
-function handleSubmit() {
-  loading.value = true
-  appStore.sessionKey = '123'
-
-  setTimeout(() => {
-    reLaunch('/pages/home/index')
-  }, 1000)
 }
 </script>
 

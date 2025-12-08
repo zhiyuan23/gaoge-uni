@@ -1,33 +1,38 @@
 /**
  * 剪切板
  * @example
- * const {setClipboardData, getClipboardData} = useClipboard()
- * // 设置剪切板
- * setClipboardData({data: '1234567890'})
- * // 获取剪切板
+ * const { setClipboardData, getClipboardData } = useClipboard()
+ * await setClipboardData({ data: '1234567890' })
  * const data = await getClipboardData()
  */
-export default function useClipboard() {
-  const setClipboardData = ({ data, showToast = true }: UniApp.SetClipboardDataOptions) => {
-    return new Promise<string>((resolve, reject) => {
+const useClipboard = () => {
+  const setClipboardData = ({
+    data,
+    showToast = true,
+  }: UniApp.SetClipboardDataOptions): Promise<string> => {
+    return new Promise((resolve, reject) => {
       uni.setClipboardData({
         data,
         showToast,
         success: ({ data }) => resolve(data),
-        fail: error => reject(error),
+        fail: reject,
       })
     })
   }
-  const getClipboardData = () => {
-    return new Promise<string>((resolve, reject) => {
+
+  const getClipboardData = (): Promise<string> => {
+    return new Promise((resolve, reject) => {
       uni.getClipboardData({
         success: ({ data }) => resolve(data),
-        fail: error => reject(error),
+        fail: reject,
       })
     })
   }
+
   return {
     setClipboardData,
     getClipboardData,
   }
 }
+
+export default useClipboard

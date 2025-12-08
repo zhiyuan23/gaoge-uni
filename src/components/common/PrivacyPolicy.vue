@@ -59,18 +59,18 @@ const showDialog = computed({
 })
 
 // 关闭隐私
-function closeAgreePrivacy() {
+const closeAgreePrivacy = () => {
   emit('update:modelValue', false)
 }
 
 // 同意
-function agree() {
+const agree = () => {
   emit('agree')
   emit('update:modelValue', false)
 }
 
 // 拒绝
-function disagree() {
+const disagree = () => {
   emit('disagree')
   closeAgreePrivacy()
 }

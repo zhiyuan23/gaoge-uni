@@ -65,7 +65,7 @@ const refreshToken = async (http: HttpRequestAbstract, config: HttpRequestConfig
   })
 }
 
-function requestInterceptors(http: HttpRequestAbstract) {
+const requestInterceptors = (http: HttpRequestAbstract) => {
   /**
    * 请求拦截
    * @param {object} http
@@ -109,7 +109,7 @@ function requestInterceptors(http: HttpRequestAbstract) {
       Promise.reject(config),
   )
 }
-function responseInterceptors(http: HttpRequestAbstract) {
+const responseInterceptors = (http: HttpRequestAbstract) => {
   /**
    * 响应拦截
    * @param {object} http

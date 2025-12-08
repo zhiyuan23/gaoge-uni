@@ -83,13 +83,13 @@ const show = computed({
   set: (val: boolean) => emit('update:modelValue', val),
 })
 
-function handleCall(phoneNumber: string) {
+const handleCall = (phoneNumber: string) => {
   uni.makePhoneCall({
     phoneNumber,
   })
 }
 
-function handleClose() {
+const handleClose = () => {
   show.value = false
   emit('close')
 }

@@ -114,18 +114,18 @@ const minDate = new Date('1900-01-01').getTime()
 const maxDate = Date.now()
 
 // 修改头像
-function onChooseAvatar(e: any) {
+const onChooseAvatar = (e: any) => {
   const { avatarUrl } = e.detail
   userInfo.avatar = avatarUrl
 }
 
 // 修改昵称
-function onChangeNickname(e: any) {
+const onChangeNickname = (e: any) => {
   console.log('输入昵称', e.detail.value)
 }
 
 // 修改性别
-function handleEditGender() {
+const handleEditGender = () => {
   uni.showActionSheet({
     itemList: chooseGender,
     success: (res) => {
@@ -134,14 +134,14 @@ function handleEditGender() {
   })
 }
 
-// 修改生日
-function handleEditBirthday() {
+// 打开日期选择器（根据当前的 birthday）
+const handleEditBirthday = () => {
   birthdayTimestamp.value = new Date(userInfo.birthday).getTime()
   showDatePicker.value = true
 }
 
-// 修改生日
-function onConfirmBirthday(e: any) {
+// 日期选择确认
+const onConfirmBirthday = (e: any) => {
   userInfo.birthday = formatTime(e.value)
   showDatePicker.value = false
 }

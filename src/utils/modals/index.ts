@@ -5,7 +5,7 @@ import type { ILoadingOptions, IShowModalOptions, IShowToastOptions } from './ty
  * @param {string} content 提示内容
  * @param {object} option 配置
  */
-export function Toast(content: string, option: IShowToastOptions = {}) {
+export const Toast = (content: string, option: IShowToastOptions = {}) => {
   uni.showToast({
     title: content,
     icon: 'none',
@@ -36,7 +36,7 @@ export const Loading: ILoadingOptions = {
  * @param {string} content 提示内容
  * @param {object} option 配置
  */
-export function Dialog(content: string, option: IShowModalOptions = {}) {
+export const Dialog = (content: string, option: IShowModalOptions = {}) => {
   return new Promise((resolve, reject) => {
     uni.showModal({
       title: '温馨提示',

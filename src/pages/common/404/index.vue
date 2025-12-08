@@ -14,7 +14,7 @@
 <script lang='ts' setup>
 import { HOME_PATH } from '@/router'
 
-function handleBack() {
+const handleBack = () => {
   uni.$u.route({
     type: 'reLaunch',
     url: HOME_PATH,

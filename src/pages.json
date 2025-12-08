@@ -60,6 +60,13 @@
       "style": {
         "navigationBarTitleText": "demo示例"
       }
+    },
+    {
+      "path": "pages/demo/list",
+      "style": {
+        "navigationBarTitleText": "demo列表",
+        "enablePullDownRefresh": true
+      }
     }
   ],
   "subPackages": [

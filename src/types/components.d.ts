@@ -8,14 +8,13 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    AgreePrivacy: typeof import('./../components/agree-privacy/index.vue')['default']
-    AreaPicker: typeof import('./../components/area-picker/index.vue')['default']
+    AreaPicker: typeof import('./../components/AreaPicker/index.vue')['default']
     Copyright: typeof import('./../components/copyright/index.vue')['default']
     LangSelect: typeof import('./../components/lang-select/index.vue')['default']
-    PopupResult: typeof import('./../components/lottery/popup-result.vue')['default']
-    PopupRule: typeof import('./../components/lottery/popup-rule.vue')['default']
-    PopupService: typeof import('./../components/lottery/popup-service.vue')['default']
-    PrivacyPopup: typeof import('./../components/privacy-popup/index.vue')['default']
+    LotteryResult: typeof import('./../components/lottery/LotteryResult.vue')['default']
+    LotteryRule: typeof import('./../components/lottery/LotteryRule.vue')['default']
+    LotteryService: typeof import('./../components/lottery/LotteryService.vue')['default']
+    PrivacyPolicy: typeof import('./../components/common/PrivacyPolicy.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

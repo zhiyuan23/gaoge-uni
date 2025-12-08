@@ -40,7 +40,7 @@ const langIndex = computed(() => {
   })
 })
 
-function handleLangChange(event: any) {
+const handleLangChange = (event: any) => {
   const lang = langOptions.value[event.detail.value].value
   locale.value = lang
   uni.setLocale(lang)

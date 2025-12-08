@@ -9,7 +9,7 @@ import useHomeStore from './modules/home'
 import useSeriesStore from './modules/series'
 
 // 安装pinia状态管理插件
-function setupStore(app: App) {
+const setupStore = (app: App) => {
   const store = createPinia()
 
   const piniaPersist = createPersistedState({

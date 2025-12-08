@@ -12,7 +12,7 @@ export const uploadFile = (filePath: string) =>
 export const sendCode = (data: SendCodeReq) => post<SendCodeRes>('/sendCode', { data })
 
 // 上传图片
-export async function uploadToCloud(tempFilePath: string, path: string = 'image'): Promise<string> {
+export const uploadToCloud = async (tempFilePath: string, path: string = 'image'): Promise<string> => {
   const cloudPath = `${path}/${Date.now()}.jpg`
 
   const res = await uniCloud.uploadFile({

@@ -16,12 +16,12 @@ interface FormatTimeOptions {
 }
 
 /**
- * 通用时间格式化函数，适配比赛业务需求
+ * 通用时间格式化函数
  */
-export function formatTime(
+export const formatTime = (
   timestamp?: number | null,
   options: FormatTimeOptions = {},
-): string {
+): string => {
   const {
     format = 'YYYY-MM-DD',
     placeholder = '',

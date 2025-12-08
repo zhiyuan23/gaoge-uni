@@ -2,16 +2,16 @@ export const useAppStore = defineStore(
   'app',
   () => {
     const sessionKey = ref<string>('')
-
     const systemInfo = reactive<UniApp.GetSystemInfoResult>({} as UniApp.GetSystemInfoResult)
-
     const getSystemInfo = computed(() => systemInfo)
 
-    function setSystemInfo(info: UniApp.GetSystemInfoResult) {
+    // 获取系统信息
+    const setSystemInfo = (info: UniApp.GetSystemInfoResult) => {
       Object.assign(systemInfo, info)
     }
 
-    function initSystemInfo() {
+    // 初始化系统信息
+    const initSystemInfo = () => {
       uni.getSystemInfo({
         success(res: UniApp.GetSystemInfoResult) {
           setSystemInfo(res)
@@ -22,7 +22,8 @@ export const useAppStore = defineStore(
       })
     }
 
-    function checkUpdate() {
+    // 检查版本更新
+    const checkUpdate = () => {
       const updateManager = uni.getUpdateManager()
       updateManager.onCheckForUpdate((res: UniApp.OnCheckForUpdateResult) => {
         console.log('有无新版本:', res.hasUpdate)

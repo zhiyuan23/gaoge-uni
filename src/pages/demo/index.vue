@@ -60,29 +60,28 @@
 </template>
 
 <script setup lang='ts'>
-import AreaPicker from '@/components/area-picker/index.vue'
 import { Dialog, Loading, Toast } from '@/utils/modals'
 import storage from '@/utils/storage'
 
 const showPicker = ref(false)
 const selectedArea = ref<any>([])
 
-function open() {
+const open = () => {
   showPicker.value = true
 }
 
-function onSelect(value: any) {
+const onSelect = (value: any) => {
   selectedArea.value = value
 }
 
-function getArea() {
+const getArea = () => {
   const areaData = storage.get('areaData')
   if (areaData) {
     selectedArea.value = areaData
   }
 }
 
-function setArea() {
+const setArea = () => {
   const areaData = selectedArea.value
   if (areaData.length === 0) {
     Dialog('请先选择地址')
@@ -91,27 +90,26 @@ function setArea() {
   storage.set('areaData', areaData)
 }
 
-function removeArea() {
+const removeArea = () => {
   storage.remove('areaData')
 }
 
-function showLoading() {
+const showLoading = () => {
   Loading.show()
-
   setTimeout(() => {
     Loading.hide()
   }, 1500)
 }
 
-function showToast() {
+const showToast = () => {
   Toast('这条为轻提示')
 }
 
-function showModal() {
+const showModal = () => {
   Dialog('这条为确认提示')
 }
 
-async function showConfirm() {
+const showConfirm = async () => {
   await Dialog('这条为确认提示', {
     showCancel: true,
   })
@@ -121,7 +119,3 @@ async function showConfirm() {
   })
 }
 </script>
-
-<style scoped>
-
-</style>

@@ -78,7 +78,7 @@ const show = computed({
   set: (val: boolean) => emit('update:modelValue', val),
 })
 
-function handleClose() {
+const handleClose = () => {
   show.value = false
   emit('close')
 }

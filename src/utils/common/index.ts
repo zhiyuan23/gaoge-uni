@@ -1,5 +1,5 @@
 // 小程序更新检测
-export function mpUpdate() {
+export const mpUpdate = () => {
   const updateManager = uni.getUpdateManager()
   updateManager.onCheckForUpdate((res) => {
     // 请求完新版本信息的回调

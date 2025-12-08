@@ -5,12 +5,12 @@ interface NavigateMiniAppOptions {
   envVersion?: 'release' | 'develop' | 'trial';
 }
 
-export function navigateToMiniApp({
+export const navigateToMiniApp = ({
   appId,
   path = '',
   extraData = {},
   envVersion = 'release',
-}: NavigateMiniAppOptions) {
+}: NavigateMiniAppOptions) => {
   return new Promise<void>((resolve, reject) => {
     uni.navigateToMiniProgram({
       appId,

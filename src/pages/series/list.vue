@@ -2,7 +2,7 @@
   <!-- 顶部区域 -->
   <view class="relative w-100vw mb-15 h-550">
     <image
-      class="h-100% w-100%"
+      class="size-full"
       src="@/static/images/home/bg-main.png"
     />
     <view class="relative flex-center-between rounded-1.5 mx-25 w-694 h-160 border-2-solid-white -mt-204">
@@ -21,7 +21,7 @@
       </view>
       <view class="relative mt-100 w-150 h-40">
         <image
-          class="h-100% w-100%"
+          class="size-full"
           src="@/static/images/home/ic-wdjp.png"
         />
         <view class="flext-center absolute color-primary h-40 top-0 right-14 leading-40 text-22">
@@ -39,7 +39,7 @@
     @click="goDetail(code)"
   >
     <image
-      class="w-100%"
+      class="w-full"
       :src="`/static/images/series/banner-${code}.png`"
       mode="widthFix"
     />
@@ -73,7 +73,7 @@ const userInfo = ref({
 })
 
 // 查看个人信息
-function goUserPage() {
+const goUserPage = () => {
   const url = isLogin.value
     ? '/pages/user/user-info/index'
     : '/pages/common/login/index'
@@ -82,7 +82,7 @@ function goUserPage() {
 }
 
 // 跳转系列页
-function goDetail(type: string) {
+const goDetail = (type: string) => {
   seriesStore.seriesCode = type
   seriesStore.seriesInfo = userInfo.value
 
