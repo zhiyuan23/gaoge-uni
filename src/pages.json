@@ -16,6 +16,12 @@
       }
     },
     {
+      "path": "pages/login/index",
+      "style": {
+        "navigationBarTitleText": "登录授权"
+      }
+    },
+    {
       "path": "pages/series/index",
       "style": {
         "navigationBarTitleText": ""
@@ -73,12 +79,6 @@
     {
       "root": "pages/common",
       "pages": [
-        {
-          "path": "login/index",
-          "style": {
-            "navigationBarTitleText": "登录授权"
-          }
-        },
         {
           "path": "webview/index",
           "style": {

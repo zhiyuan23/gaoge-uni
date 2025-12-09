@@ -51,18 +51,34 @@
 </template>
 
 <script lang='ts' setup>
-import { useAppStore } from '@/store'
+import { useAuthStore } from '@/store'
 import { reLaunch } from '@/utils'
 
-const appStore = useAppStore()
+const authStore = useAuthStore()
 
 const loading = ref(false)
 const isAgree = ref([''])
 const showPrivacy = ref(false)
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
   loading.value = true
-  appStore.sessionKey = '123'
+
+  const data = {
+    sessionKey: 'demo-sessionKey',
+    unionid: 'demo-unionid',
+    token: 'demo-token',
+  }
+  authStore.setAuthInfo(data)
+
+  try {
+    const res = await uni.getLocation()
+    console.log('res', res)
+    loading.value = false
+  }
+  catch (error) {
+    console.log('error', error)
+    loading.value = false
+  }
 
   setTimeout(() => {
     reLaunch('/pages/home/index')

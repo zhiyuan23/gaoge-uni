@@ -4,7 +4,7 @@
       选择省市区
     </view>
 
-    <AreaPicker
+    <RegionPicker
       v-model:show="showPicker"
       :level="2"
       @confirm="onSelect"

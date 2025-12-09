@@ -16,20 +16,20 @@
         ，未注册手 机号将自动注册
       </view>
 
-      <view class="flex-center-around pt-120 pb-20">
-        <view class="w-250">
+      <view class="flex-center-between pt-120 pb-20">
+        <view class="w-300">
           <u-button
             type="default"
-            shape="circle"
+            shape="square"
             @click="disagree"
           >
             以后再说
           </u-button>
         </view>
-        <view class="w-250">
+        <view class="w-300">
           <u-button
             type="primary"
-            shape="circle"
+            shape="square"
             color="var(--wechat-primary)"
             @click="agree"
           >

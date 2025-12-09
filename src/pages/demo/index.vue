@@ -20,7 +20,7 @@
         { name: '浑南区', code: '210112' }
       ] 两种格式
   -->
-  <AreaPicker
+  <RegionPicker
     v-model:show="showPicker"
     :default-value="selectedArea"
     :level="3"

@@ -8,13 +8,12 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    AreaPicker: typeof import('./../components/AreaPicker/index.vue')['default']
-    Copyright: typeof import('./../components/copyright/index.vue')['default']
-    LangSelect: typeof import('./../components/lang-select/index.vue')['default']
+    LangSelect: typeof import('./../components/common/LangSelect.vue')['default']
     LotteryResult: typeof import('./../components/lottery/LotteryResult.vue')['default']
     LotteryRule: typeof import('./../components/lottery/LotteryRule.vue')['default']
     LotteryService: typeof import('./../components/lottery/LotteryService.vue')['default']
     PrivacyPolicy: typeof import('./../components/common/PrivacyPolicy.vue')['default']
+    RegionPicker: typeof import('./../components/common/RegionPicker.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

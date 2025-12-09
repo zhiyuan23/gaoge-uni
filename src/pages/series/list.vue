@@ -24,7 +24,7 @@
           class="size-full"
           src="@/static/images/home/ic-wdjp.png"
         />
-        <view class="flext-center absolute color-primary h-40 top-0 right-14 leading-40 text-22">
+        <view class="absolute flex-center color-primary h-40 top-0 right-14 leading-40 text-22">
           我的奖品
         </view>
       </view>
@@ -64,7 +64,7 @@ import { navigateTo } from '@/utils'
 const seriesStore = useSeriesStore()
 
 // 登录状态
-const isLogin = ref(true)
+const isLogin = ref(false)
 
 // 个人信息
 const userInfo = ref({
@@ -76,7 +76,7 @@ const userInfo = ref({
 const goUserPage = () => {
   const url = isLogin.value
     ? '/pages/user/user-info/index'
-    : '/pages/common/login/index'
+    : '/pages/login/index'
 
   navigateTo(url)
 }
