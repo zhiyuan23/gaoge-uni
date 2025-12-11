@@ -27,7 +27,7 @@
               mode="aspectFit"
               class="relative w-370 left-0"
             />
-            <view class="relative h-100% flex-col-center text-center color-#F00A0A w-370 -ml-80">
+            <view class="relative h-100% flex-col-center text-center w-370 -ml-80">
               <!-- 实物奖 -->
               <block v-if="prizeInfo?.type === 'physical'">
                 <view class="mb-40 text-30">
@@ -43,6 +43,7 @@
                   实物瓶盖为唯一兑奖凭证，<br>请妥善保管
                 </view>
               </block>
+
               <!-- 现金红包 -->
               <block v-if="prizeInfo?.type === 'cash'">
                 <view class="mb-50 text-30">
@@ -136,22 +137,18 @@
 import { defaultPrizeInfo, type PrizeInfo } from '@/types/modules/prize'
 import { navigateToMiniApp } from '@/utils'
 
-const props = withDefaults(
-  defineProps<{
-    modelValue: boolean;
-    prizeInfo: PrizeInfo; // 奖品信息
-  }>(),
-  {
-    prizeInfo: () => (defaultPrizeInfo),
-  },
-)
+const props = defineProps<{
+  prizeInfo?: PrizeInfo;
+}>()
 
-const emit = defineEmits(['update:modelValue', 'close', 'confirm'])
+const emit = defineEmits<{
+  close: [];
+  confirm: [];
+}>()
 
-const show = computed({
-  get: () => props.modelValue,
-  set: (val: boolean) => emit('update:modelValue', val),
-})
+const show = defineModel<boolean>({ required: true })
+
+const prizeInfo = computed(() => props.prizeInfo ?? defaultPrizeInfo)
 
 const handleClose = () => {
   show.value = false

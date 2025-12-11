@@ -12,7 +12,6 @@
 
 <script setup>
 import { areaList } from '@vant/area-data'
-import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 
 const props = defineProps({
   show: {

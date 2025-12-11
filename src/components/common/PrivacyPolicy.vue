@@ -1,8 +1,8 @@
 <template>
   <u-popup
-    :show="showDialog"
+    :show="show"
     round="20"
-    @close="closeAgreePrivacy"
+    @close="show = false"
   >
     <view class="px-45 text-30">
       <view class="pt-50 leading-30">
@@ -41,41 +41,26 @@
   </u-popup>
 </template>
 
-<script setup lang='ts'>
-const props = withDefaults(
-  defineProps<{
-    modelValue: boolean;
-  }>(),
-  {
-    modelValue: false,
-  },
-)
+<script setup lang="ts">
+const emit = defineEmits<{
+  agree: [];
+  disagree: [];
+}>()
 
-const emit = defineEmits(['update:modelValue', 'needPrivacyAuthorization', 'agree', 'disagree'])
-
-const showDialog = computed({
-  get: () => props.modelValue,
-  set: (val: boolean) => emit('update:modelValue', val),
+const show = defineModel<boolean>({
+  default: false,
+  required: false,
 })
 
-// 关闭隐私
-const closeAgreePrivacy = () => {
-  emit('update:modelValue', false)
-}
-
-// 同意
+// 同意并关闭
 const agree = () => {
   emit('agree')
-  emit('update:modelValue', false)
+  show.value = false
 }
 
-// 拒绝
+// 拒绝并关闭
 const disagree = () => {
   emit('disagree')
-  closeAgreePrivacy()
+  show.value = false
 }
-
-onMounted(() => {
-
-})
 </script>

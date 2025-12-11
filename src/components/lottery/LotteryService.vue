@@ -65,30 +65,27 @@
   </u-popup>
 </template>
 
-<script setup lang='ts'>
-const props = withDefaults(
-  defineProps<{
-    modelValue: boolean;
-    type: string;
-  }>(),
-  {
-    type: 'ml',
-  },
-)
+<script setup lang="ts">
+const props = defineProps<{
+  type?: string;
+}>()
 
-const emit = defineEmits(['update:modelValue', 'close'])
+const emit = defineEmits<{
+  close: [];
+}>()
 
-const show = computed({
-  get: () => props.modelValue,
-  set: (val: boolean) => emit('update:modelValue', val),
-})
+const show = defineModel<boolean>({ required: true })
 
+const type = computed(() => props.type ?? 'ml')
+
+// 打电话
 const handleCall = (phoneNumber: string) => {
   uni.makePhoneCall({
     phoneNumber,
   })
 }
 
+// 关闭弹窗
 const handleClose = () => {
   show.value = false
   emit('close')
