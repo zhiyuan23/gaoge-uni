@@ -13,7 +13,6 @@ const useSeriesStore = defineStore(
     persist: [
       {
         pick: ['seriesCode'],
-        storage: localStorage,
       },
     ],
   },

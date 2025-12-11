@@ -4,7 +4,7 @@ import type {
   HttpRequestConfig,
   HttpResponse,
 } from 'uview-plus/libs/luch-request/index'
-import { getToken } from '@/utils/auth'
+import { useAuthStore } from '@/store'
 import storage from '@/utils/storage'
 import { showMessage } from './status'
 
@@ -78,16 +78,12 @@ const requestInterceptors = (http: HttpRequestAbstract) => {
       // 自定义参数
       const custom = config?.custom
 
+      const { sessionKey } = useAuthStore()
       // 是否需要设置 token
       const isToken = custom?.auth === false
-      if (getToken('yzOpenId') && !isToken && config.header) {
+      if (sessionKey && !isToken && config.header) {
         // token设置
-        config.header.yzOpenId = getToken('yzOpenId')
-      }
-
-      if (getToken('thirdSessionKey') && !isToken && config.header) {
-        // token设置
-        config.header.thirdSessionKey = getToken('thirdSessionKey')
+        config.header.thirdSessionKey = sessionKey
       }
       // console.log(`获取到的请求头的ID：${JSON.stringify(config.header)}`)
       // 是否显示 loading

@@ -4,9 +4,12 @@ import { createPinia } from 'pinia'
 import { createPersistedState } from 'pinia-plugin-persistedstate'
 
 // 导入子模块
-import useAppStore from './modules/app'
-import useHomeStore from './modules/home'
-import useSeriesStore from './modules/series'
+import useAppStore from './app'
+import useAuthStore from './auth'
+import useHomeStore from './home'
+import useExchangeStore from './lottery/exchange'
+import useMyPrizeStore from './lottery/myPrize'
+import useSeriesStore from './series'
 
 // 安装pinia状态管理插件
 const setupStore = (app: App) => {
@@ -23,10 +26,12 @@ const setupStore = (app: App) => {
   app.use(store)
 }
 
-// 导出模块
 export {
   useAppStore,
+  useAuthStore,
+  useExchangeStore,
   useHomeStore,
+  useMyPrizeStore,
   useSeriesStore,
 }
 export default setupStore

@@ -1,7 +1,6 @@
 export const useAppStore = defineStore(
   'app',
   () => {
-    const sessionKey = ref<string>('')
     const systemInfo = reactive<UniApp.GetSystemInfoResult>({} as UniApp.GetSystemInfoResult)
     const getSystemInfo = computed(() => systemInfo)
 
@@ -46,26 +45,11 @@ export const useAppStore = defineStore(
     }
 
     return {
-      sessionKey,
       systemInfo,
       getSystemInfo,
       initSystemInfo,
       checkUpdate,
     }
-  },
-  {
-    persist: [
-      {
-        pick: ['sessionKey'],
-        storage: localStorage,
-        // serializer: {
-        //   // 存储时只存字符串
-        //   serialize: (state: any) => state.seriesCode,
-        //   // 读取时还原成对象
-        //   deserialize: (value: string | null) => ({ seriesCode: value || '' }),
-        // },
-      },
-    ],
   },
 )
 
