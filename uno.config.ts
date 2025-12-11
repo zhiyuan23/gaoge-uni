@@ -101,6 +101,23 @@ export default defineConfig({
       'border-style': style,
       'border-color': color,
     })],
+    // 单独设置边框的方向（如上下左右），例如 border-t-2-solid-#e0e0e0
+    [/^border-([trblxy])-(\d+)-(solid|dashed|dotted)-(.+)$/, ([, direction, w, style, color]) => {
+      const directions = {
+        t: 'top',
+        r: 'right',
+        b: 'bottom',
+        l: 'left',
+        x: 'left right',
+        y: 'top bottom',
+      }
+      const borderSide = directions[direction]
+      return {
+        [`border-${borderSide}-width`]: `${w}rpx`,
+        [`border-${borderSide}-style`]: style,
+        [`border-${borderSide}-color`]: color,
+      }
+    }],
   ],
   shortcuts: [
     [/^flex-?(col)?-(start|end|center|baseline|stretch)-?(start|end|center|between|around|evenly|left|right)?$/, ([, col, items, justify]) => {
@@ -119,6 +136,7 @@ export default defineConfig({
       default: lightTheme['--text-primary'],
       secondary: lightTheme['--text-secondary'],
       background: lightTheme['--bg-container'],
+      bgSecondary: lightTheme['--bg-secondary'],
       border: lightTheme['--border-base'],
       wechat: lightTheme['--wechat-primary'],
       zwcs: lightTheme['--theme-zwcs'],

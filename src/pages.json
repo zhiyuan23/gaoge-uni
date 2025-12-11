@@ -56,6 +56,18 @@
       }
     },
     {
+      "path": "pages/lottery/exchange",
+      "style": {
+        "navigationBarTitleText": "兑奖点"
+      }
+    },
+    {
+      "path": "pages/lottery/my-prize",
+      "style": {
+        "navigationBarTitleText": "我的奖品"
+      }
+    },
+    {
       "path": "pages/user/user-info/index",
       "style": {
         "navigationBarTitleText": "个人信息"

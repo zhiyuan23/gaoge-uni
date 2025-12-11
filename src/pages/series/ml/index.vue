@@ -39,11 +39,11 @@
       </view>
 
       <view class="flex-center-between w-540 text-30">
-        <view class="button w-240 h-70">
+        <view class="button w-240 h-70" @click="goMyPrize">
           <image class="size-48 pr-8" src="@/static/images/icons/ic-prize.png" />
           我的奖品
         </view>
-        <view class="button w-240 h-70">
+        <view class="button w-240 h-70" @click="goExchange">
           <image class="size-48 pr-8" src="@/static/images/icons/ic-location.png" />
           兑奖门店
         </view>
@@ -72,6 +72,7 @@
 
 <script setup lang='ts'>
 import { defaultPrizeInfo } from '@/types/modules/prize'
+import { navigateTo } from '@/utils'
 
 // 活动说明/客服电话
 const showRule = ref(false)
@@ -86,6 +87,16 @@ const scanCode = async () => {
   const { result } = await uni.scanCode()
   console.log('扫描结果：', result)
   showResult.value = true
+}
+
+// 前往我的奖品
+const goMyPrize = () => {
+  navigateTo('/pages/lottery/my-prize')
+}
+
+// 前往兑奖点
+const goExchange = () => {
+  navigateTo('/pages/lottery/exchange')
 }
 
 onLoad(() => {

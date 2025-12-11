@@ -28,6 +28,9 @@ image {
 
 .u-button::after {
   border: 0;
+}
+
+.u-button--circle::after {
   border-radius: 100rpx;
 }
 

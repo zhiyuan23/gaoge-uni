@@ -16,5 +16,6 @@ declare module 'vue' {
     RegionPicker: typeof import('./../components/common/RegionPicker.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SearchBar: typeof import('./../components/common/SearchBar.vue')['default']
   }
 }

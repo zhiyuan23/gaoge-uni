@@ -5,7 +5,7 @@
       class="size-full"
       src="@/static/images/home/bg-main.png"
     />
-    <view class="relative flex-center-between rounded-1.5 mx-25 w-694 h-160 border-2-solid-white -mt-204">
+    <view class="relative flex-center-between rounded-1.5 mx-25 w-700 h-160 border-2-solid-white -mt-204">
       <!-- 个人信息 -->
       <view class="flex-center-start color-white" @click="goUserPage">
         <image
@@ -58,13 +58,11 @@
 
 <script setup lang='ts'>
 import { seriesList } from '@/constants'
-import { useSeriesStore } from '@/store'
+import { useAuthStore, useSeriesStore } from '@/store'
 import { navigateTo } from '@/utils'
 
 const seriesStore = useSeriesStore()
-
-// 登录状态
-const isLogin = ref(false)
+const authStore = useAuthStore()
 
 // 个人信息
 const userInfo = ref({
@@ -74,7 +72,7 @@ const userInfo = ref({
 
 // 查看个人信息
 const goUserPage = () => {
-  const url = isLogin.value
+  const url = authStore.isLogin
     ? '/pages/user/user-info/index'
     : '/pages/login/index'
 
@@ -84,7 +82,6 @@ const goUserPage = () => {
 // 跳转系列页
 const goDetail = (type: string) => {
   seriesStore.seriesCode = type
-  seriesStore.seriesInfo = userInfo.value
 
   uni.navigateTo({
     url: `/pages/series/${type}/index`,
