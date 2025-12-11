@@ -1,6 +1,10 @@
 <script setup lang='ts'>
-onLaunch(() => {
+import { useAuth } from '@/composables'
 
+const { silentLogin } = useAuth({ autoSilentLogin: false })
+
+onLaunch(async () => {
+  await silentLogin()
 })
 
 onShow(() => {

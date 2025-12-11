@@ -74,15 +74,13 @@ const handleSubmit = async () => {
     const res = await uni.getLocation()
     console.log('res', res)
     loading.value = false
+
+    reLaunch('/pages/home/index')
   }
   catch (error) {
     console.log('error', error)
     loading.value = false
   }
-
-  setTimeout(() => {
-    reLaunch('/pages/home/index')
-  }, 1000)
 }
 
 const handleLogin = () => {

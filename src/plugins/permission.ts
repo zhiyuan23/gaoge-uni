@@ -1,3 +1,4 @@
+// import { useAuth } from '@/composables'
 import {
   ERROR404_PATH,
   isPathExists,
@@ -5,7 +6,9 @@ import {
   removeQueryString,
   routes,
 } from '@/router'
-import { isLogin } from '@/utils/auth'
+
+// const { isLogin } = useAuth()
+const isLogin = true
 
 // 白名单路由
 const whiteList: string[] = ['/']
@@ -29,7 +32,7 @@ export const hasPerm = (path = ''): boolean => {
   const normalizedPath = removeQueryString(path)
 
   // 在白名单或已登录 → 允许访问
-  const hasPermission = whiteList.includes(normalizedPath) || isLogin()
+  const hasPermission = whiteList.includes(normalizedPath) || isLogin
 
   if (!hasPermission) {
     // 未登录 → 跳登录页并携带 redirect 参数
