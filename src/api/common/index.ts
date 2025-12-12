@@ -9,7 +9,7 @@ export const uploadFile = (filePath: string) =>
   upload<UploadRes>('/common/upload', { filePath, name: 'file' })
 
 // 发送验证码
-export const sendCode = (data: SendCodeReq) => post<SendCodeRes>('/sendCode', { data })
+export const sendCode = (data: SendCodeReq) => post<SendCodeRes>('/sendCode', data)
 
 // 上传图片
 export const uploadToCloud = async (tempFilePath: string, path: string = 'image'): Promise<string> => {
