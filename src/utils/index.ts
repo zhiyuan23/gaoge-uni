@@ -1,6 +1,5 @@
 export * from './common'
 export * from './modals'
 export * from './navigate'
-export * from './request'
 export * from './storage'
 export * from './time'

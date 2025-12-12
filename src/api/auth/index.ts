@@ -1,12 +1,4 @@
-// import { getOpenid } from './silent'
-// import { phoneLogin, wechatLogin } from './login'
-// import { logout } from './logout'
+import { post } from '@/api'
 
-// export const AuthApi = {
-//   getOpenid,
-//   phoneLogin,
-//   wechatLogin,
-//   logout,
-// }
-
-// export { getOpenid, phoneLogin, wechatLogin, logout }
+// 获取OpenId
+export const getOpenId = (data: any) => post<any>('/wx/mem/userAuth/getOpenId', data)

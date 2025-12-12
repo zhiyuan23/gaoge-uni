@@ -2,7 +2,7 @@
  * 通用接口
  */
 import type { SendCodeReq, SendCodeRes, UploadRes } from './types'
-import { post, upload } from '@/utils/request'
+import { post, upload } from '@/api'
 
 // 文件上传
 export const uploadFile = (filePath: string) =>

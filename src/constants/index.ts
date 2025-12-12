@@ -1,1 +1,2 @@
-export * from './modules/serices'
+export * from './serices'
+export * from './themes'
