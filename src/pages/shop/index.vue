@@ -1,8 +1,10 @@
 <template>
   <view class="fixed z-9 w-100vw flex-center-center bg-white h-104 border-b-1-solid-#e6e6e6 border-t-1-solid-#e6e6e6">
     <SearchBar
+      v-model="searchText"
       city-name="沈阳"
       placeholder="输入兑奖点名称或地址搜索"
+      @search="loadData"
     />
   </view>
   <view class="fixed flex flex-col overflow-hidden inset-0">
@@ -25,9 +27,7 @@
       <view
         class="absolute z-20 flex items-center justify-center rounded-full bg-white shadow-lg w-12 h-12 right-4 bottom-20"
         @click.stop="reLocate"
-      >
-        <text class="i-material-symbols-my-location text-2xl text-#333" />
-      </view>
+      />
     </view>
 
     <!-- 拖拽把手 -->
@@ -48,7 +48,7 @@
     >
       <view class="bg-white pb-50">
         <view
-          v-for="store in storeList" :key="store.id"
+          v-for="store in shopList" :key="store.id"
           class="flex-center bg-white mx-25 h-184 border-b-1-solid-#e0e0e0"
           :class="{ 'bg-#07c160': currentStoreId === store.id }"
           @click="selectStore(store)"
@@ -61,7 +61,7 @@
               <view class="font-bold mt-4">
                 {{ store.name }}
               </view>
-              <view class="flex-center-center flex-shrink-0 rounded-20 color-#F77600 ml-10 w-130 h-40 text-20 border-2-solid-#F77600">
+              <view class="flex-center-center flex-shrink-0 rounded-20 color-#F77600 ml-10 w-130 h-40 text-20 border-2-solid-#F77600" @click="goFeedback">
                 我要反馈
               </view>
             </view>
@@ -76,7 +76,7 @@
 
           <!-- 导航按钮 -->
           <view class="flex-col-center-center px-20" @click="navigateToStore(store)">
-            <image src="/static/images/exchange/ic-nav.png" class="size-48" />
+            <image src="/static/images/shop/ic-nav.png" class="size-48" />
             <view class="leading-48 text-22">
               去导航
             </view>
@@ -86,7 +86,7 @@
         <view v-if="loading" class="text-center text-#999 py-20">
           加载中...
         </view>
-        <view v-if="!loading && storeList.length === 0" class="text-center text-#999 py-20">
+        <view v-if="!loading && shopList.length === 0" class="text-center text-#999 py-20">
           附近暂无门店
         </view>
       </view>
@@ -94,13 +94,14 @@
   </view>
 </template>
 
-<script setup lang="ts">
-import { useExchangeStore } from '@/store'
-
-const exchangeStore = useExchangeStore()
-const { storeList, markers, fetchStoreList } = exchangeStore
+<script setup lang='ts'>
+import useShopStore from '@/store/shop'
+import { navigateTo } from '@/utils'
 
 const SCREEN_HEIGHT = uni.getSystemInfoSync().windowHeight
+
+const shopStore = useShopStore()
+const { shopList, markers, fetchShopList } = shopStore
 
 // 默认地图占 40%
 const mapHeight = ref(SCREEN_HEIGHT * 0.4)
@@ -114,6 +115,9 @@ const center = reactive<any>({})
 const currentStoreId = ref<number | null>(null)
 const loading = ref(false)
 
+const searchText = ref<string>('')
+
+// 加载数据
 const loadData = async () => {
   loading.value = true
 
@@ -122,11 +126,18 @@ const loadData = async () => {
   center.lat = latitude
   center.lng = longitude
 
-  await fetchStoreList()
+  console.log(searchText.value)
+  await fetchShopList()
 
   loading.value = false
 }
 
+// 我要反馈
+const goFeedback = () => {
+  navigateTo('/pages/shop/feedback')
+}
+
+// 去导航
 const navigateToStore = (store: any) => {
   uni.openLocation({
     latitude: store.lat,
@@ -137,18 +148,21 @@ const navigateToStore = (store: any) => {
   })
 }
 
+// 点击列表门店-地图定位到门店
 const selectStore = (store: any) => {
   currentStoreId.value = store.id
   center.lat = store.lat
   center.lng = store.lng
 }
 
+// 地图定位点点击
 const onMarkerTap = (e: any) => {
   const id = e.detail.markerId
-  const store = storeList.find(s => s.id === id)
+  const store = shopList.find(s => s.id === id)
   if (store) selectStore(store)
 }
 
+// 回到当前定位
 const reLocate = async () => {
   const res = await uni.getLocation()
 
@@ -157,11 +171,12 @@ const reLocate = async () => {
   loadData()
 }
 
-// 拖拽功能
+// 拖拽功能-拖拽开始
 const onTouchStart = (e: any) => {
   startY = e.touches[0].pageY
 }
 
+// 拖拽功能-拖拽中
 const onTouchMove = (e: any) => {
   const deltaY = e.touches[0].pageY - startY
   let newHeight = mapHeight.value + deltaY
@@ -173,8 +188,8 @@ const onTouchMove = (e: any) => {
   startY = e.touches[0].pageY
 }
 
+// 拖拽功能-拖拽结束
 const onTouchEnd = () => {
-  // 智能吸附
   if (mapHeight.value < MID_HEIGHT - 50) {
     mapHeight.value = MIN_HEIGHT
   }

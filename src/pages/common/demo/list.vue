@@ -22,7 +22,7 @@
   </view>
 </template>
 
-<script setup lang="ts">
+<script setup lang='ts'>
 // 列表数据
 const list = ref<Array<{ id: number;title: string;desc: string }>>([])
 const pageNo = ref(1)
@@ -66,3 +66,7 @@ onMounted(() => {
   loadList(true)
 })
 </script>
+
+<style lang="scss" scoped>
+/* 额外样式可用 UnoCSS 替代 */
+</style>

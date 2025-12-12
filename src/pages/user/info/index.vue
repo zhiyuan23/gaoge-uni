@@ -93,7 +93,7 @@
   </view>
 </template>
 
-<script setup lang="ts">
+<script setup lang='ts'>
 import { formatTime } from '@/utils'
 
 const userInfo = reactive({

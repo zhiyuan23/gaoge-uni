@@ -19,7 +19,7 @@
           <view>{{ userInfo.userName }}</view>
         </view>
       </view>
-      <view class="relative mt-100 w-150 h-40">
+      <view class="relative mt-100 w-150 h-40" @click="goMyPrize">
         <image
           class="size-full"
           src="@/static/images/home/ic-wdjp.png"
@@ -57,8 +57,10 @@
 </template>
 
 <script setup lang='ts'>
+import type { SeriesKey } from '@/constants'
 import { seriesList } from '@/constants'
-import { useAuthStore, useSeriesStore } from '@/store'
+import useAuthStore from '@/store/auth'
+import useSeriesStore from '@/store/series'
 import { navigateTo } from '@/utils'
 
 const seriesStore = useSeriesStore()
@@ -73,14 +75,19 @@ const userInfo = ref({
 // 查看个人信息
 const goUserPage = () => {
   const url = authStore.isLogin
-    ? '/pages/user/user-info/index'
+    ? '/pages/user/info/index'
     : '/pages/login/index'
 
   navigateTo(url)
 }
 
+// 前往我的奖品
+const goMyPrize = () => {
+  navigateTo('/pages/user/prize/index')
+}
+
 // 跳转系列页
-const goDetail = (type: string) => {
+const goDetail = (type: SeriesKey) => {
   seriesStore.seriesCode = type
 
   uni.navigateTo({
