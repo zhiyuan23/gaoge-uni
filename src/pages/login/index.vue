@@ -51,7 +51,7 @@
 </template>
 
 <script lang='ts' setup>
-import { useAuthStore } from '@/store'
+import useAuthStore from '@/store/auth'
 import { reLaunch } from '@/utils'
 
 const authStore = useAuthStore()

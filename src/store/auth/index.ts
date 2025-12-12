@@ -1,27 +1,27 @@
+import { getOpenId } from '@/api/auth'
+
 export const useAuthStore = defineStore(
   'auth',
   () => {
-    const openid = ref<string>('')
+    const openId = ref<string>('')
     const unionid = ref<string>('')
     const token = ref<string>('')
     const sessionKey = ref<string>('')
 
-    const isLogin = computed(() => !!openid.value)
+    const isLogin = computed(() => !!openId.value)
 
-    // 初始化 openid
+    // 初始化 openId
     const initOpenid = async () => {
-      if (openid.value) return
+      if (openId.value) return
 
       try {
         const { code } = await uni.login()
-        console.log('code', code)
-        // const res = await getOpenid(code)
-        const res = { openid: code }
+        const res: any = await getOpenId({ wxCode: code })
 
-        openid.value = res.openid
+        openId.value = res.openId
       }
       catch (err) {
-        console.error('静默获取 openid 失败', err)
+        console.error('静默获取 openId 失败', err)
       }
     }
 
@@ -38,14 +38,14 @@ export const useAuthStore = defineStore(
 
     // 退出登录清空
     const logout = () => {
-      openid.value = ''
+      openId.value = ''
       unionid.value = ''
       token.value = ''
       sessionKey.value = ''
     }
 
     return {
-      openid,
+      openId,
       unionid,
       token,
       sessionKey,

@@ -35,6 +35,13 @@
       }
     },
     {
+      "path": "pages/series/detail",
+      "style": {
+        "navigationBarTitleText": "系列详情",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    {
       "path": "pages/series/ml/index",
       "style": {
         "navigationBarTitleText": "1元畅饮赢大奖",
@@ -56,34 +63,27 @@
       }
     },
     {
-      "path": "pages/lottery/exchange",
+      "path": "pages/shop/index",
       "style": {
         "navigationBarTitleText": "兑奖点"
       }
     },
     {
-      "path": "pages/lottery/my-prize",
+      "path": "pages/shop/feedback",
       "style": {
-        "navigationBarTitleText": "我的奖品"
+        "navigationBarTitleText": "问题反馈"
       }
     },
     {
-      "path": "pages/user/user-info/index",
+      "path": "pages/user/info/index",
       "style": {
         "navigationBarTitleText": "个人信息"
       }
     },
     {
-      "path": "pages/demo/index",
+      "path": "pages/user/prize/index",
       "style": {
-        "navigationBarTitleText": "demo示例"
-      }
-    },
-    {
-      "path": "pages/demo/list",
-      "style": {
-        "navigationBarTitleText": "demo列表",
-        "enablePullDownRefresh": true
+        "navigationBarTitleText": "我的奖品"
       }
     }
   ],
@@ -102,6 +102,19 @@
           "style": {
             "navigationBarTitleText": "404",
             "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "demo/index",
+          "style": {
+            "navigationBarTitleText": "demo示例"
+          }
+        },
+        {
+          "path": "demo/list",
+          "style": {
+            "navigationBarTitleText": "demo列表",
+            "enablePullDownRefresh": true
           }
         }
       ]
