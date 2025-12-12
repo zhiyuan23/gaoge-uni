@@ -41,7 +41,7 @@
   </u-popup>
 </template>
 
-<script setup lang="ts">
+<script setup lang='ts'>
 const emit = defineEmits<{
   agree: [];
   disagree: [];

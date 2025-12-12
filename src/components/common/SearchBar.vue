@@ -22,7 +22,7 @@
         :focus="false"
         :placeholder="placeholder"
         placeholder-style="color:#C0C4CC; font-size:28rpx;"
-        class="flex-1 ml-10 text-28"
+        class="flex-1 ml-10 leading-64 text-28"
         @input="onInput"
         @confirm="emit('search', searchValue)"
       >
@@ -47,7 +47,7 @@
   />
 </template>
 
-<script setup lang="ts">
+<script setup lang='ts'>
 const props = defineProps<{
   modelValue?: string;
   placeholder?: string;
