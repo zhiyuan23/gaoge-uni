@@ -9,11 +9,12 @@ function useAuth(options: {
   /** 静默登录是否在 onMounted 时自动执行，默认 true（大多数页面都需要） */
   autoSilentLogin?: boolean;
 } = {}) {
-  const { autoSilentLogin = true } = options
+  const { autoSilentLogin = false } = options
   const authStore = useAuthStore()
 
-  const isLogin = computed(() => !!authStore.openId)
+  const isMember = computed(() => !!authStore.isMember)
   const openId = computed(() => authStore.openId)
+
   const token = computed(() => authStore.token)
   const sessionKey = computed(() => authStore.token)
 
@@ -30,7 +31,7 @@ function useAuth(options: {
   }
 
   const checkAndLogin = () => {
-    if (!isLogin.value) {
+    if (!openId.value) {
       silentLogin()
       return false
     }
@@ -39,15 +40,15 @@ function useAuth(options: {
 
   if (autoSilentLogin) {
     onMounted(() => {
-      if (!isLogin.value) {
+      if (!openId.value) {
         silentLogin()
       }
     })
   }
 
   return {
-    isLogin,
     openId,
+    isMember,
     token,
     sessionKey,
     silentLogin,

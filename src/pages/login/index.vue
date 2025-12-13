@@ -14,88 +14,108 @@
     <view class="pt-24 leading-32 text-34">
       你我的怡宝+
     </view>
-    <view class="mt-260 w-540">
+    <view class="relative mt-260 mb-160 w-540">
       <u-button
+        v-if="!isAgree"
         type="primary"
         shape="circle"
-        :loading="loading"
-        loading-text="登录中"
-        @click="handleLogin"
+        @click="showPrivacy = true"
       >
-        登录
+        {{ isMember ? '微信登录' : '一键登录' }}
       </u-button>
+      <block v-else>
+        <u-button
+          v-if="isMember"
+          type="primary"
+          shape="circle"
+          :loading="loading"
+          loading-text="登录中"
+          @click="wxLogin"
+        >
+          微信登录
+        </u-button>
+        <u-button
+          v-else
+          type="primary"
+          shape="circle"
+          :loading="loading"
+          loading-text="登录中"
+          open-type="getPhoneNumber"
+          @getphonenumber="phoneLogin"
+        >
+          一键登录
+        </u-button>
+      </block>
     </view>
-    <u-checkbox-group
-      v-model="isAgree"
-      shape="circle"
-      active-color="#007E41"
-    >
-      <view class="flex-center-center mt-160 text-24">
-        <u-checkbox
-          label="已阅读并同意"
-          name="1"
-          :custom-style="{ fontSize: '22rpx' }"
-        />
-        <text class="color-primary">
-          《服务协议》
-        </text>
-        <text class="color-primary">
-          《隐私政策》
-        </text>
-      </view>
-    </u-checkbox-group>
+
+    <!-- 隐私协议展示组件 -->
+    <PrivacyInfo v-model="isAgree" />
   </view>
 
-  <!-- 隐私协议组件 -->
-  <PrivacyPolicy v-model="showPrivacy" @agree="onAgree" />
+  <!-- 隐私协议弹窗组件 -->
+  <PrivacyPopup v-model="showPrivacy" @agree="onAgree" />
 </template>
 
 <script lang='ts' setup>
+import { useAuth } from '@/composables'
 import useAuthStore from '@/store/auth'
 import { reLaunch } from '@/utils'
 
 const authStore = useAuthStore()
 
-const loading = ref(false)
-const isAgree = ref([''])
+const { isMember } = useAuth()
+
+// 隐私协议相关
+const isAgree = ref(false)
 const showPrivacy = ref(false)
 
-const handleSubmit = async () => {
-  loading.value = true
+// 提交按钮相关
+const loading = ref<boolean>(false)
 
-  const data = {
-    sessionKey: 'demo-sessionKey',
-    unionid: 'demo-unionid',
-    token: 'demo-token',
-  }
-  authStore.setAuthInfo(data)
+// 同意用户协议
+const onAgree = () => {
+  isAgree.value = true
+}
 
+// 提交登录
+const submit = async (data: any) => {
   try {
-    const res = await uni.getLocation()
-    console.log('res', res)
-    loading.value = false
-
+    await authStore.login(data)
     reLaunch('/pages/home/index')
   }
-  catch (error) {
-    console.log('error', error)
+  finally {
     loading.value = false
   }
 }
 
-const handleLogin = () => {
-  if (isAgree.value[0] !== '1') {
-    showPrivacy.value = true
+// 微信登录
+const wxLogin = async () => {
+  loading.value = true
+
+  const { code } = await uni.login()
+  const params = {
+    wxCode: code,
+    phoneCode: '',
   }
-  else {
-    handleSubmit()
-  }
+  submit(params)
 }
 
-const onAgree = () => {
-  isAgree.value = ['1']
-  handleSubmit()
+// 手机号登录
+const phoneLogin = async ({ detail }: any) => {
+  loading.value = true
+
+  const { code } = await uni.login()
+  const params = {
+    wxCode: code,
+    phoneCode: detail.code,
+  }
+
+  submit(params)
 }
+
+onLoad(() => {
+
+})
 </script>
 
 <style scpoed>

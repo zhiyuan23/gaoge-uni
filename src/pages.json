@@ -12,6 +12,7 @@
       "path": "pages/home/index",
       "style": {
         "navigationBarTitleText": "怡宝家园",
+        "backgroundColor": "#ffffff",
         "navigationStyle": "custom"
       }
     },
@@ -131,6 +132,7 @@
     "navigationBarTitleText": "怡宝家园",
     "navigationBarBackgroundColor": "#ffffff",
     "navigationBarColor": "#202020",
-    "backgroundColor": "#F3F4F6"
+    "backgroundColor": "#ffffff"
+    // "backgroundColor": "#F3F4F6"
   }
 }
