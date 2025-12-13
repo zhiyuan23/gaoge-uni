@@ -2,8 +2,9 @@ page {
   min-height: 100vh;
   font-size: $u-font-base;
   color: $u-main-color;
-  background-color: $u-bg-color;
 }
+
+/* background-color: $u-bg-color; */
 
 uni-page-body {
   min-height: auto !important;
@@ -36,4 +37,25 @@ image {
 
 .u-button--default::after {
   border: 1px solid rgb(0 0 0 / 20%);
+}
+
+/* uView 风格点击反馈 */
+.u-press {
+  position: relative;
+  overflow: hidden;
+}
+
+/* 按下时加一层黑色遮罩 */
+.u-press::after {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  content: '';
+  background: rgb(0 0 0 / 12%);
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+
+.u-press:active::after {
+  opacity: 1;
 }

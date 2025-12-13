@@ -12,9 +12,8 @@
       <!-- 关闭按钮 -->
       <view class="w-680">
         <image
-          src="/static/images/lottery/ic-close.png"
-          mode="widthFix"
-          class="float-right w-64"
+          src="/static/images/icons/ic-close.png"
+          class="float-right size-60"
           @click="handleClose"
         />
       </view>

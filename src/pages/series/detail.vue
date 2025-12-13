@@ -9,13 +9,13 @@
 
     <view class="absolute text-center text-white top-40 right-10 leading-30">
       <view class="flex-center-end w-100" @click="showRule = true">
-        <view class="flex-center rounded-3 bg-[var(--color)] w-48 h-146">
+        <view class="u-press flex-center rounded-3 bg-[var(--color)] w-48 h-146">
           活动规则
         </view>
       </view>
       <view class="h-28" />
       <view class="flex-center-end w-100" @click="showService = true">
-        <view class="flex-center rounded-3 bg-[var(--color)] w-48 h-146">
+        <view class="u-press flex-center rounded-3 bg-[var(--color)] w-48 h-146">
           联系客服
         </view>
       </view>
@@ -25,12 +25,14 @@
     <view class="absolute w-100vw flex-col-center-center font-bold mt-1090 top-0">
       <view class="h-150">
         <!-- 扫一扫按钮 -->
-        <view v-if="true" class="button w-540 h-100" @click="scanCode">
-          <image class="size-72 pr-8" src="@/static/images/icons/ic-scan.png" />
-          <text class="text-46">
-            点击扫一扫
-          </text>
-        </view>
+        <PressFeedback v-if="true">
+          <view class="button w-540 h-100" @click="scanCode">
+            <image class="size-72 pr-8" src="@/static/images/icons/ic-scan.png" />
+            <text class="text-46">
+              点击扫一扫
+            </text>
+          </view>
+        </PressFeedback>
 
         <!-- 活动为开始/已结束 -->
         <view v-else class="text-center">
@@ -45,26 +47,32 @@
 
       <view class="flex-center-between w-540 text-30">
         <view class="button w-240 h-70" @click="goMyPrize">
-          <image class="size-48 pr-8" src="@/static/images/icons/ic-prize.png" />
+          <image class="u-press size-48 pr-8" src="@/static/images/icons/ic-prize.png" />
           我的奖品
         </view>
         <view class="button w-240 h-70" @click="goExchange">
-          <image class="size-48 pr-8" src="@/static/images/icons/ic-location.png" />
+          <image class="u-press size-48 pr-8" src="@/static/images/icons/ic-location.png" />
           兑奖门店
         </view>
       </view>
     </view>
 
+    <!-- 开奖弹窗 -->
+    <LotteryDraw
+      v-model="showDraw"
+      :type="series"
+    />
+
     <!-- 活动规则 -->
     <LotteryRule
       v-model="showRule"
-      type="ml"
+      :type="series"
     />
 
     <!-- 客服电话 -->
     <LotteryService
       v-model="showService"
-      type="ml"
+      :type="series"
     />
 
     <!-- 扫码结果弹窗 -->
@@ -78,10 +86,12 @@
 <script setup lang='ts'>
 import { useTheme } from '@/composables'
 import { defaultPrizeInfo } from '@/types/modules/prize'
-
 import { navigateTo } from '@/utils'
 
-const { color } = useTheme()
+const { series, color } = useTheme()
+
+// 开奖弹窗
+const showDraw = ref(false)
 
 // 活动说明/客服电话
 const showRule = ref(false)
@@ -93,9 +103,11 @@ const prizeInfo = ref(defaultPrizeInfo)
 
 // 扫一扫
 const scanCode = async () => {
-  const { result } = await uni.scanCode()
-  console.log('扫描结果：', result)
-  showResult.value = true
+  showDraw.value = true
+
+  // const { result } = await uni.scanCode()
+  // console.log('扫描结果：', result)
+  // showResult.value = true
 }
 
 // 前往我的奖品

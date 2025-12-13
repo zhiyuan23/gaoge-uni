@@ -9,10 +9,13 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     LangSelect: typeof import('./../components/common/LangSelect.vue')['default']
+    LotteryDraw: typeof import('./../components/lottery/LotteryDraw.vue')['default']
     LotteryResult: typeof import('./../components/lottery/LotteryResult.vue')['default']
     LotteryRule: typeof import('./../components/lottery/LotteryRule.vue')['default']
     LotteryService: typeof import('./../components/lottery/LotteryService.vue')['default']
-    PrivacyPolicy: typeof import('./../components/common/PrivacyPolicy.vue')['default']
+    PressFeedback: typeof import('./../components/common/PressFeedback.vue')['default']
+    PrivacyInfo: typeof import('./../components/common/PrivacyInfo.vue')['default']
+    PrivacyPopup: typeof import('./../components/common/PrivacyPopup.vue')['default']
     RegionPicker: typeof import('./../components/common/RegionPicker.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

@@ -1,4 +1,5 @@
 export interface ThemeModule {
+  name?: string; // 名称
   bgImg?: string; // 背景图
   bgColor?: string; // 背景色（纯色）
   textColor?: string; // 文字主色（抽奖结果页专用）
