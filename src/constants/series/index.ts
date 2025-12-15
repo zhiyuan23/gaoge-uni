@@ -1,6 +1,4 @@
-import type { SeriesItem, SeriesKey } from './types'
-
-export type { SeriesKey }
+import type { SeriesItem } from '@/types'
 
 export const seriesList: SeriesItem[] = [
   { code: 'zbqr', name: '至本清润', shortName: '至本' },

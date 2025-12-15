@@ -1,4 +1,4 @@
-import type { SeriesKey } from '@/constants'
+import type { SeriesKey } from '@/types'
 
 const useSeriesStore = defineStore(
   'series',

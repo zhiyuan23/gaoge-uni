@@ -32,12 +32,18 @@
 
     <!-- 拖拽把手 -->
     <view
-      class="relative z-30 flex-center-center rounded-[47rpx_47rpx_0rpx_0rpx] bg-[linear-gradient(180deg,_#7EBC1D,_rgba(126,188,29,0.6))] color-white font-bold h-92 min-h-92 text-36"
+      class="relative z-30 w-100vw flex-center-center h-120 min-h-120 text-36"
       @touchstart.stop="onTouchStart"
       @touchmove.stop.prevent="onTouchMove"
       @touchend.stop="onTouchEnd"
     >
-      为您找到附近最近的兑奖点
+      <image
+        :src="`/static/images/series/popup-hd-${seriesCode}.png`"
+        class="absolute size-full top-0"
+      />
+      <text class="relative font-bold top-0" :style="{ color: titleColor }">
+        为您找到附近最近的兑奖点
+      </text>
     </view>
 
     <!-- 列表区域 -->
@@ -54,14 +60,21 @@
           @click="selectStore(store)"
         >
           <!-- 门店图片 -->
-          <image :src="store.cover" class="size-144 flex-shrink-0 mr-16 -ml-5" />
+          <image
+            :src="store.cover || `/static/images/shop/img-store-${seriesCode}.png`"
+            class="size-144 flex-shrink-0 mr-16 -ml-5"
+          />
           <view class="flex-1">
             <!-- 门店信息 -->
             <view class="flex-center">
               <view class="font-bold mt-4">
                 {{ store.name }}
               </view>
-              <view class="flex-center-center flex-shrink-0 rounded-20 color-#F77600 ml-10 w-130 h-40 text-20 border-2-solid-#F77600" @click="goFeedback">
+              <view
+                class="u-press flex-center-center flex-shrink-0 rounded-20 ml-10 w-130 h-40 text-20 border-2-solid-#FFF"
+                :style="{ color: shopBtnColor, borderColor: shopBtnColor }"
+                @click="goFeedback"
+              >
                 我要反馈
               </view>
             </view>
@@ -76,7 +89,7 @@
 
           <!-- 导航按钮 -->
           <view class="flex-col-center-center px-20" @click="navigateToStore(store)">
-            <image src="/static/images/shop/ic-nav.png" class="size-48" />
+            <image :src="`/static/images/shop/ic-nav-${seriesCode}.png`" class="size-48" />
             <view class="leading-48 text-22">
               去导航
             </view>
@@ -95,6 +108,7 @@
 </template>
 
 <script setup lang='ts'>
+import { useTheme } from '@/composables'
 import useShopStore from '@/store/shop'
 import { navigateTo } from '@/utils'
 
@@ -102,6 +116,8 @@ const SCREEN_HEIGHT = uni.getSystemInfoSync().windowHeight
 
 const shopStore = useShopStore()
 const { shopList, markers, fetchShopList } = shopStore
+
+const { seriesCode, titleColor, shopBtnColor } = useTheme()
 
 // 默认地图占 40%
 const mapHeight = ref(SCREEN_HEIGHT * 0.4)

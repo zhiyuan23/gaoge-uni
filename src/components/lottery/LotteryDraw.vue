@@ -29,20 +29,17 @@
         class="mt-8 w-520 h-520"
       />
 
-      <!-- 开奖按钮 -->
-      <PressFeedback>
-        <image
-          :src="`/static/images/lottery/main-btn-${type}.png`"
-          class="rounded-20 shadow-lg mt-30 w-540 h-102"
-          @click="handleConfirm"
-        />
-      </PressFeedback>
+      <MainButton
+        text="点击开奖"
+        icon="scan"
+        @click="handleConfirm"
+      />
     </view>
   </u-popup>
 </template>
 
 <script setup lang='ts'>
-import type { SeriesKey } from '@/constants'
+import type { SeriesKey } from '@/types'
 
 const props = defineProps<{
   type?: SeriesKey;

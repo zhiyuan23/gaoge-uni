@@ -1,2 +1,2 @@
-export * from './serices'
+export * from './series'
 export * from './themes'

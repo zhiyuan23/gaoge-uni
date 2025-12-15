@@ -1,4 +1,5 @@
 import { getShopList } from '@/api/shop'
+import { useTheme } from '@/composables'
 
 const useShopStore = defineStore(
   'shop',
@@ -8,6 +9,8 @@ const useShopStore = defineStore(
 
     // 地图覆盖点
     const markers = computed(() => {
+      const { mapPopBgColor, mapPopTitColor } = useTheme()
+
       return shopList.value.map(store => ({
         id: store.id,
         latitude: store.lat,
@@ -17,9 +20,9 @@ const useShopStore = defineStore(
         height: 40,
         callout: {
           content: store.name,
-          color: '#FFFFFF',
+          color: mapPopTitColor,
           fontSize: '20rpx',
-          bgColor: '#7FBE26',
+          bgColor: mapPopBgColor,
           padding: 2,
           paddingLeft: '10rpx',
           paddingRight: '10rpx',

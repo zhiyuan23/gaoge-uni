@@ -14,11 +14,12 @@
     <view class="pt-24 leading-32 text-34">
       你我的怡宝+
     </view>
-    <view class="relative mt-260 mb-160 w-540">
+    <view class="relative mt-260 mb-160 w-540 text-32">
       <u-button
         v-if="!isAgree"
         type="primary"
         shape="circle"
+        :custom-style="btnStyle"
         @click="showPrivacy = true"
       >
         {{ isMember ? '微信登录' : '一键登录' }}
@@ -28,6 +29,7 @@
           v-if="isMember"
           type="primary"
           shape="circle"
+          :custom-style="btnStyle"
           :loading="loading"
           loading-text="登录中"
           @click="wxLogin"
@@ -38,6 +40,7 @@
           v-else
           type="primary"
           shape="circle"
+          :custom-style="btnStyle"
           :loading="loading"
           loading-text="登录中"
           open-type="getPhoneNumber"
@@ -71,6 +74,10 @@ const showPrivacy = ref(false)
 
 // 提交按钮相关
 const loading = ref<boolean>(false)
+const btnStyle = reactive({
+  fontSize: '32rpx',
+  height: '80rpx',
+})
 
 // 同意用户协议
 const onAgree = () => {

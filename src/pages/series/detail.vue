@@ -1,11 +1,11 @@
 <template>
   <view class="page relative h-100vh overflow-hidden">
     <!-- 背景图 -->
-    <!-- <image
+    <image
       class="relative w-100vw"
-      src="@/static/images/series/bg_ml.png"
+      src="@/static/images/series/bg_zwcs.png"
       mode="widthFix"
-    /> -->
+    />
 
     <view class="absolute text-center text-white top-40 right-10 leading-30">
       <view class="flex-center-end w-100" @click="showRule = true">
@@ -25,14 +25,12 @@
     <view class="absolute w-100vw flex-col-center-center font-bold mt-1090 top-0">
       <view class="h-150">
         <!-- 扫一扫按钮 -->
-        <PressFeedback v-if="true">
-          <view class="button w-540 h-100" @click="scanCode">
-            <image class="size-72 pr-8" src="@/static/images/icons/ic-scan.png" />
-            <text class="text-46">
-              点击扫一扫
-            </text>
-          </view>
-        </PressFeedback>
+        <MainButton
+          v-if="true"
+          text="点击扫一扫"
+          icon="scan"
+          @click="scanCode"
+        />
 
         <!-- 活动为开始/已结束 -->
         <view v-else class="text-center">
@@ -46,13 +44,13 @@
       </view>
 
       <view class="flex-center-between w-540 text-30">
-        <view class="button w-240 h-70" @click="goMyPrize">
-          <image class="u-press size-48 pr-8" src="@/static/images/icons/ic-prize.png" />
+        <view class="u-press button w-240 h-70" @click="goMyPrize">
+          <u-icon name="gift" :color="color" size="22" />
           我的奖品
         </view>
-        <view class="button w-240 h-70" @click="goExchange">
-          <image class="u-press size-48 pr-8" src="@/static/images/icons/ic-location.png" />
-          兑奖门店
+        <view class="u-press button w-240 h-70" @click="goExchange">
+          <u-icon name="map" :color="color" size="22" class="pr-10" />
+          兑奖点
         </view>
       </view>
     </view>
@@ -60,19 +58,17 @@
     <!-- 开奖弹窗 -->
     <LotteryDraw
       v-model="showDraw"
-      :type="series"
+      :type="seriesCode"
     />
 
     <!-- 活动规则 -->
     <LotteryRule
       v-model="showRule"
-      :type="series"
     />
 
     <!-- 客服电话 -->
     <LotteryService
       v-model="showService"
-      :type="series"
     />
 
     <!-- 扫码结果弹窗 -->
@@ -88,7 +84,7 @@ import { useTheme } from '@/composables'
 import { defaultPrizeInfo } from '@/types/modules/prize'
 import { navigateTo } from '@/utils'
 
-const { series, color } = useTheme()
+const { seriesCode, color } = useTheme()
 
 // 开奖弹窗
 const showDraw = ref(false)
@@ -143,6 +139,6 @@ onLoad(() => {
 }
 
 .button {
-  @apply bg-[var(--color)];
+  @apply color-[var(--color)] border-5-solid-[var(--color)];
 }
 </style>

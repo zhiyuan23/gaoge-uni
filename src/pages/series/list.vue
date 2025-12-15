@@ -55,12 +55,12 @@
         </view>
         <view
           class="flex-center-center rounded-full bg-#FFC700 mr-10 px-5 h-47 text-22"
-          :style="{ color: themes[code].color }"
+          :style="{ color: themes.zbqr.color }"
         >
           立即参与
           <text
             class="size-36 rounded-full color-white font-bold p-2"
-            :style="{ background: themes[code].color }"
+            :style="{ background: themes.zbqr.color }"
           >
             GO
           </text>
@@ -72,7 +72,7 @@
 </template>
 
 <script setup lang='ts'>
-import type { SeriesKey } from '@/constants'
+import type { SeriesKey } from '@/types'
 import { seriesList, themes } from '@/constants'
 import useAuthStore from '@/store/auth'
 import useSeriesStore from '@/store/series'

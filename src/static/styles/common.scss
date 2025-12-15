@@ -22,9 +22,10 @@ image {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
-  background-color: $u-primary;
-  border-radius: 100rpx;
+  font-size: 32rpx;
+  border-style: solid;
+  border-width: 2rpx;
+  border-radius: 100rpx
 }
 
 .u-button::after {
@@ -40,13 +41,13 @@ image {
 }
 
 /* uView 风格点击反馈 */
-.u-press {
+.u-press, .button {
   position: relative;
   overflow: hidden;
 }
 
 /* 按下时加一层黑色遮罩 */
-.u-press::after {
+.u-press::after, .button::after {
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -56,6 +57,6 @@ image {
   transition: opacity 0.12s ease;
 }
 
-.u-press:active::after {
+.u-press:active::after, .button:active::after {
   opacity: 1;
 }

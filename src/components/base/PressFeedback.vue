@@ -25,7 +25,7 @@ const props = defineProps<{
 
 const durationPress = props.durationPress ?? 80
 const durationRelease = props.durationRelease ?? 150
-const translateY = props.translateY ?? 4
+const translateY = props.translateY ?? 2
 const scale = props.scale ?? 0.996
 
 const pressed = ref(false)

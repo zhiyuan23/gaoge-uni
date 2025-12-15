@@ -9,7 +9,7 @@ const mockData = {
     lat: lat + Math.random() * 0.12 - 0.06, // 散布在沈阳区域
     lng: lng + Math.random() * 0.15 - 0.075,
     address: `沈阳市和平区青年大街${i + 1}号昂立信息园内`,
-    cover: '/static/images/shop/img-store.png',
+    cover: '',
     distance: (Math.random() * 8 + 0.3).toFixed(1), // 0.3~8.3km
   })),
 }

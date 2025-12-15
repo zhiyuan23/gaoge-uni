@@ -13,12 +13,13 @@ declare module 'vue' {
     LotteryResult: typeof import('./../components/lottery/LotteryResult.vue')['default']
     LotteryRule: typeof import('./../components/lottery/LotteryRule.vue')['default']
     LotteryService: typeof import('./../components/lottery/LotteryService.vue')['default']
-    PressFeedback: typeof import('./../components/common/PressFeedback.vue')['default']
-    PrivacyInfo: typeof import('./../components/common/PrivacyInfo.vue')['default']
-    PrivacyPopup: typeof import('./../components/common/PrivacyPopup.vue')['default']
+    MainButton: typeof import('./../components/base/MainButton.vue')['default']
+    PressFeedback: typeof import('./../components/base/PressFeedback.vue')['default']
+    PrivacyInfo: typeof import('./../components/privacy/PrivacyInfo.vue')['default']
+    PrivacyPopup: typeof import('./../components/privacy/PrivacyPopup.vue')['default']
     RegionPicker: typeof import('./../components/common/RegionPicker.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    SearchBar: typeof import('./../components/common/SearchBar.vue')['default']
+    SearchBar: typeof import('./../components/base/SearchBar.vue')['default']
   }
 }
