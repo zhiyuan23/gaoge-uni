@@ -1,5 +1,5 @@
 <template>
-  <view class="page min-h-100vh" :style="{ background: bgColor }">
+  <view class="page min-h-screen" :style="{ background: bgColor }">
     <!-- 背景图 -->
     <view class="absolute w-100vw h-1000">
       <image :src="`/static/images/shop/bg-fb-${seriesCode}.png`" class="size-100%" />
@@ -96,7 +96,12 @@
       </view>
 
       <!-- 提交按钮 -->
-      <MainButton text="提交" icon="scan" />
+      <view class="w-full text-center">
+        <MainButton
+          label="提交"
+          icon="check"
+        />
+      </view>
     </view>
   </view>
 </template>
