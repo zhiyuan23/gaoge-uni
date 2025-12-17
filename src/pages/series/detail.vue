@@ -80,7 +80,7 @@
 </template>
 
 <script setup lang='ts'>
-import { useTheme } from '@/composables'
+import { useLocation, useTheme } from '@/composables'
 import useMyPrizeStore from '@/store/user/prize'
 import { defaultPrizeInfo } from '@/types'
 import { Dialog, navigateTo } from '@/utils'
@@ -136,7 +136,9 @@ const handleAction = async (type: any, item: any) => {
 
 // 扫一扫
 const scanCode = async () => {
-  showDraw.value = true
+  const res = await useLocation()
+  console.log(res)
+  // showDraw.value = true
 }
 
 // 前往兑奖点
