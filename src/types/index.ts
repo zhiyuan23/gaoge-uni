@@ -1,3 +1,4 @@
 export * from './modules/prize'
 export * from './modules/series'
+export * from './modules/shop'
 export * from './modules/themes'

@@ -4,7 +4,7 @@
       v-model="searchText"
       city-name="沈阳"
       placeholder="输入兑奖点名称或地址搜索"
-      @search="loadData"
+      @search="onSearch"
     />
   </view>
   <view class="fixed flex flex-col overflow-hidden inset-0">
@@ -16,7 +16,7 @@
       <map
         class="h-full w-full"
         :latitude="center.lat"
-        :longitude="center.lng"
+        :longitude="center.lon"
         :scale="15"
         :markers="markers"
         show-location
@@ -31,32 +31,26 @@
     </view>
 
     <!-- 拖拽把手 -->
-    <view
-      class="relative z-30 w-100vw flex-center-center h-120 min-h-120 text-36"
+    <PopupHeader
+      title="为您找到附近最近的兑奖点"
       @touchstart.stop="onTouchStart"
       @touchmove.stop.prevent="onTouchMove"
       @touchend.stop="onTouchEnd"
-    >
-      <image
-        :src="`/static/images/series/popup-hd-${seriesCode}.png`"
-        class="absolute size-full top-0"
-      />
-      <text class="relative font-bold top-0" :style="{ color: titleColor }">
-        为您找到附近最近的兑奖点
-      </text>
-    </view>
+    />
 
     <!-- 列表区域 -->
     <scroll-view
       scroll-y
       class="flex-1 bg-white"
       :style="{ height: `calc(100vh - ${mapHeight}px - 48px)` }"
+      @scrolltolower="onReachBottom"
     >
       <view class="bg-white pb-50">
         <view
-          v-for="store in shopList" :key="store.id"
+          v-for="store in shopList"
+          :key="store.hotPointID"
           class="flex-center bg-white mx-25 h-184 border-b-1-solid-#e0e0e0"
-          :class="{ 'bg-#07c160': currentStoreId === store.id }"
+          :class="{ 'bg-#07c160': currentStoreId === store.hotPointID }"
           @click="selectStore(store)"
         >
           <!-- 门店图片 -->
@@ -80,7 +74,7 @@
             </view>
 
             <view class="text-secondary mt-5 leading-40 text-22">
-              距您{{ store.distance }}km
+              距您{{ store.distance }}
             </view>
             <view class="text-secondary leading-40 text-22">
               {{ store.address }}
@@ -110,14 +104,14 @@
 <script setup lang='ts'>
 import { useTheme } from '@/composables'
 import useShopStore from '@/store/shop'
+
 import { navigateTo } from '@/utils'
 
 const SCREEN_HEIGHT = uni.getSystemInfoSync().windowHeight
-
 const shopStore = useShopStore()
-const { shopList, markers, fetchShopList } = shopStore
+const { shopList, page, hasMore, markers } = storeToRefs(shopStore)
 
-const { seriesCode, titleColor, shopBtnColor } = useTheme()
+const { seriesCode, shopBtnColor } = useTheme()
 
 // 默认地图占 40%
 const mapHeight = ref(SCREEN_HEIGHT * 0.4)
@@ -127,6 +121,7 @@ const MAX_HEIGHT = SCREEN_HEIGHT * 0.7
 
 let startY = 0
 
+const location = reactive<any>({})
 const center = reactive<any>({})
 const currentStoreId = ref<number | null>(null)
 const loading = ref(false)
@@ -134,18 +129,51 @@ const loading = ref(false)
 const searchText = ref<string>('')
 
 // 加载数据
-const loadData = async () => {
+const loadData = async (isSearch = false) => {
+  if (loading.value) return
+
   loading.value = true
 
-  // const { latitude, longitude } = await uni.getLocation({ type: 'gcj02' })
-  const { latitude, longitude } = { latitude: 41.71482, longitude: 123.44972 }
+  try {
+    const params = {
+      words: searchText.value.trim(),
+      radius: '',
+      lon: location.lon,
+      lat: location.lat,
+      page: page.value,
+    }
+
+    const isLoadMore = !isSearch
+
+    await shopStore.fetchList(params, isLoadMore)
+  }
+  finally {
+    loading.value = false
+  }
+}
+
+// 初始化数据
+const initData = async () => {
+  const { latitude, longitude } = await uni.getLocation({ type: 'gcj02' })
+
   center.lat = latitude
-  center.lng = longitude
+  center.lon = longitude
+  location.lat = latitude
+  location.lon = longitude
 
-  console.log(searchText.value)
-  await fetchShopList()
+  loadData(true)
+}
 
-  loading.value = false
+// 确认搜索
+const onSearch = () => {
+  shopStore.reset()
+  loadData(true)
+}
+
+// 上拉触底加载更多
+const onReachBottom = async () => {
+  if (!hasMore.value || loading.value) return
+  await loadData(false)
 }
 
 // 我要反馈
@@ -156,8 +184,8 @@ const goFeedback = () => {
 // 去导航
 const navigateToStore = (store: any) => {
   uni.openLocation({
-    latitude: store.lat,
-    longitude: store.lng,
+    latitude: Number(store.lat),
+    longitude: Number(store.lon),
     name: store.name,
     address: store.address,
     scale: 18,
@@ -166,16 +194,20 @@ const navigateToStore = (store: any) => {
 
 // 点击列表门店-地图定位到门店
 const selectStore = (store: any) => {
-  currentStoreId.value = store.id
+  currentStoreId.value = store.hotPointID
   center.lat = store.lat
-  center.lng = store.lng
+  center.lon = store.lon
 }
 
 // 地图定位点点击
 const onMarkerTap = (e: any) => {
-  const id = e.detail.markerId
-  const store = shopList.find(s => s.id === id)
-  if (store) selectStore(store)
+  const markerId = e.detail.markerId
+  const index = markerId
+  const store = shopList.value[index]
+
+  if (store) {
+    selectStore(store)
+  }
 }
 
 // 回到当前定位
@@ -183,7 +215,8 @@ const reLocate = async () => {
   const res = await uni.getLocation()
 
   center.lat = res.latitude
-  center.lng = res.longitude
+  center.lon = res.longitude
+
   loadData()
 }
 
@@ -218,6 +251,6 @@ const onTouchEnd = () => {
 }
 
 onLoad(() => {
-  loadData()
+  initData()
 })
 </script>
