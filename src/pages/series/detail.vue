@@ -1,5 +1,5 @@
 <template>
-  <view class="page relative h-100vh overflow-hidden">
+  <view class="page relative h-screen overflow-hidden">
     <!-- 背景图 -->
     <image
       class="relative w-100vw"
@@ -27,7 +27,7 @@
         <!-- 扫一扫按钮 -->
         <MainButton
           v-if="true"
-          text="点击扫一扫"
+          label="点击扫一扫"
           icon="scan"
           @click="scanCode"
         />
@@ -44,7 +44,7 @@
       </view>
 
       <view class="flex-center-between w-540 text-30">
-        <view class="u-press button w-240 h-70" @click="goMyPrize">
+        <view class="u-press button w-240 h-70" @click="showMyPrize = true">
           <u-icon name="gift" :color="color" size="22" />
           我的奖品
         </view>
@@ -56,34 +56,36 @@
     </view>
 
     <!-- 开奖弹窗 -->
-    <LotteryDraw
-      v-model="showDraw"
-      :type="seriesCode"
-    />
+    <LotteryDraw v-model="showDraw" :type="seriesCode" />
 
     <!-- 活动规则 -->
-    <LotteryRule
-      v-model="showRule"
-    />
+    <LotteryRule v-model="showRule" />
 
     <!-- 客服电话 -->
-    <LotteryService
-      v-model="showService"
+    <LotteryService v-model="showService" />
+
+    <!-- 我的奖品 -->
+    <LotteryMyPrize
+      v-model="showMyPrize"
+      :data="prizeList"
+      :loading="loading"
+      :has-more="hasMore"
+      @loadmore="handleLoadMore"
+      @action="handleAction"
     />
 
     <!-- 扫码结果弹窗 -->
-    <LotteryResult
-      v-model="showResult"
-      :prize-info="prizeInfo"
-    />
+    <LotteryResult v-model="showResult" :prize-info="prizeInfo" />
   </view>
 </template>
 
 <script setup lang='ts'>
 import { useTheme } from '@/composables'
-import { defaultPrizeInfo } from '@/types/modules/prize'
-import { navigateTo } from '@/utils'
+import useMyPrizeStore from '@/store/user/prize'
+import { defaultPrizeInfo } from '@/types'
+import { Dialog, navigateTo } from '@/utils'
 
+const myPrizeStore = useMyPrizeStore()
 const { seriesCode, color } = useTheme()
 
 // 开奖弹窗
@@ -97,18 +99,44 @@ const showService = ref(false)
 const showResult = ref(false)
 const prizeInfo = ref(defaultPrizeInfo)
 
+// 我的奖品弹窗相关
+const showMyPrize = ref(false)
+
+// 使用当前 seriesCode 对应的数据
+const prizeList = computed(() => myPrizeStore.getList(seriesCode))
+const loading = computed(() => myPrizeStore.getLoading(seriesCode))
+const hasMore = computed(() => myPrizeStore.getHasMore(seriesCode))
+
+// 我的奖品-打开弹窗时加载第一页
+watch(showMyPrize, (val) => {
+  if (val && prizeList.value.length === 0) {
+    myPrizeStore.fetchList(seriesCode, true)
+  }
+})
+
+// 我的奖品-加载更多
+const handleLoadMore = () => {
+  myPrizeStore.fetchList(seriesCode)
+}
+
+// 我的奖品-操作处理
+const handleAction = async (type: any, item: any) => {
+  switch (type) {
+    case 'fillInfo':
+      navigateTo(`/pages/user/prize/redeem-info?id=${item.id}`)
+      break
+    case 'nearbyStore':
+      navigateTo('/pages/shop/index')
+      break
+    case 'receive':
+      Dialog('立即领取')
+      break
+  }
+}
+
 // 扫一扫
 const scanCode = async () => {
   showDraw.value = true
-
-  // const { result } = await uni.scanCode()
-  // console.log('扫描结果：', result)
-  // showResult.value = true
-}
-
-// 前往我的奖品
-const goMyPrize = () => {
-  navigateTo('/pages/user/prize/index')
 }
 
 // 前往兑奖点
@@ -126,6 +154,8 @@ onLoad(() => {
     exchangeTime: '2025年10月02日 13:59:59',
   }
   prizeInfo.value = data
+
+  myPrizeStore.fetchList(seriesCode, true)
 })
 </script>
 
