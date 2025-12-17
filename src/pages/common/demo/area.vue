@@ -1,5 +1,5 @@
 <template>
-  <view class="min-h-100vh bg-background">
+  <view class="min-h-screen bg-background">
     <view @click="open">
       选择省市区
     </view>

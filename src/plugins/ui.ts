@@ -1,32 +1,37 @@
 import type { App } from 'vue'
-import uviewPlus, { setConfig } from 'uview-plus'
+import uviewPlus from 'uview-plus'
 
 const setupUI = (app: App) => {
-  // 下面的在特殊场景下才需要配置，通常不用配置即可直接使用uview-plus框架。
-  // 调用setConfig方法，方法内部会进行对象属性深度合并，可以放心嵌套配置
-  // 需要在app.use(uview-plus)之后执行
-  setConfig({
-    // 修改$u.config对象的属性
+  // 必须先注册 uview-plus
+  app.use(uviewPlus)
+
+  // 注册完成后，再进行配置（setConfig 必须在 use 之后）
+  uni.$u.setConfig({
     config: {
-      // 修改默认单位为rpx，相当于执行 uni.$u.config.unit = 'rpx'
+      // 默认单位为 rpx
       unit: 'rpx',
+
+      // 关键：图标字体只加载一次
+      loadFontOnce: true,
     },
-    // 修改$u.props对象的属性
     props: {
-      // 修改radio组件的size参数的默认值，相当于执行 uni.$u.props.radio.size = 30
-      radio: {
-        // size: 20
-      },
       button: {
         type: 'primary',
         shape: 'circle',
       },
-      // 其他组件属性配置
-      // ......
+      input: {
+        border: 'surround',
+        align: 'left',
+      },
+      icon: {
+        size: 28,
+      },
+      // radio: {
+      //   size: 30
+      // },
+      // 其他组件默认 props 配置...
     },
   })
-
-  app.use(uviewPlus)
 }
 
 export default setupUI

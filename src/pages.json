@@ -86,6 +86,12 @@
       "style": {
         "navigationBarTitleText": "我的奖品"
       }
+    },
+    {
+      "path": "pages/user/prize/redeem-info",
+      "style": {
+        "navigationBarTitleText": "兑奖信息"
+      }
     }
   ],
   "subPackages": [

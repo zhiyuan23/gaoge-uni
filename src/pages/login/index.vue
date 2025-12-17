@@ -12,7 +12,7 @@
       class="w-300"
     />
     <view class="pt-24 leading-32 text-34">
-      你我的怡宝+
+      畅饮怡刻
     </view>
     <view class="relative mt-260 mb-160 w-540 text-32">
       <u-button

@@ -1,5 +1,5 @@
 <template>
-  <div class="h-100vh flex-col-center">
+  <div class="h-screen flex-col-center">
     <u-navbar @left-click="handleBack" />
     <u-empty
       mode="page"

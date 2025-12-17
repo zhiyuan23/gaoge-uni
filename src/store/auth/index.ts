@@ -43,8 +43,8 @@ export const useAuthStore = defineStore(
     }
 
     // 退出登录清空
-    const logout = () => {
-      openId.value = ''
+    const clear = () => {
+      uni.clearStorage()
     }
 
     return {
@@ -57,7 +57,7 @@ export const useAuthStore = defineStore(
       initOpenid,
       checkLogin,
       login,
-      logout,
+      clear,
     }
   },
   {

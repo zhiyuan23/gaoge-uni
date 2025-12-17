@@ -18,6 +18,16 @@ image {
   display: block;
 }
 
+input {
+  height: 96rpx;
+  line-height: 96rpx;
+}
+
+/* 设置页面最小高度，兼容H5自定义导航条 */
+.page {
+  min-height: calc(100vh - var(--window-top)) !important;
+}
+
 .button {
   display: flex;
   align-items: center;
