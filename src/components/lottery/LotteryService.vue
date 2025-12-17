@@ -11,16 +11,8 @@
     <view class="flex-col-center">
       <!-- 主体区域 -->
       <view class="w-full">
-        <view class="relative">
-          <image
-            :src="`/static/images/series/popup-hd-${seriesCode}.png`"
-            mode="widthFix"
-            class="w-full h-120"
-          />
-          <view class="absolute w-full text-center font-bold top-44 text-34" :style="{ color: titleColor }">
-            客服电话
-          </view>
-        </view>
+        <PopupHeader title="客服电话" />
+
         <view class="relative bg-white">
           <view class="flex-col-center-center px-30 pt-62">
             <view class="flex-center-center">
@@ -58,28 +50,17 @@
 <script setup lang='ts'>
 import { useTheme } from '@/composables'
 
-// const props = defineProps<{
-//   type?: string;
-// }>()
-
-const emit = defineEmits<{
-  close: [];
-}>()
-
-const { seriesCode, color, titleColor, phoneColor } = useTheme()
+const { color, phoneColor } = useTheme()
 
 const show = defineModel<boolean>({ required: true })
 
-// 打电话
 const handleCall = (phoneNumber: string) => {
   uni.makePhoneCall({
     phoneNumber,
   })
 }
 
-// 关闭弹窗
 const handleClose = () => {
   show.value = false
-  emit('close')
 }
 </script>

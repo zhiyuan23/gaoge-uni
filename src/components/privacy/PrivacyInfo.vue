@@ -10,20 +10,17 @@
         name="1"
         :custom-style="{ fontSize: '22rpx' }"
       />
-      <text
-        :class="labelColorClass"
-        class="ml-8"
-      >
+      <text :class="labelColorClass">
         已阅读并同意
       </text>
       <text
-        class="color-primary ml-16"
+        class="color-primary"
         @click.stop="onService"
       >
         《服务协议》
       </text>
       <text
-        class="color-primary ml-16"
+        class="color-primary"
         @click.stop="onPrivacy"
       >
         《隐私政策》

@@ -30,12 +30,22 @@
       />
 
       <MainButton
-        text="点击开奖"
-        icon="scan"
+        label="点击开奖"
+        icon="finger"
         @click="handleConfirm"
+      />
+
+      <!-- 隐私协议展示组件 -->
+      <PrivacyInfo
+        v-model="isAgree"
+        label-color="white"
+        class="fixed bottom-100"
       />
     </view>
   </u-popup>
+
+  <!-- 隐私协议弹窗组件 -->
+  <PrivacyPopup v-model="showPrivacy" @agree="onAgree" />
 </template>
 
 <script setup lang='ts'>
@@ -52,13 +62,27 @@ const emit = defineEmits<{
 
 const show = defineModel<boolean>({ required: true })
 
+// 隐私协议相关
+const isAgree = ref(false)
+const showPrivacy = ref(false)
+
+// 同意用户协议
+const onAgree = () => {
+  isAgree.value = true
+}
+
 const handleClose = () => {
   show.value = false
   emit('close')
 }
 
 const handleConfirm = () => {
-  show.value = false
-  emit('confirm')
+  if (!isAgree.value) {
+    showPrivacy.value = true
+  }
+  else {
+    show.value = false
+    emit('confirm')
+  }
 }
 </script>

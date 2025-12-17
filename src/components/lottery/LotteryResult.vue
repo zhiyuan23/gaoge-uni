@@ -87,7 +87,7 @@
         </block>
       </view>
       <!-- 装饰条 -->
-      <view class="rounded-2xl bg-ml w-660 h-50 -mt-40" />
+      <view class="bg-ml rounded-2xl w-660 h-50 -mt-40" />
 
       <view class="mt-80 h-230">
         <!-- 操作按钮 -->
@@ -123,7 +123,7 @@
     <!-- 购物车图标 -->
     <view class="fixed top-50% mt-260 w-150 right-15">
       <image
-        src="/static/images/lottery/ic-cart.png"
+        src="/static/images/lottery/popup-cart-ml.png"
         mode="aspectFit"
         class="w-150"
         @click="handleGoToShop"

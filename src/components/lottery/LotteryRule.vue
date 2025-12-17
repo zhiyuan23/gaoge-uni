@@ -8,29 +8,20 @@
     :close-on-click-overlay="true"
     @close="show = false"
   >
-    <view class="page flex-col-center -mt-200">
+    <view class="flex-col-center -mt-200">
       <!-- 关闭按钮 -->
-      <view class="w-680">
+      <view class="w-680" @click="handleClose">
         <image
           src="/static/images/icons/ic-close.png"
           class="float-right size-60 py-20 pb-20"
-          @click="handleClose"
         />
       </view>
 
       <!-- 主体区域 -->
       <view class="overflow-hidden rounded-2.5 w-680">
-        <view class="relative">
-          <image
-            :src="`/static/images/series/popup-hd-${seriesCode}.png`"
-            class="w-full h-120"
-          />
-          <view class="absolute w-full text-center text-[var(--sub-color)] font-bold h-120 top-32 text-34" :style="{ color: titleColor }">
-            活动规则
-          </view>
-        </view>
+        <PopupHeader title="活动规则" />
 
-        <view class="bg-background px-30 pb-40 -mt-2">
+        <view class="bg-background px-30 pb-40">
           <view class="title" :style="{ color }">
             活动说明
           </view>
@@ -68,22 +59,12 @@
 <script setup lang='ts'>
 import { useTheme } from '@/composables'
 
-// const props = defineProps<{
-//   type?: string;
-// }>()
-
-const emit = defineEmits<{
-  close: [];
-}>()
-
-const { seriesCode, color, titleColor } = useTheme()
+const { color } = useTheme()
 
 const show = defineModel<boolean>({ required: true })
 
-// 关闭弹窗
 const handleClose = () => {
   show.value = false
-  emit('close')
 }
 </script>
 
