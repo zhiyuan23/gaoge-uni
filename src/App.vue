@@ -1,10 +1,10 @@
 <script setup lang='ts'>
 import { useAuth } from '@/composables'
 
-const { checkAndLogin } = useAuth()
+const { silentLogin } = useAuth()
 
 onLaunch(async () => {
-  checkAndLogin()
+  silentLogin()
 })
 
 onShow(() => {

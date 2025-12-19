@@ -1,60 +1,35 @@
 import useAuthStore from '@/store/auth'
+import { reLaunch } from '@/utils'
 /**
  * useAuth - 登录状态统一封装
- * 职责：只读 store + 提供页面常用方法，不存任何数据
  */
-function useAuth(options: {
-  /** 是否需要真实登录（手机号/绑定），默认 false（只检查 openId） */
-  requireRealLogin?: boolean;
-  /** 静默登录是否在 onMounted 时自动执行，默认 true（大多数页面都需要） */
-  autoSilentLogin?: boolean;
-} = {}) {
-  const { autoSilentLogin = false } = options
+function useAuth() {
   const authStore = useAuthStore()
 
+  const isLogin = computed(() => !!authStore.isLogin)
   const isMember = computed(() => !!authStore.isMember)
   const openId = computed(() => authStore.openId)
 
-  const token = computed(() => authStore.token)
-  const sessionKey = computed(() => authStore.token)
-
-  // 静默登录-获取openid
-  const silentLogin = () => authStore.initOpenid()
-
-  const login = () => {
-    uni.navigateTo({ url: '/pages/login/index' })
+  // 静默登录-获取用户权限信息
+  const silentLogin = () => {
+    if (!openId.value) {
+      authStore.initUserAuth()
+      authStore.checkLogin()
+    }
   }
 
   const logout = () => {
-    authStore.logout()
-    uni.reLaunch({ url: '/pages/home/index' })
-  }
-
-  const checkAndLogin = () => {
-    if (!openId.value) {
-      silentLogin()
-      return false
-    }
-    return true
-  }
-
-  if (autoSilentLogin) {
-    onMounted(() => {
-      if (!openId.value) {
-        silentLogin()
-      }
-    })
+    authStore.clear()
+    reLaunch('/pages/login/index')
   }
 
   return {
-    openId,
+    isLogin,
     isMember,
-    token,
-    sessionKey,
+    openId,
+
     silentLogin,
-    login,
     logout,
-    checkAndLogin,
   }
 }
 

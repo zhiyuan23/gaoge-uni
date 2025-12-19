@@ -1,45 +1,38 @@
 import { getOpenId, getSession, isLoginApi } from '@/api/auth'
-import { Toast } from '@/utils'
 
 export const useAuthStore = defineStore(
   'auth',
   () => {
+    const isLogin = ref<boolean>(false)
     const isMember = ref<number>(0)
     const openId = ref<string>('')
-
-    const unionid = ref<string>('')
-    const token = ref<string>('')
     const sessionKey = ref<string>('')
 
-    const isLogin = ref<boolean>(false)
-
-    // 初始化 openId
-    const initOpenid = async () => {
-      try {
-        const { code } = await uni.login()
-        const res: any = await getOpenId({ wxCode: code })
-
-        isMember.value = res.isMember
-        openId.value = res.openId
-      }
-      catch {
-        Toast('获取 openId 失败')
-      }
-    }
+    const unionid = ref<string>('')
 
     // 检查是否登录
     const checkLogin = async () => {
-      const data = await isLoginApi()
+      await isLoginApi()
 
-      isLogin.value = !!data
+      isLogin.value = true
     }
 
-    // 手机号授权登录
+    // 初始化 用户权限信息 （openId / isMember）
+    const initUserAuth = async () => {
+      const { code } = await uni.login()
+      const res: any = await getOpenId({ wxCode: code })
+
+      isMember.value = res.isMember
+      openId.value = res.openId
+    }
+
+    // 授权登录
     const login = async (data: { wxCode: string; phoneCode: string }) => {
       const res: any = await getSession(data)
 
       sessionKey.value = res.thirdSessionKey
-      initOpenid()
+      isLogin.value = true
+      isMember.value = 1
     }
 
     // 退出登录清空
@@ -48,14 +41,14 @@ export const useAuthStore = defineStore(
     }
 
     return {
+      isLogin,
       isMember,
       openId,
       unionid,
-      token,
       sessionKey,
-      isLogin,
-      initOpenid,
+
       checkLogin,
+      initUserAuth,
       login,
       clear,
     }

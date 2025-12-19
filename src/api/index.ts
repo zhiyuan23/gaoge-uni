@@ -67,11 +67,14 @@ http.interceptors.response.use(
     }
 
     if (code === '50040') {
-      Toast('登录过期，请重新登录')
-      setTimeout(() => {
-        reLaunch('/pages/login/index')
-      }, 1500)
-      useAuthStore().clear()
+      if (!custom?.skipAuthCheck) {
+        Toast('登录过期，请重新登录')
+        setTimeout(() => {
+          reLaunch('/pages/login/index')
+        }, 1500)
+
+        useAuthStore().clear()
+      }
 
       return Promise.reject(res.data)
     }

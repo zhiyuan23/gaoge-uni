@@ -79,11 +79,6 @@ const btnStyle = reactive({
   height: '80rpx',
 })
 
-// 同意用户协议
-const onAgree = () => {
-  isAgree.value = true
-}
-
 // 提交登录
 const submit = async (data: any) => {
   try {
@@ -118,6 +113,13 @@ const phoneLogin = async ({ detail }: any) => {
   }
 
   submit(params)
+}
+
+// 同意用户协议
+const onAgree = () => {
+  isAgree.value = true
+
+  if (isMember.value) wxLogin()
 }
 
 onLoad(() => {
