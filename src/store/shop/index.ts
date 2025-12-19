@@ -90,9 +90,6 @@ const useShopStore = defineStore(
       reset,
     }
   },
-  {
-    persist: true,
-  },
 )
 
 export default useShopStore
