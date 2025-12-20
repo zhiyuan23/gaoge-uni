@@ -9,7 +9,7 @@ export const Toast = (content: string, option: IShowToastOptions = {}) => {
   uni.showToast({
     title: content,
     icon: 'none',
-    mask: true,
+    mask: false,
     duration: 2000,
     ...option,
   })

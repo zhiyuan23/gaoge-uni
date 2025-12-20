@@ -2,23 +2,31 @@
   <!-- 顶部区域 -->
   <view class="relative w-100vw mb-96 pt-80 h-500">
     <image
-      class="w-100% h-500"
-      src="@/static/images/home/bg-main.png"
+      class="w-full h-500"
+      src="/static/images/home/bg-main.png"
     />
-    <view class="relative w-100% flex-center-between h-162 -mt-130">
+    <view class="relative w-full flex-center-between h-162 -mt-130">
       <!-- 个人信息 -->
       <image
-        class="relative size-100%"
-        src="@/static/images/home/bg-info.png"
+        class="relative size-full"
+        src="/static/images/home/bg-info.png"
       />
-      <view class="absolute size-100% flex-center-start top-0" @click="goUserPage">
-        <image
-          class="size-120 pl-32 pr-25"
-          src="@/static/images/icons/ic-avatar.png"
-        />
+      <view class="absolute h-full flex-center-start top-0" @click="goUserPage">
+        <view class="pl-32 pr-25">
+          <u-avatar
+            :src="userInfo.avatarUrl"
+            default-url="/static/images/icons/ic-avatar.png"
+            size="55"
+          />
+        </view>
         <view class="flex-col-center">
           <view class="font-bold pb-5 text-34">
-            Hey，{{ userInfo.nickName }}
+            <text v-if="isLogin">
+              Hey, {{ userInfo.nickName }}
+            </text>
+            <text v-else>
+              去登录
+            </text>
           </view>
         </view>
       </view>
@@ -38,7 +46,7 @@
       mode="widthFix"
     />
     <view
-      class="absolute w-100% h-128 bottom-0"
+      class="absolute w-full h-128 bottom-0"
       style="
       pointer-events: none;
       background: linear-gradient(to top, rgb(0 0 0 / 60%) 0%, rgb(0 0 0 / 15%) 50%, rgb(0 0 0 / 0%) 100%);
@@ -68,27 +76,28 @@
       </view>
     </view>
   </view>
-  <view class="pb-30" />
+  <view class="h-1" />
 </template>
 
 <script setup lang='ts'>
 import type { SeriesKey } from '@/types'
+import { useAuth } from '@/composables'
 import { seriesList, themes } from '@/constants'
-import useAuthStore from '@/store/auth'
-import useSeriesStore from '@/store/series'
+import useSeriesStore from '@/store/lottery'
 import { navigateTo } from '@/utils'
 
 const seriesStore = useSeriesStore()
-const authStore = useAuthStore()
+const { isLogin } = useAuth()
 
 // 个人信息
 const userInfo = ref({
   nickName: '微信昵称',
+  avatarUrl: '',
 })
 
 // 查看个人信息
 const goUserPage = () => {
-  const url = authStore.isLogin
+  const url = isLogin
     ? '/pages/user/info/index'
     : '/pages/login/index'
 

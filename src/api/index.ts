@@ -1,7 +1,7 @@
 import type { HttpRequestConfig } from 'uview-plus/libs/luch-request'
 import Request from 'uview-plus/libs/luch-request'
 import useAuthStore from '@/store/auth'
-import { reLaunch, Toast } from '@/utils'
+import { Loading, Toast } from '@/utils'
 
 const http = new Request()
 
@@ -36,7 +36,7 @@ http.interceptors.request.use((config: HttpRequestConfig) => {
   }
 
   if (config.custom?.loading) {
-    uni.showLoading({ title: '加载中', mask: true })
+    Loading.show()
   }
 
   if (config.custom?.json) {
@@ -57,7 +57,7 @@ http.interceptors.response.use(
   (res: any) => {
     const custom = (res.config as HttpRequestConfig).custom
     if (custom?.loading) {
-      uni.hideLoading()
+      Loading.hide()
     }
 
     const { code, content, msg } = res.data as { code: string; content?: any; msg?: string }
@@ -70,17 +70,15 @@ http.interceptors.response.use(
       if (!custom?.skipAuthCheck) {
         Toast('登录过期，请重新登录')
         setTimeout(() => {
-          reLaunch('/pages/login/index')
-        }, 1500)
-
-        useAuthStore().clear()
+          useAuthStore().logout()
+        }, 2000)
       }
 
       return Promise.reject(res.data)
     }
 
     if (custom?.toast !== false) {
-      uni.$u.toast(msg || '请求失败')
+      Toast(msg || '请求失败')
     }
 
     return Promise.reject(res.data)
@@ -89,11 +87,11 @@ http.interceptors.response.use(
     const custom = (err.config as HttpRequestConfig)?.custom
 
     if (custom?.loading !== false) {
-      uni.hideLoading()
+      Loading.hide()
     }
 
     if (custom?.toast !== false) {
-      uni.$u.toast(err.errMsg || '网络开小差了')
+      Toast('网络开小差了')
     }
     return Promise.reject(err)
   },

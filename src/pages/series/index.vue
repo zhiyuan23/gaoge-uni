@@ -12,8 +12,14 @@ import SeriesZBQE from '@/pages/series/zbqr/index.vue'
 import SeriesZWCS from '@/pages/series/zwcs/index.vue'
 
 const seriesCode = ref('zbqr')
+const wxQrCode = ref('')
 
-onLoad(() => {
-  console.log('query')
+onLoad((options: any) => {
+  if (options.code) {
+    wxQrCode.value = options.code
+  }
+  wxQrCode.value = '10086'
 })
+
+provide('wxQrCode', wxQrCode)
 </script>

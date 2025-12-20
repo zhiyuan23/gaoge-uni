@@ -1,6 +1,6 @@
 <template>
   <view class="page w-screen overflow-x-hidden" :style="{ backgroundColor: redeem.bgColor }">
-    <view class="w-100% h-30" />
+    <view class="w-full h-30" />
     <view class="rounded-2.5 mx-18 px-12 pt-45" :style="{ backgroundColor: redeem.bgSubColor }">
       <!-- 红包信息 -->
       <view class="relative mb-28 w-687 h-185">
@@ -8,7 +8,7 @@
           :src="`/static/images/prize/redeem-hd-${seriesCode}.png`"
           class="absolute size-full"
         />
-        <view class="relative h-100% flex-col-start-center top-0 left-100" :style="{ color: redeem.color }">
+        <view class="relative h-full flex-col-start-center top-0 left-100" :style="{ color: redeem.color }">
           <view class="font-bold text-40">
             888元红包
           </view>
@@ -74,7 +74,7 @@
           >
         </view>
 
-        <view class="w-100% text-center pt-33 pb-50">
+        <view class="w-full text-center pt-33 pb-50">
           <MainButton
             label="提交"
             width="460"

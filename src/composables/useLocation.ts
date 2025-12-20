@@ -1,18 +1,21 @@
 export interface LocationResult {
-  latitude: number | string;
-  longitude: number | string;
+  lat: string;
+  lng: string;
 }
 
 /**
  * 获取定位的公共方法
- * @param required 是否必须授权
- * @returns Promise<LocationResult>
+ * @param required 是否必须授权（为 false 时，未授权也返回空位置）
+ * @returns Promise<LocationResult> 始终返回有效对象，失败/未授权返回 { lat: '', lng: '' }
  */
 export async function useLocation(required: boolean = true): Promise<LocationResult | null> {
   const getLocation = (): Promise<LocationResult> => new Promise((resolve, reject) => {
     uni.getLocation({
-      type: 'gcj02', // 国测局坐标
-      success: res => resolve({ latitude: res.latitude, longitude: res.longitude }),
+      type: 'gcj02',
+      success: res => resolve({
+        lat: res.latitude.toString(),
+        lng: res.longitude.toString(),
+      }),
       fail: reject,
     })
   })
@@ -29,7 +32,7 @@ export async function useLocation(required: boolean = true): Promise<LocationRes
 
     // 非必须授权：返回空位置
     if (!required) {
-      return { latitude: '', longitude: '' }
+      return { lat: '', lng: '' }
     }
 
     // 必须授权：引导用户去设置

@@ -16,7 +16,7 @@
       <map
         class="h-full w-full"
         :latitude="center.lat"
-        :longitude="center.lon"
+        :longitude="center.lng"
         :scale="15"
         :markers="markers"
         show-location
@@ -138,7 +138,7 @@ const loadData = async (isSearch = false) => {
     const params = {
       words: searchText.value.trim(),
       radius: '',
-      lon: location.lon,
+      lon: location.lng,
       lat: location.lat,
       page: page.value,
     }
@@ -157,9 +157,9 @@ const initData = async () => {
   const { latitude, longitude } = await uni.getLocation({ type: 'gcj02' })
 
   center.lat = latitude
-  center.lon = longitude
+  center.lng = longitude
   location.lat = latitude
-  location.lon = longitude
+  location.lng = longitude
 
   loadData(true)
 }
@@ -196,7 +196,7 @@ const navigateToStore = (store: any) => {
 const selectStore = (store: any) => {
   currentStoreId.value = store.hotPointID
   center.lat = store.lat
-  center.lon = store.lon
+  center.lng = store.lon
 }
 
 // 地图定位点点击
@@ -215,7 +215,7 @@ const reLocate = async () => {
   const res = await uni.getLocation()
 
   center.lat = res.latitude
-  center.lon = res.longitude
+  center.lng = res.longitude
 
   loadData()
 }

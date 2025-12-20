@@ -19,7 +19,7 @@
 
         <scroll-view
           scroll-y
-          class="h-70vh bg-background pb-40"
+          class="h-70vh bg-background"
           @scrolltolower="loadMore"
         >
           <!-- 表头 -->
@@ -39,7 +39,7 @@
             <view
               v-for="item in props.data"
               :key="item.id"
-              class="flex-center py-20 text-22 border-b-1-solid-#e8e8e8"
+              class="flex-center py-20 text-22 border-b-1-solid-#e8e8e8 last:border-b-0 last:pb-50"
             >
               <!-- 奖品名称 -->
               <view class="pr-10 w-160">
@@ -55,7 +55,7 @@
               </view>
 
               <!-- 详情列 -->
-              <view class="flex-col-end flex-1">
+              <view class="flex-col-end">
                 <!-- 未兑奖 -->
                 <template v-if="item.status === '未兑奖'">
                   <view

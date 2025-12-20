@@ -26,7 +26,7 @@
               mode="aspectFit"
               class="relative w-370 left-0"
             />
-            <view class="relative h-100% flex-col-center text-center w-370 -ml-80">
+            <view class="relative h-full flex-col-center text-center w-370 -ml-80">
               <!-- 实物奖 -->
               <block v-if="prizeInfo?.type === 'physical'">
                 <view class="mb-40 text-30">

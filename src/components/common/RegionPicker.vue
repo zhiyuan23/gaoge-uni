@@ -4,8 +4,10 @@
     :show="show"
     :columns="columns"
     key-name="name"
+    :close-on-click-overlay="true"
     @confirm="onConfirm"
     @cancel="onCancel"
+    @close="onCancel"
     @change="changeHandler"
   />
 </template>

@@ -14,6 +14,10 @@ uni-image {
   display: block !important;
 }
 
+uni-modal {
+  z-index: 99999;
+}
+
 image {
   display: block;
 }

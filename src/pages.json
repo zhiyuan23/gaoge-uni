@@ -38,29 +38,25 @@
     {
       "path": "pages/series/detail",
       "style": {
-        "navigationBarTitleText": "系列详情",
-        "backgroundColor": "#ffffff"
+        "navigationBarTitleText": "系列详情"
       }
     },
     {
       "path": "pages/series/ml/index",
       "style": {
-        "navigationBarTitleText": "1元畅饮赢大奖",
-        "backgroundColor": "#ffffff"
+        "navigationBarTitleText": "1元畅饮赢大奖"
       }
     },
     {
       "path": "pages/series/zbqr/index",
       "style": {
-        "navigationBarTitleText": "1元畅饮赢大奖",
-        "backgroundColor": "#ffffff"
+        "navigationBarTitleText": "1元畅饮赢大奖"
       }
     },
     {
       "path": "pages/series/zwcs/index",
       "style": {
-        "navigationBarTitleText": "1元畅饮赢大奖",
-        "backgroundColor": "#ffffff"
+        "navigationBarTitleText": "1元畅饮赢大奖"
       }
     },
     {
@@ -78,7 +74,8 @@
     {
       "path": "pages/user/info/index",
       "style": {
-        "navigationBarTitleText": "个人信息"
+        "navigationBarTitleText": "个人信息",
+        "backgroundColor": "#f3f4f5"
       }
     },
     {
@@ -135,7 +132,7 @@
   },
   "globalStyle": {
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "怡宝家园",
+    "navigationBarTitleText": "畅饮怡刻",
     "navigationBarBackgroundColor": "#ffffff",
     "navigationBarColor": "#202020",
     "backgroundColor": "#ffffff"

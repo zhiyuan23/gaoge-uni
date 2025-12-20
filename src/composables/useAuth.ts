@@ -1,5 +1,4 @@
 import useAuthStore from '@/store/auth'
-import { reLaunch } from '@/utils'
 /**
  * useAuth - 登录状态统一封装
  */
@@ -18,10 +17,7 @@ function useAuth() {
     }
   }
 
-  const logout = () => {
-    authStore.clear()
-    reLaunch('/pages/login/index')
-  }
+  const logout = () => authStore.logout()
 
   return {
     isLogin,

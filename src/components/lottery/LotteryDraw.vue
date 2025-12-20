@@ -37,6 +37,7 @@
 
       <!-- 隐私协议展示组件 -->
       <PrivacyInfo
+        v-if="!isLogin"
         v-model="isAgree"
         label-color="white"
         class="fixed bottom-100"
@@ -50,15 +51,18 @@
 
 <script setup lang='ts'>
 import type { SeriesKey } from '@/types'
+import { useAuth } from '@/composables'
 
 const props = defineProps<{
   type?: SeriesKey;
 }>()
 
 const emit = defineEmits<{
-  close: [];
-  confirm: [];
+  close: any;
+  confirm: any;
 }>()
+
+const { isLogin } = useAuth()
 
 const show = defineModel<boolean>({ required: true })
 
@@ -77,11 +81,10 @@ const handleClose = () => {
 }
 
 const handleConfirm = () => {
-  if (!isAgree.value) {
+  if (!isLogin && !isAgree.value) {
     showPrivacy.value = true
   }
   else {
-    show.value = false
     emit('confirm')
   }
 }

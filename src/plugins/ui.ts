@@ -11,8 +11,12 @@ const setupUI = (app: App) => {
       // 默认单位为 rpx
       unit: 'rpx',
 
-      // 关键：图标字体只加载一次
+      // 图标字体只加载一次
       loadFontOnce: true,
+
+      toast: {
+        duration: 2000,
+      },
     },
     props: {
       button: {
@@ -22,9 +26,6 @@ const setupUI = (app: App) => {
       input: {
         border: 'surround',
         align: 'left',
-      },
-      icon: {
-        size: 28,
       },
       // radio: {
       //   size: 30

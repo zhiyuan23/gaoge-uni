@@ -36,7 +36,12 @@ export const useAuthStore = defineStore(
     }
 
     // 退出登录清空
-    const clear = () => {
+    const logout = () => {
+      isLogin.value = false
+      isMember.value = 1
+      openId.value = ''
+      sessionKey.value = ''
+
       uni.clearStorage()
     }
 
@@ -50,7 +55,7 @@ export const useAuthStore = defineStore(
       checkLogin,
       initUserAuth,
       login,
-      clear,
+      logout,
     }
   },
   {

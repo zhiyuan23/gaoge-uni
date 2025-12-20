@@ -1,5 +1,6 @@
 <template>
-  <view class="container">
+  <view class="page container">
+    <view class="w-full h-20" />
     <view class="card">
       <!-- 头像 -->
       <view class="row avatar">
@@ -148,8 +149,12 @@ const onConfirmBirthday = (e: any) => {
 </script>
 
 <style scoped lang="scss">
+page {
+  @apply bg-bgSecondary;
+}
+
 .container {
-  @apply px-24 pt-20 pb-10;
+  @apply px-24 bg-bgSecondary;
 }
 
 .card {
