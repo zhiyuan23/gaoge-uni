@@ -2,12 +2,13 @@ import { defineStore } from 'pinia'
 import { getMyPrizeList } from '@/api/user/prize'
 
 const useMyPrizeStore = defineStore('myPrize', () => {
-  // 按 seriesCode 分别存列表、页码、加载状态
   const lists = ref<Record<string, any[]>>({})
   const loadings = ref<Record<string, boolean>>({})
   const hasMores = ref<Record<string, boolean>>({})
   const pages = ref<Record<string, number>>({})
   const pageSize = 10
+
+  const prizeDetail = ref<any>({})
 
   const fetchList = async (seriesCode: string, reset = false) => {
     if (!seriesCode) return
@@ -46,6 +47,14 @@ const useMyPrizeStore = defineStore('myPrize', () => {
     }
   }
 
+  const fetchDetail = () => {
+    const data = {
+      cash: '888',
+    }
+
+    prizeDetail.value = data
+  }
+
   const getList = (seriesCode: string) => lists.value[seriesCode] || []
   const getLoading = (seriesCode: string) => loadings.value[seriesCode] || false
   const getHasMore = (seriesCode: string) => hasMores.value[seriesCode] ?? true
@@ -57,11 +66,14 @@ const useMyPrizeStore = defineStore('myPrize', () => {
     loadings,
     hasMores,
     pages,
+    prizeDetail,
+
     fetchList,
     getList,
     getLoading,
     getHasMore,
     refresh,
+    fetchDetail,
   }
 })
 

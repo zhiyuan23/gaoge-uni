@@ -106,13 +106,32 @@
     </view>
     <view class="w-100vw h-30" />
   </view>
+
+  <PosterShare
+    ref="posterGenerator"
+    bg-img="https://youke2.picui.cn/s1/2025/12/20/69466dece70be.png"
+    :avatar="userInfo.avatarUrl"
+    :nickname="userInfo.nickname"
+    :money="prizeDetail.cash"
+  />
 </template>
 
 <script setup lang='ts'>
 import { useTheme } from '@/composables'
+import useProfileStore from '@/store/user/index'
+import useMyPrizeStore from '@/store/user/prize'
 import { Dialog } from '@/utils'
+import PosterShare from './poster.vue'
+
+const profileStore = useProfileStore()
+const myPrizeStore = useMyPrizeStore()
+
+const { userInfo } = storeToRefs(profileStore)
+const { prizeDetail } = storeToRefs(myPrizeStore)
 
 const { seriesCode, color, redeem } = useTheme()
+
+const posterGenerator = ref<any>(null)
 
 // 表单数据
 const form = reactive({
@@ -162,9 +181,19 @@ const handleSubmit = async () => {
   )
 
   uni.showLoading({ title: '提交中...' })
-  setTimeout(() => {
+
+  try {
+    await posterGenerator.value?.generateSharePoster()
     uni.hideLoading()
-    Dialog('提交成功')
-  }, 1000)
+  }
+  catch (e) {
+    uni.hideLoading()
+    console.log(e)
+  }
 }
+
+onLoad(() => {
+  profileStore.fetchUserInfo()
+  myPrizeStore.fetchDetail()
+})
 </script>
