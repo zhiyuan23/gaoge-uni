@@ -1,7 +1,7 @@
 import type { HttpRequestConfig } from 'uview-plus/libs/luch-request'
 import Request from 'uview-plus/libs/luch-request'
 import useAuthStore from '@/store/auth'
-import { Loading, Toast } from '@/utils'
+import { Dialog, Loading, Toast } from '@/utils'
 
 const http = new Request()
 
@@ -78,7 +78,7 @@ http.interceptors.response.use(
     }
 
     if (custom?.toast !== false) {
-      Toast(msg || '请求失败')
+      Dialog(msg || '请求失败')
     }
 
     return Promise.reject(res.data)

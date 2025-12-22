@@ -9,7 +9,7 @@
   >
     <view class="flex-col-center -mt-80">
       <!-- 关闭按钮 -->
-      <view class="w-660">
+      <view class="mb-40 w-640">
         <image
           src="/static/images/icons/ic-close.png"
           class="float-right size-60"
@@ -17,115 +17,68 @@
         />
       </view>
 
-      <view class="relative z-2 flex-col-center overflow-hidden rounded-xl bg-background w-660 h-420">
+      <view class="relative z-2 flex-col-center overflow-hidden">
         <!-- 中奖提示 -->
-        <block v-if="prizeInfo?.status === 'won'">
-          <view class="flex-start">
-            <image
-              src="https://img14.360buyimg.com/n7/jfs/t1/23011/18/29173/54148/665ee53cF87ed7142/f325fb2464ec72bb.png"
-              mode="aspectFit"
-              class="relative w-370 left-0"
-            />
-            <view class="relative h-full flex-col-center text-center w-370 -ml-80">
-              <!-- 实物奖 -->
-              <block v-if="prizeInfo?.type === 'physical'">
-                <view class="mb-40 text-30">
-                  恭喜你获得
-                </view>
-                <view class="font-bold leading-54 text-40">
-                  1元换购魔力<br>550mL一瓶
-                </view>
-                <view class="text-30">
-                  （换购产品随机）
-                </view>
-                <view class="color-#000 mt-40 leading-35">
-                  实物瓶盖为唯一兑奖凭证，<br>请妥善保管
-                </view>
-              </block>
-
-              <!-- 现金红包 -->
-              <block v-if="prizeInfo?.type === 'cash'">
-                <view class="mb-50 text-30">
-                  恭喜你获得
-                </view>
-                <view class="font-bold mb-70 leading-54 text-40">
-                  红包888元
-                </view>
-              </block>
-            </view>
-          </view>
-        </block>
+        <view v-if="prizeInfo?.drawResult === 'pass' && prizeInfo?.bingo === 1" class="flex-start">
+          <image
+            :src="prizeInfo.prizeImage"
+            mode="aspectFit"
+            class="relative w-680 h-490"
+          />
+        </view>
 
         <!-- 未中奖提示 -->
-        <block v-else-if="prizeInfo?.status === 'lost'">
-          <view class="flex-col-center-center h-140">
-            <view class="text-center color-textTheme font-bold px-35 leading-90 text-48">
-              该瓶盖已中奖红包888元
-            </view>
-            <view class="font-bold leading-90 text-48">
-              <text v-if="prizeInfo.isExchanged" class="color-#007E41">
-                已兑换
-              </text>
-              <text v-else class="color-textTheme">
-                尚未兑换
-              </text>
-            </view>
+        <view v-else class="relative flex-start-center w-680 h-490">
+          <!-- 背景图 -->
+          <view class="absolute w-full h-490 top-0">
+            <image :src="`/static/images/lottery/popup-bg-${seriesCode}.png`" class="size-full" />
           </view>
-          <view class="mt-40 h-72 leading-48">
-            <view>扫码时间：{{ prizeInfo.scanTime }}</view>
-            <view>兑奖截止：{{ prizeInfo.exchangeTime }}</view>
-          </view>
-        </block>
 
-        <!-- 参与受限提示 -->
-        <block v-else-if="prizeInfo?.status === 'fail'">
-          <view class="flex-col-center-center h-140">
-            <view class="text-center color-textTheme font-bold px-35 leading-90 text-48">
-              您累计参与次数已达上限， 无法参与活动
+          <!-- 未中奖信息 -->
+          <view class="relative z-1 flex-col-center-center w-593 h-466">
+            <view class="flex-col-center-center font-bold pt-75 h-140 text-44" :style="{ color: lotteryColor }">
+              <view class="text-center mx-25 leading-75">
+                该瓶盖已中奖红包2元
+              </view>
+              <view class="mt-25">
+                {{ prizeInfo.isExchanged === 1 ? '已兑换' : '尚未兑换' }}
+              </view>
+            </view>
+            <view class="mt-50 h-72 leading-48">
+              <view>扫码时间：{{ prizeInfo.scanTime }}</view>
+              <view>兑奖截止：{{ prizeInfo.exchangeTime }}</view>
             </view>
           </view>
-        </block>
+          <!-- /未中奖信息 -->
+        </view>
       </view>
-      <!-- 装饰条 -->
-      <view class="bg-ml rounded-2xl w-660 h-50 -mt-40" />
 
-      <view class="mt-80 h-230">
+      <view class="w-full text-center mt-42 h-230">
         <!-- 操作按钮 -->
-        <block v-if="!prizeInfo?.isExchanged">
-          <view class="h-100">
-            <u-button
-              type="primary"
-              shape="circle"
-              color="#88CC34"
-              :custom-style="{
-                width: '540rpx',
-                height: '100rpx',
-                fontSize: '46rpx',
-                fontWeight: 'bold',
-              }"
-              @click="handleConfirm"
-            >
-              立即领取
-            </u-button>
-          </view>
+        <view class="h-102">
+          <MainButton
+            v-if="buttonConfig"
+            :label="buttonConfig?.label"
+            :icon="buttonConfig?.icon"
+            @click="handleConfirm(buttonConfig?.type, prizeInfo?.giftCouponId)"
+          />
+        </view>
 
-          <!-- 提示话术 -->
-          <view class="flex-start text-center mx-40 mt-40">
-            <u-icon name="error-circle-fill" color="#fff" size="20" />
-            <view class="color-white pl-10 leading-46 text-30">
-              请于中奖后30天内带上实物瓶盖到兑奖点兑奖<br>中奖记录可在「我的奖品」中查看
-            </view>
+        <!-- 提示话术 -->
+        <view class="mx-40 mt-40">
+          <view class="color-white leading-46">
+            请于24小时内完成领取，逾期红包失效<br>中奖记录可在「我的奖品」中查看
           </view>
-        </block>
+        </view>
       </view>
     </view>
 
     <!-- 购物车图标 -->
-    <view class="fixed top-50% mt-260 w-150 right-15">
+    <view class="fixed top-50% mt-500 w-95 h-101 right-15">
       <image
-        src="/static/images/lottery/popup-cart-ml.png"
+        :src="`/static/images/lottery/popup-cart-${seriesCode}.png`"
         mode="aspectFit"
-        class="w-150"
+        class="size-full"
         @click="handleGoToShop"
       />
     </view>
@@ -133,6 +86,7 @@
 </template>
 
 <script setup lang='ts'>
+import { useTheme } from '@/composables'
 import { defaultPrizeInfo, type PrizeInfo } from '@/types/modules/prize'
 import { navigateToMiniApp } from '@/utils'
 
@@ -142,8 +96,10 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   close: [];
-  confirm: [];
+  confirm: [string, any];
 }>()
+
+const { seriesCode, lotteryColor } = useTheme()
 
 const show = defineModel<boolean>({ required: true })
 
@@ -154,8 +110,8 @@ const handleClose = () => {
   emit('close')
 }
 
-const handleConfirm = () => {
-  emit('confirm')
+const handleConfirm = (type: string, id: any) => {
+  emit('confirm', type, id)
 }
 
 const handleGoToShop = () => {
@@ -164,4 +120,42 @@ const handleGoToShop = () => {
     path: 'sub1/pages/ys-Exchange/ys-Exchange',
   })
 }
+
+// 中奖类型按钮映射
+const prizeTypeButtonMap = {
+  large_red_envelope: {
+    label: '填写兑奖信息',
+    type: 'fillInfo',
+    icon: 'edit' as const,
+  },
+  one_yuan_exchange: {
+    label: '前往附近兑奖点',
+    type: 'nearbyStore',
+    icon: 'location' as const,
+  },
+  small_red_envelope: {
+    label: '开心收下',
+    type: 'receive',
+    icon: 'coin' as const,
+  },
+} as const
+
+// 按钮配置
+const buttonConfig = computed(() => {
+  const { prizeType, isExchanged, drawResult, bingo } = prizeInfo.value
+
+  if (drawResult === 'pass' && bingo === 0) {
+    return {
+      label: '再扫一瓶',
+      type: 'scan',
+      icon: 'scan',
+    }
+  }
+
+  if (prizeType && isExchanged !== 1 && prizeType in prizeTypeButtonMap) {
+    return prizeTypeButtonMap[prizeType as keyof typeof prizeTypeButtonMap]
+  }
+
+  return null
+})
 </script>

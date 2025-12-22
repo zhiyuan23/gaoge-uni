@@ -19,19 +19,21 @@
 
       <!-- 开奖标题图片 -->
       <image
-        :src="`/static/images/lottery/main-tit-${props.type}.png`"
+        :src="`/static/images/lottery/main-tit-${seriesCode}.png`"
         class="w-460 h-200 -mt-68"
       />
 
       <!-- 开奖主图片 -->
       <image
-        :src="`/static/images/lottery/main-img-${props.type}.png`"
+        :src="`/static/images/lottery/main-img-${seriesCode}.png`"
         class="mt-8 w-520 h-520"
       />
 
       <MainButton
         label="点击开奖"
         icon="finger"
+        :loading="loading"
+        :loading-text="loadingText"
         @click="handleConfirm"
       />
 
@@ -50,11 +52,11 @@
 </template>
 
 <script setup lang='ts'>
-import type { SeriesKey } from '@/types'
-import { useAuth } from '@/composables'
+import { useAuth, useTheme } from '@/composables'
 
 const props = defineProps<{
-  type?: SeriesKey;
+  loading?: boolean;
+  loadingText?: string;
 }>()
 
 const emit = defineEmits<{
@@ -62,9 +64,14 @@ const emit = defineEmits<{
   confirm: any;
 }>()
 
+const { seriesCode } = useTheme()
+
 const { isLogin } = useAuth()
 
 const show = defineModel<boolean>({ required: true })
+
+const loading = computed(() => props.loading || false)
+const loadingText = computed(() => props.loadingText || '加载中')
 
 // 隐私协议相关
 const isAgree = ref(false)

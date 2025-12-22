@@ -4,8 +4,9 @@ export const themes: Record<SeriesKey, any> = {
   // 魔力
   ml: {
     name: '魔力',
-    bgColor: '#E3EDD6',
     color: '#7FBE26',
+    bgColor: '#E3EDD6',
+    lotteryColor: '#F77600',
     titleColor: '#FFFFFF',
     phoneColor: '#7FBE26',
     mapPopBgColor: '#7FBE26',
@@ -22,8 +23,9 @@ export const themes: Record<SeriesKey, any> = {
   // 至本清润
   zbqr: {
     name: '至本清润',
-    bgColor: '#FFFBD4',
     color: '#01613B',
+    bgColor: '#FFFBD4',
+    lotteryColor: '#83412C',
     titleColor: '#01613B',
     phoneColor: '#864228',
     mapPopBgColor: '#F1D64B',
@@ -40,8 +42,9 @@ export const themes: Record<SeriesKey, any> = {
   // 佐味茶事
   zwcs: {
     name: '佐味茶事',
-    bgColor: '#F6F8BA',
     color: '#7EBC1D',
+    bgColor: '#F6F8BA',
+    lotteryColor: '#473729',
     titleColor: '#FFFFFF',
     phoneColor: '#7FBE26',
     mapPopBgColor: '#7FBE26',

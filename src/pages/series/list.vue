@@ -97,7 +97,7 @@ const userInfo = ref({
 
 // 查看个人信息
 const goUserPage = () => {
-  const url = isLogin
+  const url = isLogin.value
     ? '/pages/user/info/index'
     : '/pages/login/index'
 
