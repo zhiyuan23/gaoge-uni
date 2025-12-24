@@ -9,7 +9,7 @@
   >
     <view class="flex-col-center -mt-150">
       <!-- 关闭按钮 -->
-      <view class="z-9 w-570">
+      <view class="z-9 w-570 h-140">
         <image
           src="/static/images/icons/ic-close.png"
           class="float-right size-60 p-40"
@@ -65,13 +65,12 @@ const emit = defineEmits<{
 }>()
 
 const { seriesCode } = useTheme()
-
 const { isLogin } = useAuth()
 
 const show = defineModel<boolean>({ required: true })
 
 const loading = computed(() => props.loading || false)
-const loadingText = computed(() => props.loadingText || '加载中')
+const loadingText = computed(() => props.loadingText || '点击开奖')
 
 // 隐私协议相关
 const isAgree = ref(false)

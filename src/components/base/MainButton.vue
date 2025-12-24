@@ -31,15 +31,14 @@
       </view>
 
       <!-- 按钮文字 -->
-      <view class="z-9 color-white font-bold ml-10 text-42">
+      <view class="z-9 color-white font-bold pl-10 text-42">
         {{ displayLabel }}
       </view>
     </view>
   </PressFeedback>
 </template>
 
-<script setup lang="ts">
-import { computed } from 'vue'
+<script setup lang='ts'>
 import { useTheme } from '@/composables'
 
 // type ButtonIcon =
@@ -75,7 +74,7 @@ const isDisabled = computed(() => props.disabled || props.loading)
 
 const displayLabel = computed(() => {
   if (props.loading) {
-    return props.loadingText || '加载中...'
+    return props.loadingText || props.label
   }
   return props.label || '提交'
 })
