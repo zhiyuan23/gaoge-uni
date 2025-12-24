@@ -1,24 +1,9 @@
-/**
- * 通用接口
- */
-import type { SendCodeReq, SendCodeRes, UploadRes } from './types'
+import type { UploadRes } from './types'
 import { post, upload } from '@/api'
 
-// 文件上传
+// 图片上传
 export const uploadFile = (filePath: string) =>
-  upload<UploadRes>('/common/upload', { filePath, name: 'file' })
+  upload<UploadRes>('/wx/mem/user/upload', { filePath, name: 'file' })
 
-// 发送验证码
-export const sendCode = (data: SendCodeReq) => post<SendCodeRes>('/sendCode', data)
-
-// 上传图片
-export const uploadToCloud = async (tempFilePath: string, path: string = 'image'): Promise<string> => {
-  const cloudPath = `${path}/${Date.now()}.jpg`
-
-  const res = await uniCloud.uploadFile({
-    filePath: tempFilePath,
-    cloudPath,
-  })
-
-  return res.fileID
-}
+// 获取协议配置
+export const getMyPrizeDetail = () => post<any>('/wx/mem/config/getProtocolConfig')

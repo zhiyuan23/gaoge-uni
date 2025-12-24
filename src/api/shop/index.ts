@@ -5,3 +5,13 @@ import { post } from '@/api'
 export const getShopList = (data: NearbyShopListReq) => {
   return post<NearbyShopListRes>('/wx/act/prizePlace/nearby', data)
 }
+
+// 门店问题反馈校验
+export const validFeedback = (data: any) => {
+  return post<any>('/wx/act/problemFeedback/valid', data)
+}
+
+// 门店问题反馈提交
+export const submitFeedback = (data: any) => {
+  return post<any>('/wx/act/problemFeedback/submit', data)
+}
