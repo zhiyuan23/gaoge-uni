@@ -134,8 +134,6 @@
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "畅饮怡刻",
     "navigationBarBackgroundColor": "#ffffff",
-    "navigationBarColor": "#202020",
     "backgroundColor": "#ffffff"
-    // "backgroundColor": "#F3F4F6"
   }
 }

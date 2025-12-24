@@ -47,6 +47,9 @@ export default antfu(
       'object-curly-newline': 'off',
       // if 语句后需要换行
       'antfu/if-newline': 'off',
+      // 关闭变量在使用前定义检查
+      'no-use-before-define': 'off',
+      '@typescript-eslint/no-use-before-define': 'off',
     },
   },
 )
