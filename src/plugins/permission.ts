@@ -1,4 +1,3 @@
-// import { useAuth } from '@/composables'
 import {
   ERROR404_PATH,
   isPathExists,
@@ -7,7 +6,9 @@ import {
   routes,
 } from '@/router'
 
-// const { isLogin } = useAuth()
+// import useAuthStore from '@/store/auth'
+
+// const { isLogin } = storeToRefs(useAuthStore())
 const isLogin = true
 
 // 白名单路由

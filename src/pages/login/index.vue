@@ -32,7 +32,7 @@
           :custom-style="btnStyle"
           :loading="loading"
           loading-text="登录中"
-          @click="wxLogin"
+          @click="authStore.wxLogin"
         >
           微信登录
         </u-button>
@@ -44,7 +44,7 @@
           :loading="loading"
           loading-text="登录中"
           open-type="getPhoneNumber"
-          @getphonenumber="phoneLogin"
+          @getphonenumber="authStore.phoneLogin"
         >
           一键登录
         </u-button>
@@ -60,10 +60,11 @@
 </template>
 
 <script lang='ts' setup>
-import { useAuth, useLogin } from '@/composables'
+import useAuthStore from '@/store/auth'
 
-const { isMember } = useAuth()
-const { loading, wxLogin, phoneLogin } = useLogin()
+const authStore = useAuthStore()
+
+const { isMember, loading } = storeToRefs(authStore)
 
 // 隐私协议相关
 const isAgree = ref(false)
@@ -79,7 +80,9 @@ const btnStyle = reactive({
 const onAgree = () => {
   isAgree.value = true
 
-  if (isMember.value) wxLogin()
+  if (isMember.value) {
+    authStore.wxLogin()
+  }
 }
 </script>
 

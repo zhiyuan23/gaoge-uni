@@ -52,7 +52,8 @@
 </template>
 
 <script setup lang='ts'>
-import { useAuth, useTheme } from '@/composables'
+import { useTheme } from '@/composables'
+import useAuthStore from '@/store/auth'
 
 const props = defineProps<{
   loading?: boolean;
@@ -64,8 +65,10 @@ const emit = defineEmits<{
   confirm: any;
 }>()
 
+const authStore = useAuthStore()
+
 const { seriesCode } = useTheme()
-const { isLogin } = useAuth()
+const { isLogin } = storeToRefs(authStore)
 
 const show = defineModel<boolean>({ required: true })
 

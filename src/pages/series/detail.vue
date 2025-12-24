@@ -89,14 +89,16 @@
 </template>
 
 <script setup lang='ts'>
-import { executeLottery, scanByDetail, scanByHome } from '@/api/lottery'
-import { getMyPrizeList } from '@/api/user/prize'
-import { useAuth, useLocation, useTheme } from '@/composables'
+import { executeLottery, getMyPrizeList, scanByDetail, scanByHome } from '@/api/lottery'
+import { useLocation, useTheme } from '@/composables'
+import useAuthStore from '@/store/auth'
 import { defaultPrizeInfo, type PrizeInfo } from '@/types'
 import { Dialog, navigateTo } from '@/utils'
 
+const authStore = useAuthStore()
+
 const { seriesCode, color } = useTheme()
-const { openId } = useAuth()
+const { openId } = storeToRefs(authStore)
 
 // 弹窗控制
 const showRule = ref(false)
@@ -266,7 +268,7 @@ const handlePrizeAction = (type: string, item?: any) => {
 
   switch (type) {
     case 'fillInfo':
-      navigateTo(`/pages/user/prize/redeem-info?id=${item.id}`)
+      navigateTo(`/pages/prize/redeem-info?id=${item.id}`)
       break
     case 'nearbyStore':
       goExchange()
