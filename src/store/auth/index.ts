@@ -1,32 +1,18 @@
-import { getOpenId, getSession, isLoginApi } from '@/api/auth'
+import { getSession } from '@/api/auth'
 
-export const useAuthStore = defineStore(
+const useAuthStore = defineStore(
   'auth',
   () => {
-    const isLogin = ref<boolean>(false)
-    const isMember = ref<number>(0)
-    const openId = ref<string>('')
-    const sessionKey = ref<string>('')
+    const isLogin = ref(false)
+    const isMember = ref(0)
+    const openId = ref('')
 
-    const unionid = ref<string>('')
+    const accessToken = ref('')
+    const userIdentity = ref('')
 
-    // 检查是否登录
-    const checkLogin = async () => {
-      await isLoginApi()
+    const sessionKey = ref('')
+    const unionid = ref('')
 
-      isLogin.value = true
-    }
-
-    // 初始化 用户权限信息 （openId / isMember）
-    const initUserAuth = async () => {
-      const { code } = await uni.login()
-      const res: any = await getOpenId({ wxCode: code })
-
-      isMember.value = res.isMember
-      openId.value = res.openId
-    }
-
-    // 授权登录
     const login = async (data: { wxCode: string; phoneCode: string }) => {
       const res: any = await getSession(data)
 
@@ -35,27 +21,44 @@ export const useAuthStore = defineStore(
       isMember.value = 1
     }
 
-    // 退出登录清空
-    const logout = () => {
+    const clear = () => {
       isLogin.value = false
-      isMember.value = 1
+      isMember.value = 0
       openId.value = ''
+      accessToken.value = ''
+      userIdentity.value = ''
       sessionKey.value = ''
+      unionid.value = ''
+    }
 
-      uni.clearStorage()
+    const setLoginStatus = (status: boolean) => {
+      isLogin.value = status
+    }
+
+    const setUserAuth = (openIdVal: string, isMemberVal: number) => {
+      openId.value = openIdVal
+      isMember.value = isMemberVal
+    }
+
+    const setHuarunAuth = (accessTokenVal: string, userIdentityVal: string) => {
+      accessToken.value = accessTokenVal
+      userIdentity.value = userIdentityVal
     }
 
     return {
-      isLogin,
-      isMember,
-      openId,
-      unionid,
-      sessionKey,
+      isLogin: readonly(isLogin),
+      isMember: readonly(isMember),
+      openId: readonly(openId),
+      accessToken: readonly(accessToken),
+      userIdentity: readonly(userIdentity),
+      sessionKey: readonly(sessionKey),
+      unionid: readonly(unionid),
 
-      checkLogin,
-      initUserAuth,
       login,
-      logout,
+      clear,
+      setLoginStatus,
+      setUserAuth,
+      setHuarunAuth,
     }
   },
   {

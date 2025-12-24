@@ -1,7 +1,7 @@
 import type { HttpRequestConfig } from 'uview-plus/libs/luch-request'
 import Request from 'uview-plus/libs/luch-request'
 import useAuthStore from '@/store/auth'
-import { Dialog, Loading, Toast } from '@/utils'
+import { Dialog, Loading, reLaunch, Toast } from '@/utils'
 
 const http = new Request()
 
@@ -28,11 +28,28 @@ http.setConfig((config: HttpRequestConfig) => {
 })
 
 // ==================== 请求拦截器 ====================
+/**
+ * 请求头
+ * appKey: dicp
+ * Authorization: bearer (accessToken)
+ * cpm-user-identity: (userIdentity)
+ * cpm-client-type: web
+ * thirdSessionKey (sessionKey)
+ */
 http.interceptors.request.use((config: HttpRequestConfig) => {
-  const { sessionKey } = useAuthStore()
+  const auth = useAuthStore()
 
-  if (sessionKey && config.header) {
-    config.header.thirdSessionKey = sessionKey
+  const headers = {
+    'appKey': 'dicp',
+    'cpm-client-type': 'web',
+    'Authorization': `bearer ${auth.accessToken}`,
+    'cpm-user-identity': auth.userIdentity,
+    'thirdSessionKey': auth.sessionKey,
+  }
+
+  config.header = {
+    ...config.header,
+    ...headers,
   }
 
   if (config.custom?.loading) {
@@ -70,7 +87,8 @@ http.interceptors.response.use(
       if (!custom?.skipAuthCheck) {
         Toast('登录过期，请重新登录')
         setTimeout(() => {
-          useAuthStore().logout()
+          useAuthStore().clear()
+          reLaunch('/pages/login/index')
         }, 2000)
       }
 

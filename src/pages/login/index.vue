@@ -60,60 +60,20 @@
 </template>
 
 <script lang='ts' setup>
-import { useAuth } from '@/composables'
-import useAuthStore from '@/store/auth'
-import { reLaunch } from '@/utils'
-
-const authStore = useAuthStore()
+import { useAuth, useLogin } from '@/composables'
 
 const { isMember } = useAuth()
+const { loading, wxLogin, phoneLogin } = useLogin()
 
 // 隐私协议相关
 const isAgree = ref(false)
 const showPrivacy = ref(false)
 
 // 提交按钮相关
-const loading = ref<boolean>(false)
 const btnStyle = reactive({
   fontSize: '32rpx',
   height: '80rpx',
 })
-
-// 提交登录
-const submit = async (data: any) => {
-  try {
-    await authStore.login(data)
-    reLaunch('/pages/home/index')
-  }
-  finally {
-    loading.value = false
-  }
-}
-
-// 微信登录
-const wxLogin = async () => {
-  loading.value = true
-
-  const { code } = await uni.login()
-  const params = {
-    wxCode: code,
-    phoneCode: '',
-  }
-  submit(params)
-}
-
-// 手机号登录
-const phoneLogin = async ({ detail }: any) => {
-  loading.value = true
-
-  const { code } = await uni.login()
-  const params = {
-    wxCode: code,
-    phoneCode: detail.code,
-  }
-
-  submit(params)
-}
 
 // 同意用户协议
 const onAgree = () => {
@@ -121,10 +81,6 @@ const onAgree = () => {
 
   if (isMember.value) wxLogin()
 }
-
-onLoad(() => {
-
-})
 </script>
 
 <style scpoed>
