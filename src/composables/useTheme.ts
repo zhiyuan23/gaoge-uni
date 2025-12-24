@@ -1,13 +1,13 @@
-import { themes } from '@/constants'
-import useSeriesStore from '@/store/theme'
+import { THEMES } from '@/constants'
+import useSeriesStore from '@/store/series'
 
 export const useTheme = () => {
-  const { seriesCode } = storeToRefs(useSeriesStore())
+  const { themeCode } = storeToRefs(useSeriesStore())
 
-  const cfg = computed(() => themes[seriesCode.value])
+  const config = computed(() => THEMES[themeCode.value])
 
   return {
-    seriesCode,
-    ...cfg.value,
+    themeCode,
+    ...config.value,
   }
 }

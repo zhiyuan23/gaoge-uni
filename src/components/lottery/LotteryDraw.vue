@@ -19,13 +19,13 @@
 
       <!-- 开奖标题图片 -->
       <image
-        :src="`/static/images/lottery/main-tit-${seriesCode}.png`"
+        :src="`/static/images/lottery/main-tit-${themeCode}.png`"
         class="w-460 h-200 -mt-68"
       />
 
       <!-- 开奖主图片 -->
       <image
-        :src="`/static/images/lottery/main-img-${seriesCode}.png`"
+        :src="`/static/images/lottery/main-img-${themeCode}.png`"
         class="mt-8 w-520 h-520"
       />
 
@@ -67,7 +67,7 @@ const emit = defineEmits<{
 
 const authStore = useAuthStore()
 
-const { seriesCode } = useTheme()
+const { themeCode } = useTheme()
 const { isLogin } = storeToRefs(authStore)
 
 const show = defineModel<boolean>({ required: true })

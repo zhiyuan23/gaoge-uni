@@ -97,7 +97,7 @@ import { Dialog, navigateTo } from '@/utils'
 
 const authStore = useAuthStore()
 
-const { seriesCode, color } = useTheme()
+const { themeCode, color } = useTheme()
 const { openId } = storeToRefs(authStore)
 
 // 弹窗控制
@@ -176,7 +176,7 @@ const fetchMyPrizeList = async (reset = false) => {
     const res = await getMyPrizeList({
       page: prizePage.value,
       pageSize,
-      seriesCode: seriesCode.value,
+      themeCode: themeCode.value,
     })
 
     if (reset) {
@@ -220,7 +220,7 @@ const scanCode = async () => {
     cityId: 0,
     districtId: 210112,
     adCode: 0,
-    themeCode: seriesCode.value,
+    themeCode: themeCode.value,
     openId: openId.value,
   }
 
@@ -252,14 +252,16 @@ const drawLottery = async () => {
     cityId: 0,
     districtId: 210112,
     adCode: 0,
-    themeCode: seriesCode.value,
+    themeCode: themeCode.value,
     logId: 0,
   }
   await fetchLottery(params)
 
   showDraw.value = false
   showResult.value = true
-  drawLoading.value = false
+  setTimeout(() => {
+    drawLoading.value = false
+  }, 200)
 }
 
 // 奖品操作统一处理

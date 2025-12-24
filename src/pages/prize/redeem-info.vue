@@ -5,7 +5,7 @@
       <!-- 红包信息 -->
       <view class="relative mb-28 w-687 h-185">
         <image
-          :src="`/static/images/prize/redeem-hd-${seriesCode}.png`"
+          :src="`/static/images/prize/redeem-hd-${themeCode}.png`"
           class="absolute size-full"
         />
         <view class="relative h-full flex-col-start-center top-0 left-100" :style="{ color: redeem.color }">
@@ -94,7 +94,7 @@
         </view>
         <view class="relative w-full flex-center-end pb-80">
           <image
-            :src="`/static/images/prize/ic-service-${seriesCode}.png`"
+            :src="`/static/images/prize/ic-service-${themeCode}.png`"
             class="w-98 h-74"
           />
           <button
@@ -124,7 +124,7 @@ import PosterShare from './poster.vue'
 
 const profileStore = useProfileStore()
 const { profile } = storeToRefs(profileStore)
-const { seriesCode, color, redeem } = useTheme()
+const { themeCode, color, redeem } = useTheme()
 
 const posterGenerator = ref<any>(null)
 const prizeDetail = ref({

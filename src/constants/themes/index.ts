@@ -1,6 +1,7 @@
 import type { SeriesKey } from '@/types'
 
-export const themes: Record<SeriesKey, any> = {
+// 系列主题色配置
+export const THEMES: Record<SeriesKey, any> = {
   // 魔力
   ml: {
     name: '魔力',

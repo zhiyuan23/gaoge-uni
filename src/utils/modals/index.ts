@@ -42,6 +42,7 @@ export const Dialog = (content: string, option: IShowModalOptions = {}) => {
       title: '温馨提示',
       content,
       showCancel: false,
+      confirmText: '我知道了',
       confirmColor: '#007E41',
       success(res) {
         if (res.confirm)

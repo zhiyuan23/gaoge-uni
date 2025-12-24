@@ -14,7 +14,7 @@
       <view class="absolute h-full flex-center-start top-0" @click="goUserPage">
         <view class="pl-32 pr-25">
           <u-avatar
-            :src="userInfo.avatarUrl"
+            :src="profile?.avatarUrl"
             default-url="/static/images/icons/ic-avatar.png"
             size="55"
           />
@@ -22,7 +22,7 @@
         <view class="flex-col-center">
           <view class="font-bold pb-5 text-34">
             <text v-if="isLogin">
-              Hey, {{ userInfo.nickName }}
+              Hey, {{ profile?.nickName }}
             </text>
             <text v-else>
               去登录
@@ -30,12 +30,13 @@
           </view>
         </view>
       </view>
+      <!-- /个人信息 -->
     </view>
   </view>
 
   <!-- 系列列表 -->
   <view
-    v-for="{ code, name } in seriesList"
+    v-for="{ code, name, status } in seriesList"
     :key="code"
     class="relative rounded-1.25 mx-32 mb-60 w-686 h-294"
     @click="goDetail(code)"
@@ -53,22 +54,23 @@
     "
     >
       <view class="flex-center-between color-white mt-70">
-        <view class="flex-center">
-          <view class="flex-center-center rounded-full bg-#8BC200 ml-8 w-96 h-36 text-22">
-            进行中
+        <view v-if="status" class="flex-center">
+          <view class="flex-center-center rounded-full ml-8 w-96 h-36 text-22" :style="{ background: STATUS_MAP[status].color }">
+            {{ STATUS_MAP[status].name }}
           </view>
           <view class="font-bold pl-14 text-32">
-            {{ name }}1元畅饮赢大奖
+            {{ name }}
           </view>
         </view>
         <view
+          v-if="status === 'in_progress'"
           class="flex-center-center rounded-full bg-#FFC700 mr-10 px-5 h-47 text-22"
-          :style="{ color: themes.zbqr.color }"
+          :style="{ color: '#01613B' }"
         >
           立即参与
           <text
             class="size-36 rounded-full color-white font-bold p-2"
-            :style="{ background: themes.zbqr.color }"
+            :style="{ background: '#01613B' }"
           >
             GO
           </text>
@@ -81,39 +83,57 @@
 
 <script setup lang='ts'>
 import type { SeriesKey } from '@/types'
-import { useAuth } from '@/composables'
-import { seriesList, themes } from '@/constants'
-import useThemeStore from '@/store/theme'
+import useAuthStore from '@/store/auth'
+import useProfileStore from '@/store/profile'
+import useSeriesStore from '@/store/series'
 import { navigateTo } from '@/utils'
 
-const themeStore = useThemeStore()
-const { isLogin } = useAuth()
+const STATUS_MAP = {
+  not_started: { name: '未开始', color: '#864227' },
+  in_progress: { name: '进行中', color: '#8BC200' },
+  end: { name: '已结束', color: '#363636' },
+}
 
-// 个人信息
-const userInfo = ref({
-  nickName: '微信昵称',
-  avatarUrl: '',
-})
+const authStore = useAuthStore()
+const profileStore = useProfileStore()
+const themeStore = useSeriesStore()
+
+const { isLogin } = storeToRefs(authStore)
+const { profile } = storeToRefs(profileStore)
+const { seriesList } = storeToRefs(themeStore)
+
+// 获取主题列表
+const getThemeList = () => {
+  themeStore.fetchSeriesList()
+}
+
+// 获取用户信息
+const getProfile = () => {
+  if (isLogin.value && !profile.value) {
+    profileStore.fetchProfile()
+  }
+}
 
 // 查看个人信息
 const goUserPage = () => {
   const url = isLogin.value
-    ? '/pages/user/info/index'
+    ? '/pages/profile/index'
     : '/pages/login/index'
 
   navigateTo(url)
 }
 
 // 跳转系列页
-const goDetail = (type: SeriesKey) => {
-  themeStore.setSeriesCode(type)
+const goDetail = (code: SeriesKey) => {
+  themeStore.setThemeCode(code)
 
   uni.navigateTo({
-    url: `/pages/series/${type}/index`,
+    url: `/pages/series/${code}/index`,
   })
 }
 
-onLoad(() => {
-  console.log('query')
+onLoad(async () => {
+  getThemeList()
+  getProfile()
 })
 </script>

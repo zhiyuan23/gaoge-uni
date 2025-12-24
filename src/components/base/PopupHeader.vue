@@ -1,7 +1,7 @@
 <template>
   <view class="relative h-118">
     <image
-      :src="`/static/images/series/popup-hd-${seriesCode}.png`"
+      :src="`/static/images/series/popup-hd-${themeCode}.png`"
       class="w-full h-120"
     />
     <view class="absolute w-full text-center font-bold tracking-wider top-30 text-36" :style="{ color: titleColor }">
@@ -17,5 +17,5 @@ const props = defineProps<{
   title?: string;
 }>()
 
-const { seriesCode, titleColor } = useTheme()
+const { themeCode, titleColor } = useTheme()
 </script>

@@ -7,7 +7,7 @@
     >
       <!-- 背景图 -->
       <image
-        :src="`/static/images/btns/btn-${seriesCode}.png`"
+        :src="`/static/images/btns/btn-${themeCode}.png`"
         mode="widthFix"
         class="absolute size-full"
       />
@@ -64,7 +64,7 @@ const emit = defineEmits<{
   click: [event: any];
 }>()
 
-const { seriesCode } = useTheme()
+const { themeCode } = useTheme()
 
 const width = computed(() => props.width || '540')
 const height = computed(() => props.height || '102')

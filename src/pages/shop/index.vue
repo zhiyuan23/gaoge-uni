@@ -58,7 +58,7 @@
         >
           <!-- 门店图片 -->
           <image
-            :src="store.cover || `/static/images/shop/img-store-${seriesCode}.png`"
+            :src="store.cover || `/static/images/shop/img-store-${themeCode}.png`"
             class="size-144 flex-shrink-0 mr-16 -ml-5"
           />
           <view class="flex-1">
@@ -86,7 +86,7 @@
 
           <!-- 导航按钮 -->
           <view class="flex-col-center-center px-20" @click="navigateToStore(store)">
-            <image :src="`/static/images/shop/ic-nav-${seriesCode}.png`" class="size-48" />
+            <image :src="`/static/images/shop/ic-nav-${themeCode}.png`" class="size-48" />
             <view class="leading-48 text-22">
               去导航
             </view>
@@ -110,7 +110,7 @@ import { useTheme } from '@/composables'
 import { navigateTo } from '@/utils'
 
 const SCREEN_HEIGHT = uni.getSystemInfoSync().windowHeight
-const { seriesCode, shopBtnColor, mapPopBgColor, mapPopTitColor } = useTheme()
+const { themeCode, shopBtnColor, mapPopBgColor, mapPopTitColor } = useTheme()
 
 // 搜索
 const searchText = ref('')

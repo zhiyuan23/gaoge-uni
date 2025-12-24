@@ -2,7 +2,7 @@
   <view class="page min-h-screen" :style="{ background: bgColor }">
     <!-- 背景图 -->
     <view class="absolute w-100vw h-1000">
-      <image :src="`/static/images/shop/bg-fb-${seriesCode}.png`" class="size-full" />
+      <image :src="`/static/images/shop/bg-fb-${themeCode}.png`" class="size-full" />
     </view>
 
     <view class="relative pb-40">
@@ -110,7 +110,7 @@
 import { useTheme } from '@/composables'
 
 const {
-  seriesCode,
+  themeCode,
   bgColor,
   color,
 } = useTheme()

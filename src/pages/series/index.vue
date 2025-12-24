@@ -1,8 +1,8 @@
 <template>
   <view>
-    <SeriesZBQE v-if="seriesCode === 'zbqr'" />
-    <SeriesZWCS v-if="seriesCode === 'zwcs'" />
-    <SeriesML v-if="seriesCode === 'ml'" />
+    <SeriesZBQE v-if="themeCode === 'zbqr'" />
+    <SeriesZWCS v-if="themeCode === 'zwcs'" />
+    <SeriesML v-if="themeCode === 'ml'" />
   </view>
 </template>
 
@@ -11,7 +11,7 @@ import SeriesML from '@/pages/series/ml/index.vue'
 import SeriesZBQE from '@/pages/series/zbqr/index.vue'
 import SeriesZWCS from '@/pages/series/zwcs/index.vue'
 
-const seriesCode = ref('zbqr')
+const themeCode = ref('zbqr')
 const wxQrCode = ref('')
 
 onLoad((options: any) => {
