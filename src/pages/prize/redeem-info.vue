@@ -110,20 +110,20 @@
   <PosterShare
     ref="posterGenerator"
     bg-img="https://youke2.picui.cn/s1/2025/12/20/69466dece70be.png"
-    :avatar="userInfo.avatarUrl"
-    :nickname="userInfo.nickname"
+    :avatar="profile.avatarUrl"
+    :nickname="profile.nickname"
     :money="prizeDetail.cash"
   />
 </template>
 
 <script setup lang='ts'>
 import { useTheme } from '@/composables'
-import useProfileStore from '@/store/user/index'
+import useProfileStore from '@/store/profile'
 import { Dialog, Loading } from '@/utils'
 import PosterShare from './poster.vue'
 
 const profileStore = useProfileStore()
-const { userInfo } = storeToRefs(profileStore)
+const { profile } = storeToRefs(profileStore)
 const { seriesCode, color, redeem } = useTheme()
 
 const posterGenerator = ref<any>(null)
@@ -187,7 +187,7 @@ const handleSubmit = async () => {
 }
 
 onLoad(() => {
-  profileStore.fetchUserInfo()
+  profileStore.fetchProfile()
   // myPrizeStore.fetchDetail()
 })
 </script>
