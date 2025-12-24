@@ -65,8 +65,8 @@
     <LotteryMyPrize
       v-model="showMyPrize"
       :data="prizeList"
-      :loading="loading"
-      :has-more="hasMore"
+      :loading="prizeLoading"
+      :has-more="prizeHasMore"
       @loadmore="handleLoadMore"
       @action="handlePrizeAction"
     />
@@ -82,55 +82,49 @@
     <!-- 扫码结果弹窗 -->
     <LotteryResult
       v-model="showResult"
-      :prize-info="prizeInfo ?? lotteryInfo"
+      :prize-info="lotteryInfo"
       @confirm="handlePrizeAction"
     />
   </view>
 </template>
 
 <script setup lang='ts'>
+import { executeLottery, scanByDetail, scanByHome } from '@/api/lottery'
+import { getMyPrizeList } from '@/api/user/prize'
 import { useAuth, useLocation, useTheme } from '@/composables'
-import useLotteryStore from '@/store/lottery'
-import useMyPrizeStore from '@/store/user/prize'
-import { defaultPrizeInfo } from '@/types'
+import { defaultPrizeInfo, type PrizeInfo } from '@/types'
 import { Dialog, navigateTo } from '@/utils'
 
 const { seriesCode, color } = useTheme()
-const myPrizeStore = useMyPrizeStore()
-const lotteryStore = useLotteryStore()
-
-const { lotteryInfo } = storeToRefs(lotteryStore)
-
 const { openId } = useAuth()
 
-// 使用当前 seriesCode 对应的数据
-const prizeList = computed(() => myPrizeStore.getList(seriesCode))
-const loading = computed(() => myPrizeStore.getLoading(seriesCode))
-const hasMore = computed(() => myPrizeStore.getHasMore(seriesCode))
-
-// 我的奖品弹窗相关
-const showMyPrize = ref(false)
-
-// 活动说明/客服电话
+// 弹窗控制
 const showRule = ref(false)
 const showService = ref(false)
-
-// 开奖相关
+const showMyPrize = ref(false)
 const showDraw = ref(false)
+const showResult = ref(false)
+
+// 扫码 & 开奖核心数据
+const scanType = ref<'weixin' | 'mini'>('mini')
+const locationInfo = reactive({ lat: '', lng: '' })
+const qrCode = ref('')
+const lotteryInfo = ref<PrizeInfo>(defaultPrizeInfo)
 const drawLoading = ref(false)
 
-const scanType = ref<'weixin' | 'mini'>('mini')
-const showResult = ref(true)
-const qrCode = ref('')
-const locationInfo = reactive({ lat: '', lng: '' })
-const prizeInfo = ref(defaultPrizeInfo)
+// 我的奖品分页数据
+const prizeList = ref<any[]>([])
+const prizeLoading = ref(false)
+const prizeHasMore = ref(true)
+const prizePage = ref(1)
+const pageSize = 10
 
-// 微信扫码进入
-const wxQrCodeRef = inject<Ref<string>>('wxQrCode')
+// 微信注入二维码（特殊注入）
+const wxQrCodeRef = inject<Ref<string>>('wxQrCode', ref(''))
 
+// 微信扫码自动触发
 watchEffect(() => {
   const code = wxQrCodeRef?.value?.trim()
-
   if (code) {
     scanType.value = 'weixin'
     qrCode.value = code
@@ -141,12 +135,74 @@ watchEffect(() => {
   }
 })
 
-// 点击扫一扫
+// 打开“我的奖品”弹窗时自动加载
+watch(showMyPrize, (val) => {
+  if (val && prizeList.value.length === 0) {
+    fetchMyPrizeList(true)
+  }
+})
+
+// API-扫码验证
+const fetchScan = async (data: any, type: 'weixin' | 'mini') => {
+  if (type === 'weixin') {
+    await scanByHome(data)
+  }
+  else {
+    await scanByDetail(data)
+  }
+}
+
+// API-开奖
+const fetchLottery = async (data: any) => {
+  const res = await executeLottery(data)
+  lotteryInfo.value = res
+}
+
+// API-我的奖品列表
+const fetchMyPrizeList = async (reset = false) => {
+  if (prizeLoading.value) return
+
+  if (reset) {
+    prizePage.value = 1
+    prizeList.value = []
+    prizeHasMore.value = true
+  }
+
+  prizeLoading.value = true
+
+  try {
+    const res = await getMyPrizeList({
+      page: prizePage.value,
+      pageSize,
+      seriesCode: seriesCode.value,
+    })
+
+    if (reset) {
+      prizeList.value = res.list || []
+    }
+    else {
+      prizeList.value.push(...(res.list || []))
+    }
+
+    prizeHasMore.value = (res.list?.length || 0) === pageSize
+    prizePage.value++
+  }
+  finally {
+    prizeLoading.value = false
+  }
+}
+
+// 加载更多奖品
+const handleLoadMore = () => {
+  fetchMyPrizeList()
+}
+
+// 扫一扫
 const scanCode = async () => {
-  const locRes: any = await useLocation(false)
   const { result } = await uni.scanCode()
   qrCode.value = result
 
+  const locRes: any = await useLocation(false)
   const params = {
     scanCode: result,
     locationLon: locRes.lng,
@@ -165,7 +221,8 @@ const scanCode = async () => {
     themeCode: seriesCode.value,
     openId: openId.value,
   }
-  await lotteryStore.fetchScan(params, scanType.value)
+
+  await fetchScan(params, scanType.value)
 
   showDraw.value = true
 }
@@ -196,37 +253,20 @@ const drawLottery = async () => {
     themeCode: seriesCode.value,
     logId: 0,
   }
-  await lotteryStore.fetchLottery(params)
+  await fetchLottery(params)
 
   showDraw.value = false
   showResult.value = true
   drawLoading.value = false
 }
 
-// 我的奖品-打开弹窗时加载第一页
-watch(showMyPrize, (val) => {
-  if (val && prizeList.value.length === 0) {
-    myPrizeStore.fetchList(seriesCode, true)
-  }
-})
-
-// 我的奖品-加载更多
-const handleLoadMore = () => {
-  myPrizeStore.fetchList(seriesCode)
-}
-
-// 前往兑奖点
-const goExchange = () => {
-  navigateTo('/pages/shop/index')
-}
-
-// 奖品-操作处理
-const handlePrizeAction = async (type: string, id: any) => {
+// 奖品操作统一处理
+const handlePrizeAction = (type: string, item?: any) => {
   showResult.value = false
 
   switch (type) {
     case 'fillInfo':
-      navigateTo(`/pages/user/prize/redeem-info?id=${id}`)
+      navigateTo(`/pages/user/prize/redeem-info?id=${item.id}`)
       break
     case 'nearbyStore':
       goExchange()
@@ -239,8 +279,15 @@ const handlePrizeAction = async (type: string, id: any) => {
       break
   }
 }
+
+// 前往兑奖点地图
+const goExchange = () => {
+  navigateTo('/pages/shop/index')
+}
+
 onLoad(() => {
-  myPrizeStore.fetchList(seriesCode, true)
+  // 进入页面预加载我的奖品
+  // fetchMyPrizeList(true)
 })
 </script>
 

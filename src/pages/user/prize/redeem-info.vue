@@ -119,21 +119,17 @@
 <script setup lang='ts'>
 import { useTheme } from '@/composables'
 import useProfileStore from '@/store/user/index'
-import useMyPrizeStore from '@/store/user/prize'
-import { Dialog } from '@/utils'
+import { Dialog, Loading } from '@/utils'
 import PosterShare from './poster.vue'
 
 const profileStore = useProfileStore()
-const myPrizeStore = useMyPrizeStore()
-
 const { userInfo } = storeToRefs(profileStore)
-const { prizeDetail } = storeToRefs(myPrizeStore)
-
 const { seriesCode, color, redeem } = useTheme()
 
 const posterGenerator = ref<any>(null)
-
-// 表单数据
+const prizeDetail = ref({
+  cash: '888',
+})
 const form = reactive({
   name: '',
   idCard: '',
@@ -180,20 +176,18 @@ const handleSubmit = async () => {
     },
   )
 
-  uni.showLoading({ title: '提交中...' })
+  Loading.show('提交中...')
 
   try {
     await posterGenerator.value?.generateSharePoster()
-    uni.hideLoading()
   }
-  catch (e) {
-    uni.hideLoading()
-    console.log(e)
+  finally {
+    Loading.hide()
   }
 }
 
 onLoad(() => {
   profileStore.fetchUserInfo()
-  myPrizeStore.fetchDetail()
+  // myPrizeStore.fetchDetail()
 })
 </script>

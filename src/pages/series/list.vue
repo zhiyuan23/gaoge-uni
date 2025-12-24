@@ -83,10 +83,10 @@
 import type { SeriesKey } from '@/types'
 import { useAuth } from '@/composables'
 import { seriesList, themes } from '@/constants'
-import useSeriesStore from '@/store/lottery'
+import useThemeStore from '@/store/theme'
 import { navigateTo } from '@/utils'
 
-const seriesStore = useSeriesStore()
+const themeStore = useThemeStore()
 const { isLogin } = useAuth()
 
 // 个人信息
@@ -106,7 +106,7 @@ const goUserPage = () => {
 
 // 跳转系列页
 const goDetail = (type: SeriesKey) => {
-  seriesStore.seriesCode = type
+  themeStore.setSeriesCode(type)
 
   uni.navigateTo({
     url: `/pages/series/${type}/index`,

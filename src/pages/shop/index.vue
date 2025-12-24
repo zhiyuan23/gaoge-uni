@@ -7,12 +7,13 @@
       @search="onSearch"
     />
   </view>
+
   <view class="fixed flex flex-col overflow-hidden inset-0">
+    <!-- 地图区域（可拖拽调整高度） -->
     <view
       class="relative flex-shrink-0 transition-all duration-300"
       :style="{ height: `${mapHeight}px` }"
     >
-      <!-- 地图 -->
       <map
         class="h-full w-full"
         :latitude="center.lat"
@@ -23,11 +24,13 @@
         @markertap="onMarkerTap"
       />
 
-      <!-- 回到定位按钮 -->
+      <!-- 回到当前位置按钮 -->
       <view
-        class="absolute z-20 flex items-center justify-center rounded-full bg-white shadow-lg w-12 h-12 right-4 bottom-20"
+        class="absolute z-20 size-48 flex-center rounded-full bg-white shadow-lg right-16 bottom-80"
         @click.stop="reLocate"
-      />
+      >
+        <u-icon name="map" size="32" color="#07c160" />
+      </view>
     </view>
 
     <!-- 拖拽把手 -->
@@ -38,7 +41,7 @@
       @touchend.stop="onTouchEnd"
     />
 
-    <!-- 列表区域 -->
+    <!-- 门店列表 -->
     <scroll-view
       scroll-y
       class="flex-1 bg-white"
@@ -49,7 +52,7 @@
         <view
           v-for="store in shopList"
           :key="store.hotPointID"
-          class="flex-center bg-white mx-25 h-184 border-b-1-solid-#e0e0e0"
+          class="flex-center bg-white mx-25 h-184 border-b-1-solid-#e0e0e0 last:border-b-0"
           :class="{ 'bg-#07c160': currentStoreId === store.hotPointID }"
           @click="selectStore(store)"
         >
@@ -101,51 +104,88 @@
   </view>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
+import { getShopList } from '@/api/shop'
 import { useTheme } from '@/composables'
-import useShopStore from '@/store/shop'
-
 import { navigateTo } from '@/utils'
 
 const SCREEN_HEIGHT = uni.getSystemInfoSync().windowHeight
-const shopStore = useShopStore()
-const { shopList, page, hasMore, markers } = storeToRefs(shopStore)
+const { seriesCode, shopBtnColor, mapPopBgColor, mapPopTitColor } = useTheme()
 
-const { seriesCode, shopBtnColor } = useTheme()
+// 搜索
+const searchText = ref('')
 
-// 默认地图占 40%
+// 地图高度拖拽
 const mapHeight = ref(SCREEN_HEIGHT * 0.4)
 const MIN_HEIGHT = SCREEN_HEIGHT * 0.3
 const MID_HEIGHT = SCREEN_HEIGHT * 0.5
 const MAX_HEIGHT = SCREEN_HEIGHT * 0.7
-
 let startY = 0
 
-const location = reactive<any>({})
-const center = reactive<any>({})
-const currentStoreId = ref<number | null>(null)
+// 定位 & 地图中心
+const location = reactive({ lat: 0, lng: 0 })
+const center = reactive({ lat: 0, lng: 0 })
+
+// 门店列表 & 分页
+const shopList = ref<any[]>([])
+const page = ref(1)
+const pageSize = 30
+const hasMore = ref(true)
 const loading = ref(false)
+const currentStoreId = ref<number | null>(null)
 
-const searchText = ref<string>('')
+// 地图标记点
+const markers: any = computed(() => {
+  return shopList.value.map((store, index) => ({
+    id: index,
+    latitude: Number(store.lat),
+    longitude: Number(store.lon),
+    iconPath: '/static/images/shop/ic-map-mark.png',
+    width: 40,
+    height: 40,
+    callout: {
+      content: store.name,
+      color: mapPopTitColor,
+      fontSize: '20rpx',
+      bgColor: mapPopBgColor,
+      padding: 10,
+      borderRadius: 20,
+      display: 'ALWAYS',
+      textAlign: 'center',
+    },
+  }))
+})
 
-// 加载数据
-const loadData = async (isSearch = false) => {
+// 加载列表
+const fetchList = async (isSearch = false) => {
   if (loading.value) return
 
-  loading.value = true
+  if (isSearch) {
+    page.value = 1
+    shopList.value = []
+    hasMore.value = true
+  }
 
+  loading.value = true
   try {
-    const params = {
+    const res = await getShopList({
       words: searchText.value.trim(),
-      radius: '',
       lon: location.lng,
       lat: location.lat,
       page: page.value,
+    })
+
+    const rows = res.rows || []
+
+    if (isSearch) {
+      shopList.value = rows
+    }
+    else {
+      shopList.value.push(...rows)
+      page.value += 1
     }
 
-    const isLoadMore = !isSearch
-
-    await shopStore.fetchList(params, isLoadMore)
+    hasMore.value = rows.length >= pageSize
   }
   finally {
     loading.value = false
@@ -155,33 +195,56 @@ const loadData = async (isSearch = false) => {
 // 初始化数据
 const initData = async () => {
   const { latitude, longitude } = await uni.getLocation({ type: 'gcj02' })
-
   center.lat = latitude
   center.lng = longitude
   location.lat = latitude
   location.lng = longitude
 
-  loadData(true)
+  await fetchList(true)
 }
 
 // 确认搜索
 const onSearch = () => {
-  shopStore.reset()
-  loadData(true)
+  fetchList(true)
 }
 
-// 上拉触底加载更多
-const onReachBottom = async () => {
+// 上拉加载分页
+const onReachBottom = () => {
   if (!hasMore.value || loading.value) return
-  await loadData(false)
+  fetchList(false)
 }
 
-// 我要反馈
-const goFeedback = () => {
-  navigateTo('/pages/shop/feedback')
+// 点击列表门店
+const selectStore = (store: any) => {
+  currentStoreId.value = store.hotPointID
+  center.lat = Number(store.lat)
+  center.lng = Number(store.lon)
 }
 
-// 去导航
+// 点击地图标记点
+const onMarkerTap = (e: any) => {
+  const index = e.detail.markerId
+  const store = shopList.value[index]
+  if (store) selectStore(store)
+}
+
+// 重新定位
+const reLocate = async () => {
+  try {
+    const res = await uni.getLocation({ type: 'gcj02' })
+    center.lat = res.latitude
+    center.lng = res.longitude
+    location.lat = res.latitude
+    location.lng = res.longitude
+
+    await fetchList(true)
+  }
+  catch {
+    uni.showToast({ title: '重新定位失败', icon: 'none' })
+  }
+}
+
+// 前往导航
 const navigateToStore = (store: any) => {
   uni.openLocation({
     latitude: Number(store.lat),
@@ -192,41 +255,17 @@ const navigateToStore = (store: any) => {
   })
 }
 
-// 点击列表门店-地图定位到门店
-const selectStore = (store: any) => {
-  currentStoreId.value = store.hotPointID
-  center.lat = store.lat
-  center.lng = store.lon
+// 问题反馈
+const goFeedback = () => {
+  navigateTo('/pages/shop/feedback')
 }
 
-// 地图定位点点击
-const onMarkerTap = (e: any) => {
-  const markerId = e.detail.markerId
-  const index = markerId
-  const store = shopList.value[index]
-
-  if (store) {
-    selectStore(store)
-  }
-}
-
-// 回到当前定位
-const reLocate = async () => {
-  const res = await uni.getLocation()
-
-  center.lat = res.latitude
-  center.lng = res.longitude
-
-  loadData()
-}
-
-// 拖拽功能-拖拽开始
-const onTouchStart = (e: any) => {
+// 拖拽调整地图高度
+const onTouchStart = (e: TouchEvent) => {
   startY = e.touches[0].pageY
 }
 
-// 拖拽功能-拖拽中
-const onTouchMove = (e: any) => {
+const onTouchMove = (e: TouchEvent) => {
   const deltaY = e.touches[0].pageY - startY
   let newHeight = mapHeight.value + deltaY
 
@@ -237,12 +276,12 @@ const onTouchMove = (e: any) => {
   startY = e.touches[0].pageY
 }
 
-// 拖拽功能-拖拽结束
 const onTouchEnd = () => {
-  if (mapHeight.value < MID_HEIGHT - 50) {
+  const diff = 50
+  if (mapHeight.value < MID_HEIGHT - diff) {
     mapHeight.value = MIN_HEIGHT
   }
-  else if (mapHeight.value > MID_HEIGHT + 50) {
+  else if (mapHeight.value > MID_HEIGHT + diff) {
     mapHeight.value = MAX_HEIGHT
   }
   else {
