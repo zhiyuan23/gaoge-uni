@@ -3,13 +3,13 @@ import { jsonPost } from '@/api'
 import { mockPrizeData } from '../prize/mock'
 
 // 扫码-活动页
-export const scanByDetail = (data: any) => jsonPost<any>('/wx/act/scanCode/executeByScan', data)
+export const scanByDetail = (data: any) => jsonPost<any>('/wx/mem/act/scanCode/executeByScan', data)
 
 // 扫码-首页
-export const scanByHome = (data: any) => jsonPost<any>('/wx/act/scanCode/executeByHome', data)
+export const scanByHome = (data: any) => jsonPost<any>('/wx/mem/act/scanCode/executeByHome', data)
 
 // 开奖
-export const executeLottery = (data: any) => jsonPost<any>('/wx/act/prizeDraw/execute', data)
+export const executeLottery = (data: any) => jsonPost<any>('/wx/mem/act/prizeDraw/execute', data)
 
 // 获取我的奖品
 export const getMyPrizeList = (data: any) => {
