@@ -1,33 +1,43 @@
+import type { Profile } from '@/types'
 import { getUserInfo, updateUserInfo } from '@/api/profile'
 
 const useProfileStore = defineStore(
   'profile',
   () => {
-    const profile = ref<any>(null)
+    const profile = ref<Profile>({
+      userName: '',
+      mobilePhone: '',
+      nickName: '',
+      realName: '',
+      gender: 0,
+      genderName: '',
+      avatarUrl: '',
+      avatarUrlBase64: '',
+      birthDate: '',
+    })
+
+    const genderOptions = ['女', '男']
 
     // 获取用户信息
     const fetchProfile = async () => {
       const res = await getUserInfo()
-
-      profile.value = res
+      profile.value = { ...profile.value, ...res }
     }
 
     // 更新用户信息
-    const updateProfile = async (data: any) => {
-      const res = await updateUserInfo(data)
+    const updateProfile = async (partial: Partial<Profile>) => {
+      await updateUserInfo(partial)
 
-      profile.value = res
+      fetchProfile()
     }
 
     return {
       profile,
+      genderOptions,
 
       fetchProfile,
       updateProfile,
     }
-  },
-  {
-    persist: true,
   },
 )
 

@@ -1,13 +1,16 @@
 <template>
-  <view class="page container">
+  <view class="container page">
     <view class="w-full h-20" />
+
+    <!-- 个人信息卡片 -->
     <view class="card">
       <!-- 头像 -->
-      <view class="row avatar">
+      <view class="row avatar relative">
         <text>头像</text>
         <image
           class="size-120 rounded-full"
-          :src="userInfo.avatar || '/static/images/icons/ic-avatar.png'"
+          :src="profile.avatarUrlBase64 || '/static/images/icons/ic-avatar.png'"
+          mode="aspectFill"
         />
         <button
           class="absolute opacity-0 w-650 h-120"
@@ -20,10 +23,10 @@
       </view>
       <view class="line" />
 
-      <!-- 用户名 -->
+      <!-- 用户名（不可编辑） -->
       <view class="row">
         <text>用户名</text>
-        <view>{{ userInfo.username }}</view>
+        <view>{{ profile.userName || '未设置' }}</view>
       </view>
       <view class="line" />
 
@@ -31,10 +34,10 @@
       <view class="row">
         <text>昵称</text>
         <input
-          v-model="userInfo.nickname"
+          v-model="profile.nickName"
           type="nickname"
           placeholder="请输入昵称"
-          class="text-right text-26"
+          class="flex-1 text-right text-26"
           @blur="onChangeNickname"
         >
         <view class="icon">
@@ -42,17 +45,20 @@
         </view>
       </view>
       <view class="line" />
+
+      <!-- 手机号（不可编辑） -->
       <view class="row">
-        <text>手机号 </text>
-        <view>{{ userInfo.phone }}</view>
+        <text>手机号</text>
+        <view>{{ profile.mobilePhone || '未绑定' }}</view>
       </view>
     </view>
 
+    <!-- 更多信息卡片 -->
     <view class="card">
       <!-- 性别 -->
-      <view class="row" @click="handleEditGender">
+      <view class="row" @tap="handleEditGender">
         <text>性别</text>
-        <view>{{ userInfo.gender }}</view>
+        <view>{{ profile.genderName || '未设置' }}</view>
         <view class="icon">
           <u-icon name="arrow-right" color="#909399" />
         </view>
@@ -60,13 +66,15 @@
       <view class="line" />
 
       <!-- 生日 -->
-      <view class="row" @click="handleEditBirthday">
+      <view class="row" @tap="handleEditBirthday">
         <text>生日</text>
-        <view>{{ userInfo.birthday }}</view>
+        <view>{{ profile.birthDate || '未设置' }}</view>
         <view class="icon">
           <u-icon name="arrow-right" color="#909399" />
         </view>
       </view>
+
+      <!-- 日期选择器 -->
       <u-datetime-picker
         v-model="birthdayTimestamp"
         :show="showDatePicker"
@@ -74,7 +82,6 @@
         mode="date"
         :min-date="minDate"
         :max-date="maxDate"
-        :close-on-click-overlay="true"
         confirm-color="var(--primary)"
         @cancel="showDatePicker = false"
         @close="showDatePicker = false"
@@ -82,8 +89,8 @@
       />
     </view>
 
+    <!-- 协议与说明 -->
     <view class="card">
-      <!-- 协议与说明 -->
       <view class="row">
         <text>协议与说明</text>
         <view class="icon">
@@ -95,55 +102,63 @@
 </template>
 
 <script setup lang='ts'>
+import { uploadFile } from '@/api/common'
+import useProfileStore from '@/store/profile'
 import { formatTime } from '@/utils'
 
-const userInfo = reactive({
-  avatar: '',
-  username: 'DY0000001',
-  nickname: '邢道荣',
-  phone: '186****5507',
-  gender: '男',
-  birthday: '1998-08-06',
-})
+const profileStore = useProfileStore()
+const { profile } = storeToRefs(profileStore)
 
-const chooseGender = ['男', '女']
+const genderOptions = ['女', '男']
 
-// 日期选择相关
+// 生日选择器
 const showDatePicker = ref(false)
 const birthdayTimestamp = ref(Date.now())
 const minDate = new Date('1900-01-01').getTime()
 const maxDate = Date.now()
 
+// 初始化加载用户信息
+onLoad(() => {
+  profileStore.fetchProfile()
+})
+
 // 修改头像
-const onChooseAvatar = (e: any) => {
+const onChooseAvatar = async (e: any) => {
   const { avatarUrl } = e.detail
-  userInfo.avatar = avatarUrl
+  if (!avatarUrl) return
+
+  const { filePath } = await uploadFile(avatarUrl)
+  await profileStore.updateProfile({ avatarUrl: filePath })
 }
 
-// 修改昵称
-const onChangeNickname = (e: any) => {
-  console.log('输入昵称', e.detail.value)
+// 修改昵称（失去焦点时保存）
+const onChangeNickname = async () => {
+  if (!profile.value.nickName.trim()) return
+
+  await profileStore.updateProfile({ nickName: profile.value.nickName })
 }
 
 // 修改性别
-const handleEditGender = () => {
-  uni.showActionSheet({
-    itemList: chooseGender,
-    success: (res) => {
-      userInfo.gender = chooseGender[res.tapIndex]
-    },
-  })
+const handleEditGender = async () => {
+  const { tapIndex } = await uni.showActionSheet({ itemList: genderOptions })
+
+  const genderName = genderOptions[tapIndex]
+  const gender = tapIndex === 0 ? 0 : 1
+
+  await profileStore.updateProfile({ gender, genderName })
 }
 
-// 打开日期选择器（根据当前的 birthday）
+// 打开生日选择器
 const handleEditBirthday = () => {
-  birthdayTimestamp.value = new Date(userInfo.birthday).getTime()
+  const birth = profile.value.birthDate
+  birthdayTimestamp.value = birth ? new Date(birth).getTime() : Date.now()
   showDatePicker.value = true
 }
 
-// 日期选择确认
-const onConfirmBirthday = (e: any) => {
-  userInfo.birthday = formatTime(e.value)
+// 确认生日
+const onConfirmBirthday = async ({ value }: any) => {
+  const birthDate = formatTime(value, { format: 'YYYY-MM-DD' })
+  await profileStore.updateProfile({ birthDate })
   showDatePicker.value = false
 }
 </script>

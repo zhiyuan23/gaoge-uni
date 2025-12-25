@@ -143,8 +143,8 @@ export const get = <T = any>(url: string, params?: any, options?: RequestOption)
 export const post = <T = any>(url: string, data?: any, options?: RequestOption): Promise<T> =>
   request<T>(url, 'POST', data, options)
 
-export const upload = <T = any>(url: string, data?: any, options?: RequestOption): Promise<T> =>
-  request<T>(url, 'UPLOAD', data, options)
+export const upload = <T = any>(url: string, options?: RequestOption): Promise<T> =>
+  request<T>(url, 'UPLOAD', options)
 
 export const download = <T = any>(url: string, data?: any, options?: RequestOption): Promise<T> =>
   request<T>(url, 'DOWNLOAD', data, options)
