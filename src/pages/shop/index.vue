@@ -2,9 +2,14 @@
   <view class="fixed z-9 w-100vw flex-center-center bg-white h-104 border-b-1-solid-#e6e6e6 border-t-1-solid-#e6e6e6">
     <SearchBar
       v-model="searchText"
-      city-name="沈阳"
+      :city-name="selectedRegion?.city?.name || '请选择'"
+      :default-area="[
+        selectedRegion?.province?.code,
+        selectedRegion?.city?.code,
+      ]"
       placeholder="输入兑奖点名称或地址搜索"
       @search="onSearch"
+      @region-confirm="onRegionConfirm"
     />
   </view>
 
@@ -70,7 +75,7 @@
               <view
                 class="u-press flex-center-center flex-shrink-0 rounded-20 ml-10 w-130 h-40 text-20 border-2-solid-#FFF"
                 :style="{ color: shopBtnColor, borderColor: shopBtnColor }"
-                @click="goFeedback"
+                @click="goFeedback(store.hotPointID)"
               >
                 我要反馈
               </view>
@@ -105,8 +110,8 @@
 </template>
 
 <script setup lang="ts">
-import { getShopList } from '@/api/shop'
-import { useTheme } from '@/composables'
+import { getShopList, validFeedback } from '@/api/shop'
+import { useLocation, useTheme } from '@/composables'
 import { navigateTo } from '@/utils'
 
 const SCREEN_HEIGHT = uni.getSystemInfoSync().windowHeight
@@ -114,6 +119,10 @@ const { themeCode, shopBtnColor, mapPopBgColor, mapPopTitColor } = useTheme()
 
 // 搜索
 const searchText = ref('')
+const selectedRegion = ref<any>({
+  province: { code: '', name: '' },
+  city: { code: '', name: '' },
+})
 
 // 地图高度拖拽
 const mapHeight = ref(SCREEN_HEIGHT * 0.4)
@@ -156,6 +165,46 @@ const markers: any = computed(() => {
   }))
 })
 
+onLoad(() => {
+  initPage()
+})
+
+// 初始化数据
+const initPage = async () => {
+  const { lat, lng, province, city } = await useLocation()
+
+  selectedRegion.value = { province, city }
+  center.lat = Number(lat)
+  center.lng = Number(lng)
+  location.lat = Number(lat)
+  location.lng = Number(lng)
+
+  fetchList(true)
+}
+
+// 确认搜索
+const onSearch = () => {
+  fetchList(true)
+}
+
+// 确认选择城市
+const onRegionConfirm = (region: any) => {
+  selectedRegion.value = {
+    province: region[0],
+    city: region[1],
+  }
+
+  console.log(selectedRegion.value)
+
+  fetchList(true)
+}
+
+// 上拉加载分页
+const onReachBottom = () => {
+  if (!hasMore.value || loading.value) return
+  fetchList(false)
+}
+
 // 加载列表
 const fetchList = async (isSearch = false) => {
   if (loading.value) return
@@ -168,12 +217,15 @@ const fetchList = async (isSearch = false) => {
 
   loading.value = true
   try {
-    const res = await getShopList({
+    const params = {
       words: searchText.value.trim(),
       lon: location.lng,
       lat: location.lat,
       page: page.value,
-    })
+      provinceCode: selectedRegion.value?.province?.code,
+      cityCode: selectedRegion.value?.city?.code,
+    }
+    const res = await getShopList(params)
 
     const rows = res.rows || []
 
@@ -192,28 +244,6 @@ const fetchList = async (isSearch = false) => {
   }
 }
 
-// 初始化数据
-const initData = async () => {
-  const { latitude, longitude } = await uni.getLocation({ type: 'gcj02' })
-  center.lat = latitude
-  center.lng = longitude
-  location.lat = latitude
-  location.lng = longitude
-
-  await fetchList(true)
-}
-
-// 确认搜索
-const onSearch = () => {
-  fetchList(true)
-}
-
-// 上拉加载分页
-const onReachBottom = () => {
-  if (!hasMore.value || loading.value) return
-  fetchList(false)
-}
-
 // 点击列表门店
 const selectStore = (store: any) => {
   currentStoreId.value = store.hotPointID
@@ -230,18 +260,7 @@ const onMarkerTap = (e: any) => {
 
 // 重新定位
 const reLocate = async () => {
-  try {
-    const res = await uni.getLocation({ type: 'gcj02' })
-    center.lat = res.latitude
-    center.lng = res.longitude
-    location.lat = res.latitude
-    location.lng = res.longitude
-
-    await fetchList(true)
-  }
-  catch {
-    uni.showToast({ title: '重新定位失败', icon: 'none' })
-  }
+  initPage()
 }
 
 // 前往导航
@@ -256,8 +275,10 @@ const navigateToStore = (store: any) => {
 }
 
 // 问题反馈
-const goFeedback = () => {
-  navigateTo('/pages/shop/feedback')
+const goFeedback = async (storeId: string) => {
+  const data = await validFeedback(storeId)
+
+  navigateTo(`/pages/shop/feedback?storeId=${storeId}&feedbackTypes=${JSON.stringify(data)}`)
 }
 
 // 拖拽调整地图高度
@@ -288,8 +309,4 @@ const onTouchEnd = () => {
     mapHeight.value = MID_HEIGHT
   }
 }
-
-onLoad(() => {
-  initData()
-})
 </script>

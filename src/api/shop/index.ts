@@ -1,5 +1,5 @@
 import type { NearbyShopListReq, NearbyShopListRes } from '@/types'
-import { post } from '@/api'
+import { jsonPost, post } from '@/api'
 
 // 获取兑奖点列表
 export const getShopList = (data: NearbyShopListReq) => {
@@ -7,11 +7,11 @@ export const getShopList = (data: NearbyShopListReq) => {
 }
 
 // 门店问题反馈校验
-export const validFeedback = (data: any) => {
-  return post<any>('/wx/mem/act/problemFeedback/valid', data)
+export const validFeedback = (storeId: string) => {
+  return post<any>('/wx/mem/act/problemFeedback/valid', { storeId })
 }
 
 // 门店问题反馈提交
 export const submitFeedback = (data: any) => {
-  return post<any>('/wx/mem/act/problemFeedback/submit', data)
+  return jsonPost<any>('/wx/mem/act/problemFeedback/submit', data)
 }

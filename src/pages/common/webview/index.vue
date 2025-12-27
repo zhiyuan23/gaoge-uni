@@ -5,8 +5,15 @@
 <script setup lang='ts'>
 const url = ref<string>('')
 
+const setTitle = (title = '网页') => {
+  uni.setNavigationBarTitle({ title })
+}
+
 onLoad((options: any) => {
-  if (options.url)
+  if (options.url) {
     url.value = decodeURIComponent(options.url)
+  }
+
+  setTitle(options.title)
 })
 </script>
