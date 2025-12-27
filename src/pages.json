@@ -98,7 +98,7 @@
         {
           "path": "webview/index",
           "style": {
-            "navigationBarTitleText": "网页"
+            "navigationBarTitleText": ""
           }
         },
         {

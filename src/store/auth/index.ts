@@ -1,9 +1,7 @@
 import { md5 } from 'js-md5'
 import { getOpenId, getSession, hrAuth, isLoginApi } from '@/api/auth'
+import { APP_ID, PREFIX } from '@/constants'
 import { reLaunch } from '@/utils'
-
-const PREFIX = 'dicp'
-const APP_ID = 'wx027ab4853c647162'
 
 const useAuthStore = defineStore(
   'auth',

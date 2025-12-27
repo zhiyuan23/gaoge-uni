@@ -17,9 +17,10 @@ interface FormatTimeOptions {
 
 /**
  * 通用时间格式化函数
+ * 支持 number（时间戳）、string（时间字符串）、null/undefined
  */
 export const formatTime = (
-  timestamp?: number | null,
+  time?: number | string | null,
   options: FormatTimeOptions = {},
 ): string => {
   const {
@@ -29,16 +30,32 @@ export const formatTime = (
     locale = 'zh-cn',
   } = options
 
-  if (typeof timestamp !== 'number' || Number.isNaN(timestamp)) {
+  if (time == null || (typeof time === 'string' && !time.trim())) {
     return placeholder
   }
 
-  const ts = timestamp.toString().length === 10 ? timestamp * 1000 : timestamp
-  const time = dayjs(ts).locale(locale)
+  let dayjsInstance
 
-  if (relative) {
-    return time.fromNow()
+  if (typeof time === 'string') {
+    dayjsInstance = dayjs(time)
+  }
+  else if (typeof time === 'number') {
+    const ts = time.toString().length === 10 ? time * 1000 : time
+    dayjsInstance = dayjs(ts)
+  }
+  else {
+    return placeholder
   }
 
-  return time.format(format)
+  if (!dayjsInstance.isValid()) {
+    return placeholder
+  }
+
+  dayjsInstance = dayjsInstance.locale(locale)
+
+  if (relative) {
+    return dayjsInstance.fromNow()
+  }
+
+  return dayjsInstance.format(format)
 }
