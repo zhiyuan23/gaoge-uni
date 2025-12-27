@@ -18,7 +18,7 @@ onLoad((options: any) => {
   if (options.code) {
     wxQrCode.value = options.code
   }
-  wxQrCode.value = '10086'
+  wxQrCode.value = 'http://spring.ehsure.com:82/a/8N39RXFE7Z4ZK'
 })
 
 provide('wxQrCode', wxQrCode)

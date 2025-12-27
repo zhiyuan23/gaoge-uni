@@ -1,12 +1,20 @@
 import type { SeriesItem, SeriesKey } from '@/types'
 import { getSeriesDetail, getSeriesList } from '@/api/series'
-import { SERIES_CODE, SERIES_CODES, SERIES_LIST } from '@/constants'
+import { SERIES_CODES, SERIES_LIST } from '@/constants'
+import { formatTime } from '@/utils'
+
+const format = 'YYYY年MM月DD日'
 
 const useSeriesStore = defineStore(
-  'theme',
+  'series',
   () => {
-    const themeCode = ref<SeriesKey>(SERIES_CODE)
+    const themeCode = ref<SeriesKey>()
     const seriesList = ref<SeriesItem[]>(SERIES_LIST)
+    const seriesDetail = ref<SeriesItem>(SERIES_LIST[0])
+
+    const beginDate = computed(() => formatTime(seriesDetail.value?.beginTime, { format }))
+    const endDate = computed(() => formatTime(seriesDetail.value?.endTime, { format }))
+    const endTime = computed(() => formatTime(seriesDetail.value?.endTime, { format: 'YYYY年MM月DD日HH:mm' }))
 
     // 修改主题代码
     const setThemeCode = (code: SeriesKey) => {
@@ -26,15 +34,19 @@ const useSeriesStore = defineStore(
     }
 
     // 获取系列详情
-    const fetchSeriesDetail = async (code: SeriesKey) => {
-      const res = await getSeriesDetail(code)
-
-      seriesList.value = res
+    const fetchSeriesDetail = async () => {
+      if (themeCode.value) {
+        seriesDetail.value = await getSeriesDetail(themeCode.value)
+      }
     }
 
     return {
       themeCode,
       seriesList,
+      seriesDetail,
+      beginDate,
+      endDate,
+      endTime,
 
       setThemeCode,
       fetchSeriesList,

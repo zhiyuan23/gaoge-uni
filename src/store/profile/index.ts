@@ -16,8 +16,6 @@ const useProfileStore = defineStore(
       birthDate: '',
     })
 
-    const genderOptions = ['女', '男']
-
     // 获取用户信息
     const fetchProfile = async () => {
       const res = await getUserInfo()
@@ -33,7 +31,6 @@ const useProfileStore = defineStore(
 
     return {
       profile,
-      genderOptions,
 
       fetchProfile,
       updateProfile,

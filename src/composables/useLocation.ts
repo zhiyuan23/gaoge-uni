@@ -17,8 +17,10 @@ export interface LocationResult {
   district?: {
     code: string;
     name: string;
-    adCode: string;
   };
+  adCode?: string;
+  street?: string;
+  fullAddress?: string;
 }
 
 /**
@@ -133,8 +135,10 @@ export async function useLocation(
       district: {
         code: res.districtId || '',
         name: res.districtName || '',
-        adCode: res.adCode || '',
       },
+      adCode: res.adCode || '',
+      street: res.regeocode?.streetNumber?.street ?? '',
+      fullAddress: res.regeocode?.formatted_address ?? '',
     }
   }
   catch (reverseErr) {

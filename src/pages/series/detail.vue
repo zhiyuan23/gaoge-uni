@@ -1,62 +1,71 @@
 <template>
-  <view class="page relative h-screen overflow-hidden">
+  <view v-if="themeCode" class="theme page relative overflow-hidden" :style="{ background: currentTheme.bgColor }">
     <!-- 背景图 -->
     <image
-      class="relative w-100vw"
-      src="@/static/images/series/bg_zwcs.png"
+      class="absolute w-100vw -mt-165"
+      :src="`/static/images/series/main-${themeCode}.png`"
       mode="widthFix"
     />
 
     <view class="absolute text-center text-white top-40 right-10 leading-30">
       <view class="flex-center-end w-100" @click="showRule = true">
-        <view class="u-press flex-center rounded-3 bg-[var(--color)] w-48 h-146">
+        <view class="u-press vertical-btn">
           活动规则
         </view>
       </view>
       <view class="h-28" />
       <view class="flex-center-end w-100" @click="showService = true">
-        <view class="u-press flex-center rounded-3 bg-[var(--color)] w-48 h-146">
+        <view class="u-press vertical-btn">
           联系客服
         </view>
       </view>
     </view>
 
     <!-- 主体区域 -->
-    <view class="absolute w-100vw flex-col-center-center font-bold mt-1090 top-0">
+    <view class="relative z-9 w-100vw flex-col-center-center font-bold mt-1090 pb-50">
       <view class="h-150">
         <!-- 扫一扫按钮 -->
         <MainButton
-          v-if="true"
+          v-if="seriesDetail.status === 'in_progress'"
           label="点击扫一扫"
           icon="scan"
-          @click="scanCode"
+          @click="onScan"
         />
 
         <!-- 活动为开始/已结束 -->
         <view v-else class="text-center">
           <view class="color-[var(--color)] leading-100 text-46">
-            活动为开始，敬请期待
+            <text v-if="seriesDetail.status === 'not_started'">
+              活动未开始，敬请期待
+            </text>
+            <text v-if="seriesDetail.status === 'end'">
+              活动已结束，感谢参与
+            </text>
           </view>
           <view class="color-black font-normal leading-22 text-22">
-            2026年3月1日-2026年12月31日
+            {{ beginDate }}-{{ endDate }}
           </view>
         </view>
       </view>
 
       <view class="flex-center-between w-540 text-30">
         <view class="u-press button w-240 h-70" @click="showMyPrize = true">
-          <u-icon name="gift" :color="color" size="22" />
+          <u-icon name="gift" :color="currentTheme.color" size="22" />
           我的奖品
         </view>
         <view class="u-press button w-240 h-70" @click="goExchange">
-          <u-icon name="map" :color="color" size="22" class="pr-10" />
+          <u-icon name="map" :color="currentTheme.color" size="22" class="pr-10" />
           兑奖点
         </view>
       </view>
     </view>
 
     <!-- 活动规则 -->
-    <LotteryRule v-model="showRule" />
+    <LotteryRule
+      v-model="showRule"
+      :rule-info="seriesDetail.ruleDescription"
+      :end-date="endTime"
+    />
 
     <!-- 客服电话 -->
     <LotteryService v-model="showService" />
@@ -82,23 +91,32 @@
     <!-- 扫码结果弹窗 -->
     <LotteryResult
       v-model="showResult"
-      :prize-info="lotteryInfo"
+      :prize-info="drawResultInfo"
       @confirm="handlePrizeAction"
     />
   </view>
 </template>
 
 <script setup lang='ts'>
-import { executeLottery, getMyPrizeList, scanByDetail, scanByHome } from '@/api/lottery'
-import { useLocation, useTheme } from '@/composables'
+import type { LocationResult } from '@/composables/useLocation'
+import { cashWithdraw, executeLottery, getMyPrizeList, scanByDetail, scanByHome } from '@/api/lottery'
+import { useLocation } from '@/composables'
+import { THEMES } from '@/constants'
 import useAuthStore from '@/store/auth'
+import useSeriesStore from '@/store/series'
 import { defaultPrizeInfo, type PrizeInfo } from '@/types'
-import { Dialog, navigateTo } from '@/utils'
+import { delay, navigateTo, Toast } from '@/utils'
 
 const authStore = useAuthStore()
+const seriesStore = useSeriesStore()
 
-const { themeCode, color } = useTheme()
 const { openId } = storeToRefs(authStore)
+const { themeCode, seriesDetail, beginDate, endDate, endTime } = storeToRefs(seriesStore)
+
+const currentTheme = reactive({
+  color: '',
+  bgColor: '',
+})
 
 // 弹窗控制
 const showRule = ref(false)
@@ -108,11 +126,25 @@ const showDraw = ref(false)
 const showResult = ref(false)
 
 // 扫码 & 开奖核心数据
-const scanType = ref<'weixin' | 'mini'>('mini')
-const locationInfo = reactive({ lat: '', lng: '' })
-const qrCode = ref('')
-const lotteryInfo = ref<PrizeInfo>(defaultPrizeInfo)
 const drawLoading = ref(false)
+const drawResultInfo = ref<PrizeInfo>(defaultPrizeInfo)
+const drawParams = reactive({
+  scanCode: '',
+  locationLon: '',
+  locationLat: '',
+  locationProvince: '',
+  locationCity: '',
+  locationDistrict: '',
+  locationStreet: '',
+  locationAddress: '',
+  locationFullAddress: '',
+  locationAdCode: '',
+  provinceId: '',
+  cityId: '',
+  districtId: '',
+  adCode: '',
+  themeCode: themeCode.value,
+}) as any
 
 // 我的奖品分页数据
 const prizeList = ref<any[]>([])
@@ -121,46 +153,71 @@ const prizeHasMore = ref(true)
 const prizePage = ref(1)
 const pageSize = 10
 
-// 微信注入二维码（特殊注入）
+// 微信扫码注入二维码
 const wxQrCodeRef = inject<Ref<string>>('wxQrCode', ref(''))
 
 // 微信扫码自动触发
 watchEffect(() => {
   const code = wxQrCodeRef?.value?.trim()
-  if (code) {
-    scanType.value = 'weixin'
-    qrCode.value = code
-    showDraw.value = true
-  }
-  else {
-    scanType.value = 'mini'
+  if (code && openId.value) {
+    drawParams.scanCode = code
+    checkCode('weixin')
   }
 })
 
 // 打开“我的奖品”弹窗时自动加载
-watch(showMyPrize, (val) => {
-  if (val && prizeList.value.length === 0) {
+watch(showMyPrize, (newShow) => {
+  if (newShow) {
     fetchMyPrizeList(true)
   }
 })
 
-// API-扫码验证
-const fetchScan = async (data: any, type: 'weixin' | 'mini') => {
-  if (type === 'weixin') {
-    await scanByHome(data)
+// 自动同步主题色（微信扫码进入无主题代码，无法使用useTheme）
+watch(themeCode, (newCode) => {
+  if (newCode && THEMES[newCode]) {
+    currentTheme.color = THEMES[newCode].color
+    currentTheme.bgColor = THEMES[newCode].bgColor
   }
-  else {
-    await scanByDetail(data)
-  }
+}, { immediate: true })
+
+/**
+ * 将 useLocation 返回的位置信息赋值到 drawParams 对象
+ * @param target - 目标 reactive 对象（drawParams）
+ * @param data - useLocation 返回的定位数据
+ */
+const assignLocation = (target: typeof drawParams, data: LocationResult) => {
+  Object.assign(target, {
+    locationLat: data.lat || '',
+    locationLon: data.lng || '',
+    locationProvince: data.province?.name || '',
+    locationCity: data.city?.name || '',
+    locationDistrict: data.district?.name || '',
+    locationAdCode: data.adCode || '',
+    locationAddress: data.street || '',
+    locationFullAddress: data.fullAddress || '',
+    provinceId: data.province?.code || '',
+    cityId: data.city?.code || '',
+    districtId: data.district?.code || '',
+    adCode: data.adCode || '',
+  })
 }
 
-// API-开奖
-const fetchLottery = async (data: any) => {
-  const res = await executeLottery(data)
-  lotteryInfo.value = res
+onLoad(() => {
+  getSeriesDetail()
+})
+
+onShow(() => {
+  if (showMyPrize.value) {
+    fetchMyPrizeList(true)
+  }
+})
+
+// 获取系列详情信息
+const getSeriesDetail = () => {
+  seriesStore.fetchSeriesDetail()
 }
 
-// API-我的奖品列表
+// 获取我的奖品列表
 const fetchMyPrizeList = async (reset = false) => {
   if (prizeLoading.value) return
 
@@ -173,21 +230,25 @@ const fetchMyPrizeList = async (reset = false) => {
   prizeLoading.value = true
 
   try {
-    const res = await getMyPrizeList({
+    const params = {
       page: prizePage.value,
       pageSize,
       themeCode: themeCode.value,
-    })
+    }
+    const { rows, total } = await getMyPrizeList(params)
 
     if (reset) {
-      prizeList.value = res.list || []
+      prizeList.value = rows || []
     }
     else {
-      prizeList.value.push(...(res.list || []))
+      prizeList.value.push(...(rows || []))
     }
 
-    prizeHasMore.value = (res.list?.length || 0) === pageSize
-    prizePage.value++
+    prizeHasMore.value = prizeList.value.length < total
+
+    if (rows.length > 0) {
+      prizePage.value += 1
+    }
   }
   finally {
     prizeLoading.value = false
@@ -199,32 +260,29 @@ const handleLoadMore = () => {
   fetchMyPrizeList()
 }
 
-// 扫一扫
-const scanCode = async () => {
+// 点击扫一扫
+const onScan = async () => {
   const { result } = await uni.scanCode()
-  qrCode.value = result
+  drawParams.scanCode = result
 
-  const locRes: any = await useLocation(false)
-  const params = {
-    scanCode: result,
-    locationLon: locRes.lng,
-    locationLat: locRes.lat,
-    locationProvince: '辽宁省',
-    locationCity: '沈阳市',
-    locationDistrict: '浑南区',
-    locationStreet: '高歌路',
-    locationAddress: '',
-    locationFullAddress: '',
-    locationAdCode: '',
-    provinceId: 0,
-    cityId: 0,
-    districtId: 210112,
-    adCode: 0,
-    themeCode: themeCode.value,
-    openId: openId.value,
+  checkCode('mini')
+}
+
+// 校验扫描码
+const checkCode = async (type: 'weixin' | 'mini') => {
+  const data = await useLocation(false)
+  assignLocation(drawParams, data)
+
+  const params = { ...drawParams, openId: openId.value }
+
+  const fn = type === 'weixin' ? scanByDetail : scanByHome
+  const { themeCode } = await fn(params)
+
+  if (type === 'weixin') {
+    seriesStore.setThemeCode(themeCode)
+
+    getSeriesDetail()
   }
-
-  await fetchScan(params, scanType.value)
 
   showDraw.value = true
 }
@@ -233,71 +291,71 @@ const scanCode = async () => {
 const drawLottery = async () => {
   drawLoading.value = true
 
-  const locRes: any = await useLocation()
-  locationInfo.lat = locRes.lat
-  locationInfo.lng = locRes.lng
+  try {
+    const data = await useLocation()
+    assignLocation(drawParams, data)
 
-  const params = {
-    scanCode: qrCode.value,
-    locationLon: locRes.lng,
-    locationLat: locRes.lat,
-    locationProvince: '辽宁省',
-    locationCity: '沈阳市',
-    locationDistrict: '浑南区',
-    locationStreet: '高歌路',
-    locationAddress: '',
-    locationFullAddress: '',
-    locationAdCode: '',
-    provinceId: 0,
-    cityId: 0,
-    districtId: 210112,
-    adCode: 0,
-    themeCode: themeCode.value,
-    logId: 0,
+    const params = { ...drawParams, logId: 0 }
+
+    drawResultInfo.value = await executeLottery(params)
+
+    showDraw.value = false
+    showResult.value = true
   }
-  await fetchLottery(params)
-
-  showDraw.value = false
-  showResult.value = true
-  setTimeout(() => {
+  finally {
+    await delay(200)
     drawLoading.value = false
-  }, 200)
+  }
 }
 
 // 奖品操作统一处理
-const handlePrizeAction = (type: string, item?: any) => {
+const handlePrizeAction = (type: string, id: string) => {
   showResult.value = false
 
   switch (type) {
     case 'fillInfo':
-      navigateTo(`/pages/prize/redeem-info?id=${item.id}`)
+      navigateTo(`/pages/prize/redeem-info?id=${id}`)
       break
     case 'nearbyStore':
       goExchange()
       break
-    case 'receive':
-      Dialog('立即领取')
+    case 'withdraw':
+      handleWithdraw(id)
       break
     case 'scan':
-      scanCode()
+      onScan()
       break
   }
+}
+
+// 立即领取
+const handleWithdraw = async (id: string) => {
+  const data = await cashWithdraw(id)
+
+  uni.requestMerchantTransfer({
+    mchId: data.mchId,
+    package: data.packageInfo,
+    appId: data.appId,
+    success: () => {
+      fetchMyPrizeList(true)
+    },
+    fail: ({ result }: any) => {
+      if (result !== 'cancel') {
+        Toast(result)
+      }
+    },
+  })
 }
 
 // 前往兑奖点地图
 const goExchange = () => {
   navigateTo('/pages/shop/index')
 }
-
-onLoad(() => {
-  // 进入页面预加载我的奖品
-  // fetchMyPrizeList(true)
-})
 </script>
 
 <style scoped>
-.page {
-  --color: v-bind(color);
+.theme {
+  --color: v-bind(currentTheme.color);
 }
 
 :deep(uni-page-wrapper) {
@@ -306,5 +364,9 @@ onLoad(() => {
 
 .button {
   @apply color-[var(--color)] border-5-solid-[var(--color)];
+}
+
+.vertical-btn {
+  @apply flex-center rounded-3 bg-[var(--color)] w-48 h-146;
 }
 </style>
