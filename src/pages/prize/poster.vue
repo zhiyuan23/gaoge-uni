@@ -9,6 +9,8 @@
 </template>
 
 <script setup lang="ts">
+import { Loading } from '@/utils'
+
 interface Props {
   bgImg: string;
   avatar: string;
@@ -45,7 +47,7 @@ const generateSharePoster = async () => {
   if (generating.value) return
   generating.value = true
 
-  uni.showLoading({ title: '生成海报中...', mask: true })
+  Loading.show('生成海报中...')
 
   const ctx = uni.createCanvasContext('sharePosterCanvas', thisProxy)
 
@@ -107,13 +109,13 @@ const generateSharePoster = async () => {
           fileType: 'png',
           quality: 0.95,
           success: (res) => {
-            uni.hideLoading()
+            Loading.hide()
             uni.showShareImageMenu({
               path: res.tempFilePath,
             })
           },
           fail: (err) => {
-            uni.hideLoading()
+            Loading.hide()
             uni.showToast({ title: '生成失败', icon: 'none' })
             console.error(err)
           },
@@ -125,8 +127,7 @@ const generateSharePoster = async () => {
     })
   }
   catch (err) {
-    uni.hideLoading()
-    uni.showToast({ title: '图片加载失败', icon: 'none' })
+    Loading.hide()
     console.error(err)
     generating.value = false
   }

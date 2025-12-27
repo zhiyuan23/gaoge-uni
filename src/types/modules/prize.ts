@@ -36,7 +36,7 @@ export interface PrizeInfo {
   /** 是否中奖 0-否 1-是（后端可能返回 null） */
   bingo: 0 | 1 | null;
 
-  /** 奖品类型（小额红包：small_red_envelope / 大额红包：large_red_envelope / 1元换购：one_yuan_exchange） */
+  /** 奖品类型（小额红包 / 大额红包 / 1元换购） */
   prizeType: 'small_red_envelope' | 'large_red_envelope' | 'one_yuan_exchange' | null;
 
   /** 奖品名称 */
@@ -49,7 +49,10 @@ export interface PrizeInfo {
   bonus: string | null;
 
   /** 礼品券 ID（0 表示无，后端可能返回 null） */
-  giftCouponId: number | null;
+  giftCouponId: string | null;
+
+  /** 奖品状态（待兑换 / 已兑换 / 已过期） */
+  status?: 'to_be_exchange' | 'exchanged' | 'expired';
 }
 
 /** 奖品信息默认值 */
@@ -71,7 +74,7 @@ export const defaultPrizeInfo: PrizeInfo = {
   prizeName: '888元', // 奖品名称
   prizeImage: 'https://youke2.picui.cn/s1/2025/12/22/6948eb0de6aa6.png', // 奖品图片
   bonus: '', // 加赠奖品描述
-  giftCouponId: 2002932889307103200, // 礼品券 ID
+  giftCouponId: '2002932889307103200', // 礼品券 ID
 }
 
 // 奖品图片测试版在线地址

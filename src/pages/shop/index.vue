@@ -98,10 +98,10 @@
           </view>
         </view>
 
-        <view v-if="loading" class="text-center text-#999 py-20">
+        <view v-if="!initialized || loading" class="text-center text-#999 py-40">
           加载中...
         </view>
-        <view v-if="!loading && shopList.length === 0" class="text-center text-#999 py-20">
+        <view v-else-if="!loading && shopList.length === 0" class="text-center text-#999 py-20">
           附近暂无门店
         </view>
       </view>
@@ -136,6 +136,7 @@ const location = reactive({ lat: 0, lng: 0 })
 const center = reactive({ lat: 0, lng: 0 })
 
 // 门店列表 & 分页
+const initialized = ref(false)
 const shopList = ref<any[]>([])
 const page = ref(1)
 const pageSize = 30
@@ -179,6 +180,8 @@ const initPage = async () => {
   location.lat = Number(lat)
   location.lng = Number(lng)
 
+  initialized.value = true
+
   fetchList(true)
 }
 
@@ -206,10 +209,10 @@ const onReachBottom = () => {
 }
 
 // 加载列表
-const fetchList = async (isSearch = false) => {
+const fetchList = async (reset = false) => {
   if (loading.value) return
 
-  if (isSearch) {
+  if (reset) {
     page.value = 1
     shopList.value = []
     hasMore.value = true
@@ -222,22 +225,24 @@ const fetchList = async (isSearch = false) => {
       lon: location.lng,
       lat: location.lat,
       page: page.value,
+      pageSize,
       provinceCode: selectedRegion.value?.province?.code,
       cityCode: selectedRegion.value?.city?.code,
     }
-    const res = await getShopList(params)
+    const { rows, total } = await getShopList(params)
 
-    const rows = res.rows || []
-
-    if (isSearch) {
+    if (reset) {
       shopList.value = rows
     }
     else {
       shopList.value.push(...rows)
-      page.value += 1
     }
 
-    hasMore.value = rows.length >= pageSize
+    hasMore.value = shopList.value.length < total
+
+    if (rows.length > 0) {
+      page.value += 1
+    }
   }
   finally {
     loading.value = false

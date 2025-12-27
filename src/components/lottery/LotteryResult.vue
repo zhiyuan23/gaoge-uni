@@ -223,7 +223,7 @@ const prizeTypeButtonMap = {
   },
   small_red_envelope: {
     label: '开心收下',
-    type: 'receive',
+    type: 'withdraw',
     icon: 'coin' as const,
   },
 } as const

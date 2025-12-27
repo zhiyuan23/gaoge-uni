@@ -10,10 +10,10 @@
         />
         <view class="relative h-full flex-col-start-center top-0 left-100" :style="{ color: redeem.color }">
           <view class="font-bold text-40">
-            888元红包
+            {{ prizeDetail.prizeName }}
           </view>
-          <view>兑换期限：2026.11.01-2026.12.31</view>
-          <view>12天后过期</view>
+          <view>兑换期限：{{ beginDate }}-{{ endDate }}</view>
+          <view>{{ prizeDetail.memExchangeMsg }}</view>
         </view>
       </view>
 
@@ -31,7 +31,7 @@
             姓名
           </text>
           <input
-            v-model.trim="form.name"
+            v-model.trim="form.receivePrizeUserName"
             type="text"
             :maxlength="20"
             placeholder="填写姓名"
@@ -48,7 +48,7 @@
             身份证号
           </text>
           <input
-            v-model.trim="form.idCard"
+            v-model.trim="form.receivePrizeUserIdcard"
             type="text"
             :maxlength="18"
             placeholder="填写身份证号"
@@ -65,7 +65,7 @@
             银行卡号
           </text>
           <input
-            v-model.trim="form.bankCard"
+            v-model.trim="form.bankCardNumber"
             type="digit"
             :maxlength="19"
             placeholder="填写银行卡号"
@@ -109,17 +109,18 @@
 
   <PosterShare
     ref="posterGenerator"
-    bg-img="https://youke2.picui.cn/s1/2025/12/20/69466dece70be.png"
+    :bg-img="`http://spring.ehsure.com:82/image/member/card-bg-${themeCode}.png`"
     :avatar="profile.avatarUrl"
-    :nickname="profile.nickname"
-    :money="prizeDetail.cash"
+    :nickname="profile.nickName"
+    :money="prizeDetail.bonus"
   />
 </template>
 
 <script setup lang='ts'>
+import { fillInInfo, getMyPrizeDetail } from '@/api/lottery'
 import { useTheme } from '@/composables'
 import useProfileStore from '@/store/profile'
-import { Dialog, Loading } from '@/utils'
+import { Dialog, formatTime, Loading, Toast } from '@/utils'
 import PosterShare from './poster.vue'
 
 const profileStore = useProfileStore()
@@ -127,45 +128,59 @@ const { profile } = storeToRefs(profileStore)
 const { themeCode, color, redeem } = useTheme()
 
 const posterGenerator = ref<any>(null)
-const prizeDetail = ref({
-  cash: '888',
-})
+
+const prizeDetail = ref()
 const form = reactive({
-  name: '',
-  idCard: '',
-  bankCard: '',
+  id: '',
+  receivePrizeUserName: '',
+  receivePrizeUserIdcard: '',
+  bankCardNumber: '',
 })
 
+const beginDate = computed(() => formatTime(prizeDetail.value?.memExchangeBeginTime, { format: 'YYYY.MM.DD' }))
+const endDate = computed(() => formatTime(prizeDetail.value?.memExchangeEndTime, { format: 'YYYY.MM.DD' }))
+
 // 身份证正则（支持15/18位）
-// const idCardReg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}([\dX])$)/i
+const idCardReg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}([\dX])$)/i
+
+onLoad((options: any) => {
+  form.id = options.id
+
+  getDetail(options.id)
+  profileStore.fetchProfile()
+})
+
+const getDetail = async (id: string) => {
+  prizeDetail.value = await getMyPrizeDetail(id)
+}
 
 // 提交处理
 const handleSubmit = async () => {
   // 必填校验
-  if (!form.name) {
-    Dialog('请填写姓名')
+  if (!form.receivePrizeUserName) {
+    Toast('请填写姓名')
     return
   }
-  if (!form.idCard) {
-    Dialog('请填写身份证号')
+  if (!form.receivePrizeUserIdcard) {
+    Toast('请填写身份证号')
     return
   }
-  if (!form.bankCard) {
-    Dialog('请填写银行卡号')
+  if (!form.bankCardNumber) {
+    Toast('请填写银行卡号')
     return
   }
 
-  // // 身份证格式校验
-  // if (!idCardReg.test(form.idCard)) {
-  //   Dialog('身份证号格式不正确')
-  //   return
-  // }
+  // 身份证格式校验
+  if (!idCardReg.test(form.receivePrizeUserIdcard)) {
+    Toast('身份证号格式不正确')
+    return
+  }
 
-  // // 银行卡校验（长度+纯数字+Luhn）
-  // if (form.bankCard.length < 16 || form.bankCard.length > 19 || !/^\d+$/.test(form.bankCard)) {
-  //   Dialog('银行卡号长度或格式不正确')
-  //   return
-  // }
+  // 银行卡校验（长度+纯数字）
+  if (form.bankCardNumber.length < 16 || form.bankCardNumber.length > 19 || !/^\d+$/.test(form.bankCardNumber)) {
+    Toast('银行卡号长度或格式不正确')
+    return
+  }
 
   await Dialog(
     '信息提交后无法更改，请确认正确无误后再进行提交，如因所提供的信息不准确而造成无法兑换奖品的，损失由消费者自行承担',
@@ -179,15 +194,11 @@ const handleSubmit = async () => {
   Loading.show('提交中...')
 
   try {
-    await posterGenerator.value?.generateSharePoster()
+    await fillInInfo(form)
+    posterGenerator.value?.generateSharePoster()
   }
   finally {
     Loading.hide()
   }
 }
-
-onLoad(() => {
-  profileStore.fetchProfile()
-  // myPrizeStore.fetchDetail()
-})
 </script>

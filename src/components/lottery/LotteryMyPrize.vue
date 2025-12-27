@@ -22,8 +22,16 @@
           class="h-78vh bg-background"
           @scrolltolower="loadMore"
         >
+          <!-- 加载中-正常加载速度不需要添加 -->
+          <!-- <view v-if="props.loading" class="h-60vh flex flex-col items-center justify-center">
+            <u-loading-icon mode="semicircle" />
+            <text class="text-#999 mt-30 text-28">
+              加载中...
+            </text>
+          </view> -->
+
           <!-- 表头 -->
-          <view v-if="props.data && props.data.length !== 0" class="px-55">
+          <view v-if="props.loading || props.data?.length" class="px-55">
             <view class="flex-center font-bold mb-20 h-74 text-28">
               <view class="w-170">
                 奖品名称
@@ -43,7 +51,7 @@
             >
               <!-- 奖品名称 -->
               <view class="pr-10 w-160">
-                {{ item.name }}
+                {{ item.prizeName }}
               </view>
 
               <!-- 状态 + 颜色 -->
@@ -51,59 +59,59 @@
                 class="font-bold w-130"
                 :style="{ color: getStatusColor(item.status) }"
               >
-                {{ item.status }}
+                {{ item.statusName }}
               </view>
 
               <!-- 详情列 -->
               <view class="flex-col-end">
                 <!-- 未兑奖 -->
-                <template v-if="item.status === '未兑奖'">
+                <template v-if="item.status === 'to_be_exchange'">
                   <view
-                    v-if="item.type === '小额红包'"
+                    v-if="item.prizeType === 'small_red_envelope'"
                     class="btn u-press"
                     :style="{ backgroundColor: color }"
-                    @click="handleAction('receive', item)"
+                    @click="handleAction('withdraw', item.id)"
                   >
                     立即领取
                   </view>
                   <view
-                    v-else-if="item.type === '大额红包'"
+                    v-else-if="item.prizeType === 'large_red_envelope'"
                     class="btn u-press"
                     :style="{ backgroundColor: color }"
-                    @click="handleAction('fillInfo', item)"
+                    @click="handleAction('fillInfo', item.id)"
                   >
                     填写兑奖信息
                   </view>
                   <view
-                    v-else-if="item.type === '实物'"
+                    v-else-if="item.prizeType === 'one_yuan_exchange'"
                     class="btn u-press"
                     :style="{ backgroundColor: color }"
-                    @click="handleAction('nearbyStore', item)"
+                    @click="handleAction('nearbyStore', item.id)"
                   >
                     附近兑奖门店
                   </view>
 
                   <text class="text-#666 mt-10">
-                    兑奖截止：{{ item.deadlineTime }}
+                    兑奖截止：{{ item.memExchangeEndTime }}
                   </text>
                 </template>
 
                 <!-- 已兑奖 -->
-                <template v-else-if="item.status === '已兑奖'">
+                <template v-else-if="item.status === 'exchanged'">
                   <view>
                     <text v-if="item.type === '实物'" class="block text-#666">
-                      兑奖点：{{ item.redeemPoint || '-' }}
+                      兑奖点：{{ item.exchangeStoreName }}
                     </text>
                     <text class="block text-#666 mt-4">
-                      兑奖时间：{{ item.redeemTime }}
+                      兑奖时间：{{ item.exchangeTime }}
                     </text>
                   </view>
                 </template>
 
                 <!-- 已过期 -->
-                <template v-else-if="item.status === '已过期'">
+                <template v-else-if="item.status === 'expired'">
                   <text class="text-#999">
-                    过期时间：{{ item.expireTime }}
+                    过期时间：{{ item.memExchangeEndTime }}
                   </text>
                 </template>
               </view>
@@ -127,16 +135,7 @@
 import { useTheme } from '@/composables'
 
 const props = defineProps<{
-  data?: Array<{
-    id: string | number;
-    name: string;
-    status: '未兑奖' | '已兑奖' | '已过期';
-    type?: '小额红包' | '大额红包' | '实物' | string;
-    deadlineTime?: string;
-    redeemTime?: string;
-    expireTime?: string;
-    redeemPoint?: string;
-  }>;
+  data?: Array<any>;
   // 分页状态，由父组件控制
   loading?: boolean; // 是否正在加载下一页
   hasMore?: boolean; // 是否还有更多数据
@@ -158,23 +157,22 @@ const handleClose = () => {
 }
 
 // 操作按钮
-const handleAction = (type: 'nearbyStore' | 'fillInfo' | 'receive', item: any) => {
-  emit('action', type, item)
+const handleAction = (type: 'nearbyStore' | 'fillInfo' | 'withdraw', id: any) => {
+  emit('action', type, id)
 }
 
 // 状态颜色
 const getStatusColor = (status: string) => {
   switch (status) {
-    case '未兑奖': return color
-    case '已兑奖': return '#000'
-    case '已过期': return '#999'
+    case 'to_be_exchange': return color
+    case 'exchanged': return '#000'
+    case 'expired': return '#999'
     default: return '#666'
   }
 }
 
 // 触发加载更多
 const loadMore = () => {
-  console.log('触发加载更多')
   if (!props.loading && props.hasMore) {
     emit('loadmore')
   }
