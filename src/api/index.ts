@@ -40,37 +40,29 @@ http.setConfig((config: HttpRequestConfig) => {
 http.interceptors.request.use((config: HttpRequestConfig) => {
   const auth = useAuthStore()
 
-  const headers = {
+  Object.assign(config.header ??= {}, {
     'appKey': 'dicp',
     'cpm-client-type': 'web',
     'Authorization': `bearer ${auth.accessToken}`,
     'cpm-user-identity': auth.userIdentity,
     'thirdSessionKey': auth.sessionKey,
-  }
-
-  config.header = {
-    ...config.header,
-    ...headers,
-  }
+  })
 
   if (config.custom?.json) {
-    config.header = {
-      ...config.header,
-      'content-type': 'application/json;charset=UTF-8',
-    }
+    config.header['content-type'] = 'application/json;charset=UTF-8'
   }
 
   if (config.custom?.loading) {
     Loading.show()
   }
 
-  if (import.meta.env.DEV) {
+  if (import.meta.env.DEV || true) {
     let centerPath = CenterService.Activity
 
     if (config.data && config.data._center) {
       centerPath = config.data._center
-      config.baseURL = import.meta.env.VITE_API_BASE_URL + centerPath
     }
+    config.baseURL = import.meta.env.VITE_API_BASE_URL + centerPath
   }
 
   return config
@@ -149,8 +141,8 @@ const request = <T = any>(
   }) as Promise<T>
 }
 
-export const upload = <T = any>(url: string, options?: RequestOption): Promise<T> =>
-  request<T>(url, 'UPLOAD', options)
+export const upload = <T = any>(url: string, data?: any, options?: RequestOption): Promise<T> =>
+  request<T>(url, 'UPLOAD', data, options)
 
 export const download = <T = any>(url: string, data?: any, options?: RequestOption): Promise<T> =>
   request<T>(url, 'DOWNLOAD', data, options)

@@ -1,8 +1,12 @@
+import type { UploadReq } from './types'
 import { post, upload } from '@/api'
 import { CenterService } from '@/constants'
 
 // 图片上传
-export const uploadFile = (filePath: string) => upload<any>('/wx/mem/user/upload', { filePath, name: 'file' })
+export const uploadFile = (options: UploadReq) => {
+  const { filePath, name = 'file', extraData = {} } = options
+  return upload<any>('/wx/mem/user/upload', extraData, { filePath, name })
+}
 
 // 地址逆解析
 export const locationInfo = (data: any) => post<any>('/md/location/locationInfo', {

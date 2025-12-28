@@ -91,7 +91,7 @@
 
     <!-- 协议与说明 -->
     <view class="card">
-      <view class="row">
+      <view class="row" @tap="showSelector">
         <text>协议与说明</text>
         <view class="icon">
           <u-icon name="arrow-right" color="#909399" />
@@ -103,8 +103,11 @@
 
 <script setup lang='ts'>
 import { uploadFile } from '@/api/common'
+import { useAgreement } from '@/composables'
 import useProfileStore from '@/store/profile'
 import { formatTime } from '@/utils'
+
+const { showSelector } = useAgreement()
 
 const profileStore = useProfileStore()
 const { profile } = storeToRefs(profileStore)
@@ -127,7 +130,7 @@ const onChooseAvatar = async (e: any) => {
   const { avatarUrl } = e.detail
   if (!avatarUrl) return
 
-  const { filePath } = await uploadFile(avatarUrl)
+  const { filePath } = await uploadFile({ filePath: avatarUrl })
   await profileStore.updateProfile({ avatarUrl: filePath })
 }
 
