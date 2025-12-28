@@ -143,7 +143,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   close: [];
-  action: [item: any, type: 'nearbyStore' | 'fillInfo' | 'receive'];
+  action: [item: any, type: 'nearbyStore' | 'fillInfo' | 'withdraw'];
   loadmore: [];
 }>()
 

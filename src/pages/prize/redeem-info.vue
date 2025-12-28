@@ -196,6 +196,10 @@ const handleSubmit = async () => {
   try {
     await fillInInfo(form)
     posterGenerator.value?.generateSharePoster()
+
+    const pages = getCurrentPages()
+    const prevPage = pages[pages.length - 1]
+    prevPage.$vm.fetchMyPrizeList()
   }
   finally {
     Loading.hide()

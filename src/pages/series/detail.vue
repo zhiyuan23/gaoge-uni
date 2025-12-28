@@ -1,5 +1,5 @@
 <template>
-  <view v-if="themeCode" class="theme page relative overflow-hidden" :style="{ background: currentTheme.bgColor }">
+  <view v-if="themeCode" class="page theme relative overflow-hidden" :style="{ background: currentTheme.bgColor }">
     <!-- 背景图 -->
     <image
       class="absolute w-100vw -mt-165"
@@ -110,7 +110,7 @@ import { delay, navigateTo, Toast } from '@/utils'
 const authStore = useAuthStore()
 const seriesStore = useSeriesStore()
 
-const { openId } = storeToRefs(authStore)
+const { isLogin, openId } = storeToRefs(authStore)
 const { themeCode, seriesDetail, beginDate, endDate, endTime } = storeToRefs(seriesStore)
 
 const currentTheme = reactive({
@@ -124,6 +124,13 @@ const showService = ref(false)
 const showMyPrize = ref(false)
 const showDraw = ref(false)
 const showResult = ref(false)
+
+// 我的奖品分页数据
+const prizeList = ref<any[]>([])
+const prizeLoading = ref(false)
+const prizeHasMore = ref(true)
+const prizePage = ref(1)
+const pageSize = 10
 
 // 扫码 & 开奖核心数据
 const drawLoading = ref(false)
@@ -145,13 +152,6 @@ const drawParams = reactive({
   adCode: '',
   themeCode: themeCode.value,
 }) as any
-
-// 我的奖品分页数据
-const prizeList = ref<any[]>([])
-const prizeLoading = ref(false)
-const prizeHasMore = ref(true)
-const prizePage = ref(1)
-const pageSize = 10
 
 // 微信扫码注入二维码
 const wxQrCodeRef = inject<Ref<string>>('wxQrCode', ref(''))
@@ -180,6 +180,13 @@ watch(themeCode, (newCode) => {
   }
 }, { immediate: true })
 
+// 未登录状态，登录后自动开奖
+watch(isLogin, (newLoginStatus, oldLoginStatus) => {
+  if (newLoginStatus && !oldLoginStatus && showDraw.value) {
+    drawLottery()
+  }
+}, { immediate: false })
+
 /**
  * 将 useLocation 返回的位置信息赋值到 drawParams 对象
  * @param target - 目标 reactive 对象（drawParams）
@@ -204,12 +211,6 @@ const assignLocation = (target: typeof drawParams, data: LocationResult) => {
 
 onLoad(() => {
   getSeriesDetail()
-})
-
-onShow(() => {
-  if (showMyPrize.value) {
-    fetchMyPrizeList(true)
-  }
 })
 
 // 获取系列详情信息
@@ -273,9 +274,8 @@ const checkCode = async (type: 'weixin' | 'mini') => {
   const data = await useLocation(false)
   assignLocation(drawParams, data)
 
-  const params = { ...drawParams, openId: openId.value }
-
   const fn = type === 'weixin' ? scanByDetail : scanByHome
+  const params = { ...drawParams, openId: openId.value }
   const { themeCode } = await fn(params)
 
   if (type === 'weixin') {
@@ -298,6 +298,14 @@ const drawLottery = async () => {
     const params = { ...drawParams, logId: 0 }
 
     drawResultInfo.value = await executeLottery(params)
+
+    if (drawResultInfo.value.bingo === 1) {
+      uni.vibrateLong()
+
+      if (drawResultInfo.value.prizeType === 'large_red_envelope') {
+        setTimeout(() => uni.vibrateLong(), 400)
+      }
+    }
 
     showDraw.value = false
     showResult.value = true
@@ -351,6 +359,10 @@ const handleWithdraw = async (id: string) => {
 const goExchange = () => {
   navigateTo('/pages/shop/index')
 }
+
+defineExpose({
+  fetchMyPrizeList,
+})
 </script>
 
 <style scoped>

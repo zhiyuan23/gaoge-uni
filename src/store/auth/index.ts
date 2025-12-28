@@ -77,33 +77,24 @@ const useAuthStore = defineStore(
       setHuarunAuth(res.accessToken, res.userIdentity)
     }
 
-    // 提交登录
-    const submit = async (data: { wxCode: string; phoneCode: string }) => {
+    // 授权登录
+    const login = async (phoneCode = '', needJump = true) => {
+      const { code } = await uni.login()
+
       loading.value = true
+
       try {
-        const res: any = await getSession(data)
+        const res = await getSession({ wxCode: code, phoneCode })
 
         sessionKey.value = res.thirdSessionKey
         isLogin.value = true
         isMember.value = 1
 
-        reLaunch('/pages/home/index')
+        if (needJump) reLaunch('/pages/home/index')
       }
       finally {
         loading.value = false
       }
-    }
-
-    // 微信登录（会员）
-    const wxLogin = async () => {
-      const { code } = await uni.login()
-      await submit({ wxCode: code, phoneCode: '' })
-    }
-
-    // 手机号授权登录（非会员）
-    const phoneLogin = async (e: any) => {
-      const { code } = await uni.login()
-      await submit({ wxCode: code, phoneCode: e.detail.code })
     }
 
     return {
@@ -121,8 +112,7 @@ const useAuthStore = defineStore(
       setUserAuth,
       setHuarunAuth,
       silentLogin,
-      wxLogin,
-      phoneLogin,
+      login,
     }
   },
   {

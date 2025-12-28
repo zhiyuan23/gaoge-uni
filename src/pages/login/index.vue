@@ -32,7 +32,7 @@
           :custom-style="btnStyle"
           :loading="loading"
           loading-text="登录中"
-          @click="authStore.wxLogin"
+          @click="handleLogin"
         >
           微信登录
         </u-button>
@@ -44,7 +44,7 @@
           :loading="loading"
           loading-text="登录中"
           open-type="getPhoneNumber"
-          @getphonenumber="authStore.phoneLogin"
+          @getphonenumber="handleLogin"
         >
           一键登录
         </u-button>
@@ -76,12 +76,18 @@ const btnStyle = reactive({
   height: '80rpx',
 })
 
+// 点击登录
+const handleLogin = (e: any) => {
+  const phoneCode = e ? e.detail.code : ''
+  authStore.login(phoneCode)
+}
+
 // 同意用户协议
 const onAgree = () => {
   isAgree.value = true
 
   if (isMember.value) {
-    authStore.wxLogin()
+    authStore.login()
   }
 }
 </script>

@@ -28,7 +28,6 @@
         :src="`/static/images/lottery/main-img-${themeCode}.png`"
         class="mt-8 w-520 h-520"
       />
-
       <MainButton
         label="点击开奖"
         icon="finger"
@@ -36,6 +35,27 @@
         :loading-text="loadingText"
         @click="handleConfirm"
       />
+
+      <view v-if="!isLogin" class="z-10 opacity-1 -mt-102">
+        <u-button
+          v-if="!isAgree"
+          :custom-style="btnStyle"
+          @click="showPrivacy = true"
+        />
+        <block v-else>
+          <u-button
+            v-if="isMember"
+            :custom-style="btnStyle"
+            @click.stop="handleLogin"
+          />
+          <u-button
+            v-else
+            :custom-style="btnStyle"
+            open-type="getPhoneNumber"
+            @getphonenumber="handleLogin"
+          />
+        </block>
+      </view>
 
       <!-- 隐私协议展示组件 -->
       <PrivacyInfo
@@ -68,16 +88,27 @@ const emit = defineEmits<{
 const authStore = useAuthStore()
 
 const { themeCode } = useTheme()
-const { isLogin } = storeToRefs(authStore)
+const { isLogin, isMember } = storeToRefs(authStore)
 
 const show = defineModel<boolean>({ required: true })
 
 const loading = computed(() => props.loading || false)
 const loadingText = computed(() => props.loadingText || '点击开奖')
 
+const btnStyle = reactive({
+  width: '540rpx',
+  height: '102rpx',
+})
+
 // 隐私协议相关
 const isAgree = ref(false)
 const showPrivacy = ref(false)
+
+// 点击登录
+const handleLogin = (e: any) => {
+  const phoneCode = e ? e.detail.code : ''
+  authStore.login(phoneCode, false)
+}
 
 // 同意用户协议
 const onAgree = () => {
@@ -90,11 +121,6 @@ const handleClose = () => {
 }
 
 const handleConfirm = () => {
-  if (!isLogin && !isAgree.value) {
-    showPrivacy.value = true
-  }
-  else {
-    emit('confirm')
-  }
+  emit('confirm')
 }
 </script>
