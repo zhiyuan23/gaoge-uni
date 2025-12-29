@@ -3,7 +3,6 @@
 
 使用uniapp+vite+vue3+typescript+uview-plus+unocss 搭建的适合团队协作的快速开发模版
 
-[uview-plus官方文档](https://uiadmin.net/uview-plus/)
 
 ### 特性
 
@@ -31,13 +30,13 @@ uniapp-vue3-project
 │  └ plugins
 ├ env                   环境变量
 ├ scripts               一些脚本
-│  ├ post-upgrade.js     依赖库清理
-│  └ verify-commit.js    git提交检验
+│  ├ post-upgrade.js    依赖库清理
+│  └ verify-commit.js   git提交检验
 ├ src
 │  ├ api                接口管理
 │  ├ components         公共组件
+│  ├ composables        组合式函数
 │  ├ constants          常量
-│  ├ hooks              常用hooks封装
 │  ├ locale             国际化语言管理
 │  ├ pages              页面管理
 │  ├ plugins            插件管理
@@ -51,10 +50,16 @@ uniapp-vue3-project
 │  ├ pages.json         页面配置
 │  └ uni.scss           全局scss变量
 ├ types                 全局typescript类型文件
+│  ├ modules            业务数据类型
+│  │  ├ prize.ts
+│  │  ├ series.ts
+│  │  ├ shop.ts
+│  │  └ themes.ts
 │  ├ auto-imports.d.ts
 │  ├ components.d.ts
 │  ├ global.d.ts
-│  └ module.d.ts
+│  ├ module.d.ts
+│  └ index.ts           入口文件 
 ├ LICENSE
 ├ README.md
 ├ cz.config.js          cz-git配置
@@ -88,69 +93,91 @@ build
 #### 接口管理
 ```
 api
-├ common       通用api
+├ auth
+│  └ index.ts
+├ common        通用api
 │  ├ index.ts
 │  └ types.ts
-├ user         用户相关api
-│  ├ index.ts
-│  └ types.ts
+├ lottery
+│  └ index.ts
+├ prize
+│  └ index.ts
+├ profile
+│  └ index.ts
+├ series
+│  └ index.ts
+├ shop
+│  └ index.ts
 └ index.ts     入口文件
 ```
 
-#### hooks管理
+#### 组合式函数管理
 ```
 hooks
-├ use-clipboard  剪切板
-│  └ index.ts
-├ use-permission 校验权限
-│  └ index.ts
-└ index.ts       入口文件
+├ useClipboard
+├ useLocation
+├ usePermission
+├ useTheme
+└ index.ts      入口文件
 ```
 
 ### 页面管理
 ```
 pages
-├ common           公共页面（分包common）
-│  ├ login
+├ common              公共页面（分包common）
+│  ├ 404
 │  │  └ index.vue
 │  └ webview
 │     └ index.vue
-├ home
+├ home 
 │  └ index.vue
-├ list
+├ login 
 │  └ index.vue
-└ user
+├ prize 
+│  ├ index.vue
+│  ├ poster.vue       分中奖享海报
+│  └ redeem-info.vue  填写兑奖信息
+├ profile 
+│  └ index.vue
+├ series
+│  ├ ml
+│  ├ zbqr
+│  ├ zwcs
+│  ├ detail.vue       活动详情页
+│  ├ index.vue        活动主页
+│  └ list.vue         活动列表页
+└ shop 
   └ index.vue
 ```
 
 #### 状态管理
 ```
 store
-├ modules
-│  ├ app          app状态
-│  │  ├ index.ts
-│  │  └ types.ts
-│  └ user         用户状态
-│     ├ index.ts
-│     └ types.ts
-└ index.ts        入口文件
+├ app             程序系统状态  
+│  └ index.vue
+├ auth            权限状态
+│  └ index.vue
+├ profile         用户信息状态
+│  └ index.vue
+├ series          产品系列状态
+│  └ index.vue
+└ index.ts
 ```
 
 ### 工具方法
 ```
 utils
-├ auth                token相关方法
+├ common          通用方法
 │  └ index.ts
-├ common              通用方法
+├ modals          弹窗相关方法
 │  └ index.ts
-├ modals              弹窗相关方法
+├ navigate        导航跳转
 │  └ index.ts
-├ request             网络请求相关方法
-│  ├ index.ts
-│  ├ interceptors.ts
-│  ├ status.ts
-│  └ types.ts
-└ index.ts            入口文件
+├ storage         使用缓存
+│  └ index.ts
+├ time            时间格式化
+│  └ index.ts
+└ index.ts        入口文件
 ```
 
 ### 使用方法
