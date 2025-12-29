@@ -1,3 +1,4 @@
+// src/composables/useLocation.ts
 import { locationInfo } from '@/api/common'
 
 /**
@@ -6,36 +7,43 @@ import { locationInfo } from '@/api/common'
 export interface LocationResult {
   lat: string;
   lng: string;
-  province?: {
+  province: {
     code: string;
     name: string;
   };
-  city?: {
+  city: {
     code: string;
     name: string;
   };
-  district?: {
+  district: {
     code: string;
     name: string;
   };
-  adCode?: string;
-  street?: string;
-  fullAddress?: string;
+  adCode: string;
+  street: string;
+  fullAddress: string;
 }
 
 /**
  * 获取用户当前位置 + 可选逆地理编码
  * @param required 是否必须获取定位权限（false 时未授权返回空位置对象）
  * @param withReverse 是否进行逆地理编码获取省市区（默认 true）
- * @returns Promise<LocationResult> 始终返回 LocationResult 对象，失败时返回空值对象
+ * @returns Promise<LocationResult> 始终返回完整结构的 LocationResult，所有字段在失败/未授权时为空字符串或空对象
  */
 export async function useLocation(
   required: boolean = true,
   withReverse: boolean = true,
 ): Promise<LocationResult> {
-  const emptyResult: LocationResult = {
+  // 完整的默认空对象（所有字段都有默认值）
+  const defaultEmpty: LocationResult = {
     lat: '',
     lng: '',
+    province: { code: '', name: '' },
+    city: { code: '', name: '' },
+    district: { code: '', name: '' },
+    adCode: '',
+    street: '',
+    fullAddress: '',
   }
 
   // 内部获取经纬度的函数
@@ -65,11 +73,11 @@ export async function useLocation(
 
     if (!isAuthDenied) {
       uni.showToast({ title: '获取位置失败，请检查定位服务', icon: 'none' })
-      return emptyResult
+      return defaultEmpty
     }
 
     if (!required) {
-      return emptyResult
+      return defaultEmpty
     }
 
     // 必须权限：引导开启
@@ -85,7 +93,7 @@ export async function useLocation(
     })
 
     if (!confirm) {
-      return emptyResult
+      return defaultEmpty
     }
 
     const settingRes = await new Promise<any | null>((resolve) => {
@@ -97,7 +105,7 @@ export async function useLocation(
 
     if (!settingRes?.authSetting?.['scope.userLocation']) {
       uni.showToast({ title: '定位权限未开启', icon: 'none' })
-      return emptyResult
+      return defaultEmpty
     }
 
     try {
@@ -105,14 +113,18 @@ export async function useLocation(
     }
     catch {
       uni.showToast({ title: '获取位置失败，请检查定位服务', icon: 'none' })
-      return emptyResult
+      return defaultEmpty
     }
   }
 
   // 到这里 basic 有值或仍是空对象
 
   if (!withReverse) {
-    return basic
+    return {
+      ...defaultEmpty,
+      lat: basic.lat,
+      lng: basic.lng,
+    }
   }
 
   // 需要逆解析
@@ -123,7 +135,8 @@ export async function useLocation(
     })
 
     return {
-      ...basic,
+      lat: basic.lat,
+      lng: basic.lng,
       province: {
         code: res.provinceId || '',
         name: res.provinceName || '',
@@ -144,6 +157,10 @@ export async function useLocation(
   catch (reverseErr) {
     console.warn('逆地理编码失败:', reverseErr)
     uni.showToast({ title: '获取城市信息失败，仅使用经纬度', icon: 'none' })
-    return basic // 逆解析失败返回基本经纬度
+    return {
+      ...defaultEmpty,
+      lat: basic.lat,
+      lng: basic.lng,
+    }
   }
 }
