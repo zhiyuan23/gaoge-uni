@@ -40,30 +40,29 @@ http.setConfig((config: HttpRequestConfig) => {
 http.interceptors.request.use((config: HttpRequestConfig) => {
   const auth = useAuthStore()
 
-  Object.assign(config.header ??= {}, {
-    'appKey': 'dicp',
-    'cpm-client-type': 'web',
-    'Authorization': `bearer ${auth.accessToken}`,
-    'cpm-user-identity': auth.userIdentity,
-    'thirdSessionKey': auth.sessionKey,
-  })
+  const headers = config.header = config.header ?? {}
 
   if (config.custom?.json) {
-    config.header['content-type'] = 'application/json;charset=UTF-8'
+    headers['content-type'] = 'application/json;charset=UTF-8'
   }
 
   if (config.custom?.loading) {
     Loading.show()
   }
 
-  if (import.meta.env.DEV || true) {
-    let centerPath = CenterService.Activity
-
-    if (config.data && config.data._center) {
-      centerPath = config.data._center
-    }
-    config.baseURL = import.meta.env.VITE_API_BASE_URL + centerPath
+  if (auth.accessToken?.trim()) {
+    Object.assign(headers, {
+      'appKey': 'dicp',
+      'cpm-client-type': 'web',
+      'Authorization': `bearer ${auth.accessToken}`,
+      'cpm-user-identity': auth.userIdentity,
+      'thirdSessionKey': auth.sessionKey,
+    })
   }
+
+  // 拼接微服务路径
+  const centerPath = config.data?._center ?? CenterService.Activity
+  config.baseURL = import.meta.env.VITE_API_BASE_URL + centerPath
 
   return config
 })
