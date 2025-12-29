@@ -33,6 +33,7 @@
           v-if="seriesDetail.status === 'in_progress'"
           label="点击扫一扫"
           icon="scan"
+          :loading="scanLoading"
           @click="onScan"
         />
 
@@ -142,6 +143,7 @@ const prizePage = ref(1)
 const pageSize = 10
 
 // 扫码 & 开奖核心数据
+const scanLoading = ref(false)
 const drawLoading = ref(false)
 const drawResultInfo = ref<PrizeInfo>(defaultPrizeInfo)
 const drawParams = reactive({
@@ -167,25 +169,26 @@ const bingoList = ref([])
 // 微信扫码注入二维码
 const wxQrCodeRef = inject<Ref<string>>('wxQrCode', ref(''))
 
-// 微信扫码自动触发
-watch(wxQrCodeRef, async (code) => {
-  if (code?.trim() && openId.value) {
+watch(wxQrCodeRef, (newCode) => {
+  const code = newCode?.trim()
+  if (!code) return
+
+  scanLoading.value = true
+
+  if (openId.value) {
     drawParams.scanCode = code
     showDraw.value = true
+    scanLoading.value = false
   }
 }, { immediate: true })
 
 // 微信扫码进入系列详情页 设置系列代码
-watch(
-  () => props.seriesCode,
-  (newCode) => {
-    if (newCode) {
-      drawParams.themeCode = newCode
-      seriesStore.setThemeCode(newCode)
-    }
-  },
-  { immediate: true },
-)
+watch(() => props.seriesCode, (newCode) => {
+  if (newCode) {
+    drawParams.themeCode = newCode
+    seriesStore.setThemeCode(newCode)
+  }
+}, { immediate: true })
 
 // 自动同步主题色（微信扫码进入无主题代码，无法使用useTheme）
 watch(themeCode, (newCode) => {
@@ -295,6 +298,8 @@ const onScan = async () => {
 
 // 校验扫描码
 const checkCode = async (type: 'weixin' | 'mini') => {
+  scanLoading.value = true
+
   const data = await useLocation(false)
   assignLocation(drawParams, data)
 
@@ -307,7 +312,7 @@ const checkCode = async (type: 'weixin' | 'mini') => {
 
     getSeriesDetail()
   }
-
+  scanLoading.value = false
   showDraw.value = true
 }
 
