@@ -3,19 +3,19 @@
   <view class="relative w-100vw mb-96 pt-80 h-500">
     <image
       class="w-full h-500"
-      src="/static/images/home/bg-main.png"
+      :src="`${IMG_BASE_URL}/home/bg-header.png`"
     />
     <view class="relative w-full flex-center-between h-162 -mt-130">
       <!-- 个人信息 -->
       <image
         class="relative size-full"
-        src="/static/images/home/bg-info.png"
+        :src="`${IMG_BASE_URL}/home/bg-user.png`"
       />
       <view class="absolute h-full flex-center-start top-0" @click="goUserPage">
         <view class="pl-32 pr-25">
           <u-avatar
             :src="profile?.avatarUrlBase64"
-            default-url="/static/images/icons/ic-avatar.png"
+            :default-url="`${IMG_BASE_URL}/icons/ic-avatar.png`"
             size="55"
           />
         </view>
@@ -42,7 +42,7 @@
     >
       <image
         class="w-full"
-        :src="`/static/images/series/banner-${code}.png`"
+        :src="`${IMG_BASE_URL}/lottery/banner-${code}.png`"
         mode="widthFix"
       />
       <view
@@ -83,6 +83,7 @@
 
 <script setup lang='ts'>
 import type { SeriesKey } from '@/types'
+import { IMG_BASE_URL } from '@/constants'
 import useAuthStore from '@/store/auth'
 import useProfileStore from '@/store/profile'
 import useSeriesStore from '@/store/series'

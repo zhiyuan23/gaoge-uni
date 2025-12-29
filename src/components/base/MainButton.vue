@@ -7,7 +7,7 @@
     >
       <!-- 背景图 -->
       <image
-        :src="`/static/images/btns/btn-${themeCode}.png`"
+        :src="`${IMG_BASE_URL}/btns/btn-${themeCode}.png`"
         mode="widthFix"
         class="absolute size-full"
       />
@@ -24,7 +24,7 @@
 
         <u-icon
           v-else-if="props.icon"
-          :name="`/static/images/btns/ic-${props.icon}.png`"
+          :name="`${IMG_BASE_URL}/btns/ic-${props.icon}.png`"
           color="#fff"
           :size="iconSize"
         />
@@ -40,6 +40,7 @@
 
 <script setup lang='ts'>
 import { useTheme } from '@/composables'
+import { IMG_BASE_URL } from '@/constants'
 
 // type ButtonIcon =
 //   | 'location'

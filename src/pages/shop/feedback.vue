@@ -2,7 +2,7 @@
   <view class="page min-h-screen" :style="{ background: shopBgColor }">
     <!-- 背景图 -->
     <view class="absolute h-full w-full">
-      <image :src="`/static/images/shop/bg-fb-${themeCode}.png`" class="size-full" mode="aspectFill" />
+      <image :src="`${IMG_BASE_URL}/shop/bg-fb-${themeCode}.png`" class="size-full" mode="aspectFill" />
     </view>
 
     <view class="relative pb-40">
@@ -119,6 +119,7 @@
 <script setup lang='ts'>
 import { submitFeedback } from '@/api/shop'
 import { useTheme } from '@/composables'
+import { IMG_BASE_URL } from '@/constants'
 import { delay, navigateBack, Toast } from '@/utils'
 
 const { themeCode, shopBgColor, color } = useTheme()

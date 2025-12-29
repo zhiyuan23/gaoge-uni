@@ -3,7 +3,7 @@
     <!-- 背景图 -->
     <image
       class="absolute w-100vw -mt-165"
-      :src="`/static/images/series/main-${themeCode}.png`"
+      :src="`${IMG_BASE_URL}/lottery/detail-${themeCode}.png`"
       mode="widthFix"
     />
 
@@ -101,7 +101,7 @@
 import type { LocationResult } from '@/composables/useLocation'
 import { cashWithdraw, executeLottery, getMyPrizeList, scanByDetail, scanByHome } from '@/api/lottery'
 import { useLocation } from '@/composables'
-import { THEMES } from '@/constants'
+import { IMG_BASE_URL, THEMES } from '@/constants'
 import useAuthStore from '@/store/auth'
 import useSeriesStore from '@/store/series'
 import { defaultPrizeInfo, type PrizeInfo } from '@/types'

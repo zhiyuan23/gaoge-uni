@@ -120,7 +120,7 @@
 
           <!-- 空数据 -->
           <view v-else class="flex-col-center-center">
-            <image src="/static/images/icons/ic-empty.png" class="size-240 mt-130" />
+            <image :src="`${IMG_BASE_URL}/icons/ic-empty.png`" class="size-240 mt-130" />
             <text class="font-bold mt-122 text-30">
               暂无中奖哦  快去参与活动抽奖吧
             </text>
@@ -133,6 +133,7 @@
 
 <script setup lang='ts'>
 import { useTheme } from '@/composables'
+import { IMG_BASE_URL } from '@/constants'
 
 const props = defineProps<{
   data?: Array<any>;

@@ -4,7 +4,7 @@
     <u-empty
       mode="page"
       text="页面不存在"
-      icon="/static/images/404.png"
+      :icon="`${IMG_BASE_URL}/404.png`"
       width="300"
       heigth="300"
     />
@@ -12,6 +12,7 @@
 </template>
 
 <script lang='ts' setup>
+import { IMG_BASE_URL } from '@/constants'
 import { HOME_PATH } from '@/router'
 
 const handleBack = () => {

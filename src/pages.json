@@ -12,14 +12,14 @@
       "path": "pages/home/index",
       "style": {
         "navigationBarTitleText": "怡宝家园",
-        "backgroundColor": "#ffffff",
         "navigationStyle": "custom"
       }
     },
     {
       "path": "pages/login/index",
       "style": {
-        "navigationBarTitleText": "登录授权"
+        "navigationBarTitleText": "登录授权",
+        "backgroundColor": "#f3f5f7"
       }
     },
     {

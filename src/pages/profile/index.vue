@@ -1,5 +1,5 @@
 <template>
-  <view class="container page">
+  <view class="page container">
     <view class="w-full h-20" />
 
     <!-- 个人信息卡片 -->
@@ -9,7 +9,7 @@
         <text>头像</text>
         <image
           class="size-120 rounded-full"
-          :src="profile.avatarUrlBase64 || '/static/images/icons/ic-avatar.png'"
+          :src="profile.avatarUrlBase64 || `${IMG_BASE_URL}/icons/ic-avatar.png`"
           mode="aspectFill"
         />
         <button
@@ -104,6 +104,7 @@
 <script setup lang='ts'>
 import { uploadFile } from '@/api/common'
 import { useAgreement } from '@/composables'
+import { IMG_BASE_URL } from '@/constants'
 import useProfileStore from '@/store/profile'
 import { formatTime } from '@/utils'
 

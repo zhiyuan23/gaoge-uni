@@ -31,7 +31,7 @@
         <view v-else class="relative flex-start-center w-680 h-490">
           <!-- 背景图 -->
           <view class="absolute w-full h-490 top-0">
-            <image :src="`/static/images/lottery/popup-bg-${themeCode}.png`" class="size-full" />
+            <image :src="`${IMG_BASE_URL}/lottery/win-popup-${themeCode}.png`" class="size-full" />
           </view>
 
           <!-- 未中奖信息 -->
@@ -82,7 +82,7 @@
     <!-- 购物车图标 -->
     <view v-if="showCart" class="fixed top-50% mt-500 w-95 h-101 right-15">
       <image
-        :src="`/static/images/lottery/popup-cart-${themeCode}.png`"
+        :src="`${IMG_BASE_URL}/lottery/win-cart-${themeCode}.png`"
         mode="aspectFit"
         class="size-full"
         @click="handleGoShop"
@@ -93,6 +93,7 @@
 
 <script setup lang='ts'>
 import { useTheme } from '@/composables'
+import { IMG_BASE_URL } from '@/constants'
 import { defaultPrizeInfo, type PrizeInfo } from '@/types/modules/prize'
 import { navigateToMiniApp } from '@/utils'
 

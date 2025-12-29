@@ -19,13 +19,13 @@
 
       <!-- 开奖标题图片 -->
       <image
-        :src="`/static/images/lottery/main-tit-${themeCode}.png`"
+        :src="`${IMG_BASE_URL}/lottery/draw-tit-${themeCode}.png`"
         class="w-460 h-200 -mt-68"
       />
 
       <!-- 开奖主图片 -->
       <image
-        :src="`/static/images/lottery/main-img-${themeCode}.png`"
+        :src="`${IMG_BASE_URL}/lottery/draw-img-${themeCode}.png`"
         class="mt-8 w-520 h-520"
       />
       <MainButton
@@ -73,6 +73,7 @@
 
 <script setup lang='ts'>
 import { useTheme } from '@/composables'
+import { IMG_BASE_URL } from '@/constants'
 import useAuthStore from '@/store/auth'
 
 const props = defineProps<{
