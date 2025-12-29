@@ -1,5 +1,5 @@
 <template>
-  <view class="page theme relative overflow-hidden" :style="{ background: currentTheme.bgColor }">
+  <view class="theme page relative overflow-hidden" :style="{ background: currentTheme.bgColor }">
     <!-- 背景图 -->
     <image
       class="absolute w-100vw -mt-165"
@@ -316,6 +316,7 @@ const drawLottery = async () => {
     drawResultInfo.value = await executeLottery(params)
 
     if (drawResultInfo.value.bingo === 1) {
+      fetchMyPrizeList(true)
       uni.vibrateLong()
 
       if (drawResultInfo.value.prizeType === 'large_red_envelope') {
