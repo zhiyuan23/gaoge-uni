@@ -9,6 +9,9 @@ export const scanByHome = (data: any) => jsonPost<any>('/wx/mem/act/scanCode/exe
 // 开奖
 export const executeLottery = (data: any) => jsonPost<any>('/wx/mem/act/prizeDraw/execute', data)
 
+// 获取中奖人名单
+export const getBingoList = (themeId: string) => post<any>('/wx/mem/act/prizeDraw/listBingoLimit', { themeId }, { custom: { skipAuthCheck: true } })
+
 // 获取我的奖品列表
 export const getMyPrizeList = (data: any) => post<any>('/wx/mem/act/myGiftCoupon/myGiftCouponPageList', data, { custom: { skipAuthCheck: true } })
 

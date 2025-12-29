@@ -14,6 +14,7 @@ declare module 'vue' {
     LotteryResult: typeof import('./../components/lottery/LotteryResult.vue')['default']
     LotteryRule: typeof import('./../components/lottery/LotteryRule.vue')['default']
     LotteryService: typeof import('./../components/lottery/LotteryService.vue')['default']
+    LotteryWinner: typeof import('./../components/lottery/LotteryWinner.vue')['default']
     MainButton: typeof import('./../components/base/MainButton.vue')['default']
     PopupHeader: typeof import('./../components/base/PopupHeader.vue')['default']
     PressFeedback: typeof import('./../components/base/PressFeedback.vue')['default']

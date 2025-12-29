@@ -7,6 +7,10 @@
       mode="widthFix"
     />
 
+    <view v-if="bingoList?.length !== 0" class="fixed top-134 right-100">
+      <LotteryWinner :list="bingoList" />
+    </view>
+
     <view class="absolute text-center text-white top-40 right-10 leading-30">
       <view class="flex-center-end w-100" @click="showRule = true">
         <view class="u-press vertical-btn">
@@ -100,7 +104,7 @@
 <script setup lang='ts'>
 import type { LocationResult } from '@/composables/useLocation'
 import type { PrizeInfo, SeriesKey } from '@/types'
-import { cashWithdraw, executeLottery, getMyPrizeList, scanByDetail, scanByHome } from '@/api/lottery'
+import { cashWithdraw, executeLottery, getBingoList, getMyPrizeList, scanByDetail, scanByHome } from '@/api/lottery'
 import { useLocation } from '@/composables'
 import { IMG_BASE_URL, THEMES } from '@/constants'
 import useAuthStore from '@/store/auth'
@@ -158,6 +162,8 @@ const drawParams = reactive({
   themeCode: themeCode.value,
 }) as any
 
+const bingoList = ref([])
+
 // 微信扫码注入二维码
 const wxQrCodeRef = inject<Ref<string>>('wxQrCode', ref(''))
 
@@ -169,6 +175,7 @@ watch(wxQrCodeRef, async (code) => {
   }
 }, { immediate: true })
 
+// 微信扫码进入系列详情页 设置系列代码
 watch(
   () => props.seriesCode,
   (newCode) => {
@@ -177,15 +184,8 @@ watch(
       seriesStore.setThemeCode(newCode)
     }
   },
-  { immediate: true }, // 组件挂载时立即执行
+  { immediate: true },
 )
-
-// 打开“我的奖品”弹窗时自动加载
-// watch(showMyPrize, (newShow) => {
-//   if (newShow) {
-//     fetchMyPrizeList(true)
-//   }
-// })
 
 // 自动同步主题色（微信扫码进入无主题代码，无法使用useTheme）
 watch(themeCode, (newCode) => {
@@ -230,8 +230,16 @@ onLoad(() => {
 })
 
 // 获取系列详情信息
-const getSeriesDetail = () => {
-  seriesStore.fetchSeriesDetail()
+const getSeriesDetail = async () => {
+  await seriesStore.fetchSeriesDetail()
+
+  fetchBingoList()
+}
+
+// 获取中奖人名单
+const fetchBingoList = async () => {
+  const themeId = seriesDetail.value.id as string
+  bingoList.value = await getBingoList(themeId)
 }
 
 // 获取我的奖品列表
