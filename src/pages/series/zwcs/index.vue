@@ -1,5 +1,5 @@
 <template>
-  <SeriesDetail />
+  <SeriesDetail series-code="zwcs" />
 </template>
 
 <script setup lang='ts'>

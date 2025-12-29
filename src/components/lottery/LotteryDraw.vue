@@ -31,12 +31,12 @@
       <MainButton
         label="点击开奖"
         icon="finger"
-        :loading="loading"
+        :loading="loading || authLoading"
         :loading-text="loadingText"
         @click="handleConfirm"
       />
 
-      <view v-if="!isLogin" class="z-10 opacity-1 -mt-102">
+      <view v-if="!isLogin && !authLoading" class="z-10 opacity-1 -mt-102">
         <u-button
           v-if="!isAgree"
           :custom-style="btnStyle"
@@ -89,7 +89,7 @@ const emit = defineEmits<{
 const authStore = useAuthStore()
 
 const { themeCode } = useTheme()
-const { isLogin, isMember } = storeToRefs(authStore)
+const { isLogin, isMember, loading: authLoading } = storeToRefs(authStore)
 
 const show = defineModel<boolean>({ required: true })
 

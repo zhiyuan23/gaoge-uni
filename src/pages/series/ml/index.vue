@@ -1,5 +1,5 @@
 <template>
-  <SeriesDetail />
+  <SeriesDetail series-code="ml" />
 </template>
 
 <script setup lang='ts'>

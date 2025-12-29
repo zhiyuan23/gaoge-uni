@@ -87,9 +87,9 @@ const handleLogin = (e: any) => {
 const onAgree = () => {
   isAgree.value = true
 
-  if (isMember.value) {
-    authStore.login()
-  }
+  // if (isMember.value) {
+  //   authStore.login()
+  // }
 }
 </script>
 

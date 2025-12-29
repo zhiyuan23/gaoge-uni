@@ -1,5 +1,5 @@
 <template>
-  <view v-if="themeCode" class="page theme relative overflow-hidden" :style="{ background: currentTheme.bgColor }">
+  <view class="page theme relative overflow-hidden" :style="{ background: currentTheme.bgColor }">
     <!-- 背景图 -->
     <image
       class="absolute w-100vw -mt-165"
@@ -99,13 +99,18 @@
 
 <script setup lang='ts'>
 import type { LocationResult } from '@/composables/useLocation'
+import type { PrizeInfo, SeriesKey } from '@/types'
 import { cashWithdraw, executeLottery, getMyPrizeList, scanByDetail, scanByHome } from '@/api/lottery'
 import { useLocation } from '@/composables'
 import { IMG_BASE_URL, THEMES } from '@/constants'
 import useAuthStore from '@/store/auth'
 import useSeriesStore from '@/store/series'
-import { defaultPrizeInfo, type PrizeInfo } from '@/types'
+import { defaultPrizeInfo } from '@/types'
 import { delay, navigateTo, Toast } from '@/utils'
+
+const props = defineProps<{
+  seriesCode?: SeriesKey;
+}>()
 
 const authStore = useAuthStore()
 const seriesStore = useSeriesStore()
@@ -157,20 +162,30 @@ const drawParams = reactive({
 const wxQrCodeRef = inject<Ref<string>>('wxQrCode', ref(''))
 
 // 微信扫码自动触发
-watchEffect(() => {
-  const code = wxQrCodeRef?.value?.trim()
-  if (code && openId.value) {
+watch(wxQrCodeRef, async (code) => {
+  if (code?.trim() && openId.value) {
     drawParams.scanCode = code
-    checkCode('weixin')
+    showDraw.value = true
   }
-})
+}, { immediate: true })
+
+watch(
+  () => props.seriesCode,
+  (newCode) => {
+    if (newCode) {
+      drawParams.themeCode = newCode
+      seriesStore.setThemeCode(newCode)
+    }
+  },
+  { immediate: true }, // 组件挂载时立即执行
+)
 
 // 打开“我的奖品”弹窗时自动加载
-watch(showMyPrize, (newShow) => {
-  if (newShow) {
-    fetchMyPrizeList(true)
-  }
-})
+// watch(showMyPrize, (newShow) => {
+//   if (newShow) {
+//     fetchMyPrizeList(true)
+//   }
+// })
 
 // 自动同步主题色（微信扫码进入无主题代码，无法使用useTheme）
 watch(themeCode, (newCode) => {
@@ -194,23 +209,24 @@ watch(isLogin, (newLoginStatus, oldLoginStatus) => {
  */
 const assignLocation = (target: typeof drawParams, data: LocationResult) => {
   Object.assign(target, {
-    locationLat: data.lat || '',
-    locationLon: data.lng || '',
-    locationProvince: data.province?.name || '',
-    locationCity: data.city?.name || '',
-    locationDistrict: data.district?.name || '',
-    locationAdCode: data.adCode || '',
-    locationAddress: data.street || '',
-    locationFullAddress: data.fullAddress || '',
-    provinceId: data.province?.code || '',
-    cityId: data.city?.code || '',
-    districtId: data.district?.code || '',
-    adCode: data.adCode || '',
+    locationLat: data.lat,
+    locationLon: data.lng,
+    locationProvince: data.province.name,
+    locationCity: data.city.name,
+    locationDistrict: data.district.name,
+    locationAdCode: data.adCode,
+    locationAddress: data.street,
+    locationFullAddress: data.fullAddress,
+    provinceId: data.province.code,
+    cityId: data.city.code,
+    districtId: data.district.code,
+    adCode: data.adCode,
   })
 }
 
 onLoad(() => {
   getSeriesDetail()
+  fetchMyPrizeList(true)
 })
 
 // 获取系列详情信息

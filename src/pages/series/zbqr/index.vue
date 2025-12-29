@@ -1,5 +1,5 @@
 <template>
-  <SeriesDetail />
+  <SeriesDetail series-code="zbqr" />
 </template>
 
 <script setup lang='ts'>

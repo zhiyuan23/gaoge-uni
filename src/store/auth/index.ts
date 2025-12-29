@@ -79,9 +79,9 @@ const useAuthStore = defineStore(
 
     // 授权登录
     const login = async (phoneCode = '', needJump = true) => {
-      const { code } = await uni.login()
-
       loading.value = true
+
+      const { code } = await uni.login()
 
       try {
         const res = await getSession({ wxCode: code, phoneCode })
