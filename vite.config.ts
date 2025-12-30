@@ -45,6 +45,15 @@ export default defineConfig(({ command, mode }): UserConfig => {
         },
       },
     },
+    build: {
+      minify: 'terser',
+      terserOptions: {
+        compress: {
+          drop_console: true,
+          drop_debugger: true,
+        },
+      },
+    },
     plugins: createVitePlugins(isBuild),
     esbuild: { drop: JSON.parse(env.VITE_DROP_CONSOLE) ? ['console', 'debugger'] : [] },
   }

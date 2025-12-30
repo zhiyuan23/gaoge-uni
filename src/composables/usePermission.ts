@@ -7,8 +7,6 @@ import { currentRoute } from '@/router'
  * 2. H5 浏览器地址栏输入 URL 不触发 uni 路由 API
  * 3. 首次启动加载的页面不触发 uni 路由 API
  */
-const usePermission = () => {
+export const usePermission = () => {
   return hasPerm(currentRoute())
 }
-
-export default usePermission

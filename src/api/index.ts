@@ -2,7 +2,7 @@ import type { HttpRequestConfig } from 'uview-plus/libs/luch-request'
 import Request from 'uview-plus/libs/luch-request'
 import { CenterService } from '@/constants'
 import useAuthStore from '@/store/auth'
-import { Dialog, Loading, reLaunch, Toast } from '@/utils'
+import { Loading, reLaunch, Toast } from '@/utils'
 
 const http = new Request()
 
@@ -50,7 +50,7 @@ http.interceptors.request.use((config: HttpRequestConfig) => {
     Loading.show()
   }
 
-  if (auth.accessToken?.trim()) {
+  if (auth.accessToken) {
     Object.assign(headers, {
       'appKey': 'dicp',
       'cpm-client-type': 'web',
@@ -99,7 +99,7 @@ http.interceptors.response.use(
     }
 
     if (custom?.toast !== false) {
-      Dialog(msg || '请求失败')
+      Toast(msg || '请求失败')
     }
 
     return Promise.reject(res.data)
