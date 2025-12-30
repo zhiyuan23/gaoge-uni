@@ -78,7 +78,7 @@ const useAuthStore = defineStore(
     }
 
     // 授权登录
-    const login = async (phoneCode = '', needJump = true) => {
+    const login = async (phoneCode = '', needJump = false) => {
       if (loading.value) return
 
       loading.value = true

@@ -117,8 +117,6 @@ export async function useLocation(
     }
   }
 
-  // 到这里 basic 有值或仍是空对象
-
   if (!withReverse) {
     return {
       ...defaultEmpty,

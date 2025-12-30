@@ -6,6 +6,7 @@ type AuthApiAction<T = any> = () => Promise<T>
 
 /**
  * 登录守卫：未登录时先完成登录，登录成功后再执行操作
+ * 登录守卫API：仅在已登录状态下调用API，未登录时直接返回默认值
  */
 export function useAuthGuard() {
   const authStore = useAuthStore()
@@ -13,7 +14,6 @@ export function useAuthGuard() {
   const withAuthThrottled = throttle(async (
     e: any = null,
     action: AfterLoginAction,
-    options: { silent?: boolean } = {},
   ) => {
     if (authStore.isLogin) {
       return await action()
@@ -21,25 +21,15 @@ export function useAuthGuard() {
 
     const phoneCode = e?.detail?.code || ''
 
-    try {
-      await authStore.login(phoneCode, options.silent ?? false)
-      await action()
-    }
-    catch (err) {
-      console.warn('登录失败，已中断后续操作', err)
-      if (!options.silent) {
-        uni.showToast({ title: '登录失败，请稍后重试', icon: 'none' })
-      }
-    }
+    await authStore.login(phoneCode)
+    await action()
   }, 800)
 
-  // 可选：保留原始版本（给需要不节流的场景用）
   const withAuth = async (
     e: any = null,
     action: AfterLoginAction,
-    options: { silent?: boolean } = {},
   ) => {
-    return withAuthThrottled(e, action, options)
+    return withAuthThrottled(e, action)
   }
 
   const withAuthApi = async <T>(

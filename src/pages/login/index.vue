@@ -80,7 +80,7 @@ const btnStyle = reactive({
 // 点击登录
 const handleLogin = (e: any) => {
   const phoneCode = e ? e.detail.code : ''
-  authStore.login(phoneCode)
+  authStore.login(phoneCode, true)
 }
 
 // 同意用户协议
