@@ -1,5 +1,5 @@
-// src/composables/useLocation.ts
 import { locationInfo } from '@/api/common'
+import { Toast } from '@/utils'
 
 /**
  * 定位结果完整接口（包含逆解析信息）
@@ -72,8 +72,8 @@ export async function useLocation(
         || err.errMsg?.includes('authorize no response')
 
     if (!isAuthDenied) {
-      uni.showToast({ title: '获取位置失败，请检查定位服务', icon: 'none' })
-      return defaultEmpty
+      Toast('获取位置失败，请检查定位服务')
+      throw new Error('获取定位失败')
     }
 
     if (!required) {
@@ -93,7 +93,7 @@ export async function useLocation(
     })
 
     if (!confirm) {
-      return defaultEmpty
+      throw new Error('用户取消授权定位')
     }
 
     const settingRes = await new Promise<any | null>((resolve) => {
@@ -104,7 +104,7 @@ export async function useLocation(
     })
 
     if (!settingRes?.authSetting?.['scope.userLocation']) {
-      uni.showToast({ title: '定位权限未开启', icon: 'none' })
+      Toast('定位权限未开启')
       return defaultEmpty
     }
 
@@ -112,8 +112,8 @@ export async function useLocation(
       basic = await getBasicLocation()
     }
     catch {
-      uni.showToast({ title: '获取位置失败，请检查定位服务', icon: 'none' })
-      return defaultEmpty
+      Toast('获取位置失败，请检查定位服务')
+      throw new Error('最终获取定位失败')
     }
   }
 
@@ -156,7 +156,7 @@ export async function useLocation(
   }
   catch (reverseErr) {
     console.warn('逆地理编码失败:', reverseErr)
-    uni.showToast({ title: '获取城市信息失败，仅使用经纬度', icon: 'none' })
+    Toast('获取城市信息失败，仅使用经纬度')
     return {
       ...defaultEmpty,
       lat: basic.lat,
