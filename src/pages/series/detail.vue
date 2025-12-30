@@ -53,14 +53,18 @@
         </view>
       </view>
 
-      <view class="flex-center-between w-540 text-30">
-        <view class="u-press button w-240 h-70" @click="showMyPrize = true">
+      <view class="relative flex-center-between w-540 text-30">
+        <view class="u-press button w-240 h-70" @click="openMyPrize">
           <u-icon name="gift" :color="currentTheme.color" size="22" />
           我的奖品
         </view>
         <view class="u-press button w-240 h-70" @click="goExchange">
           <u-icon name="map" :color="currentTheme.color" size="22" class="pr-10" />
           兑奖点
+        </view>
+        <view v-if="!isLogin && !isMember" class="absolute w-full flex-center-between opacity-0 h-70">
+          <u-button open-type="getPhoneNumber" @getphonenumber="openMyPrize" />
+          <u-button open-type="getPhoneNumber" @getphonenumber="goExchange" />
         </view>
       </view>
     </view>
@@ -106,7 +110,7 @@
 import type { LocationResult } from '@/composables/useLocation'
 import type { PrizeInfo, SeriesKey } from '@/types'
 import { cashWithdraw, executeLottery, getBingoList, getMyPrizeList, scanByDetail, scanByHome } from '@/api/lottery'
-import { useLocation } from '@/composables'
+import { useAuthGuard, useLocation } from '@/composables'
 import { IMG_BASE_URL, THEMES } from '@/constants'
 import useAuthStore from '@/store/auth'
 import useSeriesStore from '@/store/series'
@@ -117,10 +121,11 @@ const props = defineProps<{
   seriesCode?: SeriesKey;
 }>()
 
+const { withAuth, withAuthApi } = useAuthGuard()
 const authStore = useAuthStore()
 const seriesStore = useSeriesStore()
 
-const { isLogin, openId } = storeToRefs(authStore)
+const { isLogin, isMember, openId } = storeToRefs(authStore)
 const { themeCode, seriesDetail, beginDate, endDate, endTime } = storeToRefs(seriesStore)
 
 const currentTheme = reactive({
@@ -146,6 +151,7 @@ const pageSize = 10
 const scanLoading = ref(false)
 const drawLoading = ref(false)
 const drawResultInfo = ref<PrizeInfo>(defaultPrizeInfo)
+const scanLogId = ref('')
 const drawParams = reactive({
   scanCode: '',
   locationLon: '',
@@ -198,10 +204,13 @@ watch(themeCode, (newCode) => {
   }
 }, { immediate: true })
 
-// 未登录状态，登录后自动开奖
+// 监听登录状态变化
 watch(isLogin, (newLoginStatus, oldLoginStatus) => {
-  if (newLoginStatus && !oldLoginStatus && showDraw.value) {
-    drawLottery()
+  if (newLoginStatus && !oldLoginStatus) {
+    if (showDraw.value) {
+      drawLottery()
+    }
+    fetchMyPrizeList(true)
   }
 }, { immediate: false })
 
@@ -242,7 +251,10 @@ const getSeriesDetail = async () => {
 // 获取中奖人名单
 const fetchBingoList = async () => {
   const themeId = seriesDetail.value.id as string
-  bingoList.value = await getBingoList(themeId)
+  bingoList.value = await withAuthApi(
+    () => getBingoList(themeId),
+    [],
+  )
 }
 
 // 获取我的奖品列表
@@ -263,7 +275,11 @@ const fetchMyPrizeList = async (reset = false) => {
       pageSize,
       themeCode: themeCode.value,
     }
-    const { rows, total } = await getMyPrizeList(params)
+
+    const { rows, total } = await withAuthApi(
+      () => getMyPrizeList(params),
+      [],
+    )
 
     if (reset) {
       prizeList.value = rows || []
@@ -305,8 +321,9 @@ const checkCode = async (type: 'weixin' | 'mini') => {
 
   const fn = type === 'weixin' ? scanByDetail : scanByHome
   const params = { ...drawParams, openId: openId.value }
-  const { themeCode } = await fn(params)
+  const { themeCode, logId } = await fn(params)
 
+  scanLogId.value = logId
   if (type === 'weixin') {
     seriesStore.setThemeCode(themeCode)
 
@@ -324,7 +341,7 @@ const drawLottery = async () => {
     const data = await useLocation()
     assignLocation(drawParams, data)
 
-    const params = { ...drawParams, logId: 0 }
+    const params = { ...drawParams, logId: scanLogId.value }
 
     drawResultInfo.value = await executeLottery(params)
 
@@ -355,7 +372,7 @@ const handlePrizeAction = (type: string, id: string) => {
       navigateTo(`/pages/prize/redeem-info?id=${id}`)
       break
     case 'nearbyStore':
-      goExchange()
+      goExchange('')
       break
     case 'withdraw':
       handleWithdraw(id)
@@ -385,9 +402,19 @@ const handleWithdraw = async (id: string) => {
   })
 }
 
-// 前往兑奖点地图
-const goExchange = () => {
-  navigateTo('/pages/shop/index')
+// 打开我的奖品
+const openMyPrize = (e: any) => {
+  withAuth(e, () => {
+    showMyPrize.value = true
+  })
+}
+
+// 前往兑奖点
+const goExchange = (e: any) => {
+  withAuth(e, async () => {
+    await useLocation(true, false)
+    uni.navigateTo({ url: '/pages/shop/index' })
+  })
 }
 
 defineExpose({

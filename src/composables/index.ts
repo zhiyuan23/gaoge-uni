@@ -1,12 +1,12 @@
 import { useAgreement } from './useAgreement'
-import useClipboard from './useClipboard'
+import { useAuthGuard } from './useAuthGuard'
 import { useLocation } from './useLocation'
-import usePermission from './usePermission'
+import { usePermission } from './usePermission'
 import { useTheme } from './useTheme'
 
 export {
   useAgreement,
-  useClipboard,
+  useAuthGuard,
   useLocation,
   usePermission,
   useTheme,

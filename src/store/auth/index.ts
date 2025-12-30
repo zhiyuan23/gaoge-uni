@@ -79,6 +79,8 @@ const useAuthStore = defineStore(
 
     // 授权登录
     const login = async (phoneCode = '', needJump = true) => {
+      if (loading.value) return
+
       loading.value = true
 
       const { code } = await uni.login()
