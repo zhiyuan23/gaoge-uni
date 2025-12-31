@@ -1,5 +1,5 @@
 <template>
-  <view class="page container">
+  <view class="container page">
     <view class="w-full h-20" />
 
     <!-- 个人信息卡片 -->
@@ -9,7 +9,7 @@
         <text>头像</text>
         <image
           class="size-120 rounded-full"
-          :src="profile.avatarUrlBase64 || `/pages-personal/static/images/icons/ic-avatar.png`"
+          :src="profile.avatarUrlBase64 || `/static/images/icons/ic-avatar.png`"
           mode="aspectFill"
         />
         <button
