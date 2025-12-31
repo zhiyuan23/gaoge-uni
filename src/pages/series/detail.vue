@@ -1,5 +1,5 @@
 <template>
-  <view class="page theme relative overflow-hidden" :style="{ background: currentTheme.bgColor }">
+  <view class="theme page relative overflow-hidden" :style="{ background: currentTheme.bgColor }">
     <!-- 背景图 -->
     <image
       class="absolute w-100vw -mt-165"
@@ -66,6 +66,7 @@
           <u-button open-type="getPhoneNumber" @getphonenumber="openMyPrize" />
           <u-button open-type="getPhoneNumber" @getphonenumber="goExchange" />
         </view>
+        <view v-if="authLoading" class="absolute w-full h-70" />
       </view>
     </view>
 
@@ -124,7 +125,7 @@ const { withAuth, withAuthApi } = useAuthGuard()
 const authStore = useAuthStore()
 const seriesStore = useSeriesStore()
 
-const { isLogin, isMember, openId } = storeToRefs(authStore)
+const { isLogin, isMember, openId, loading: authLoading } = storeToRefs(authStore)
 const { themeCode, seriesDetail, beginDate, endDate, endTime } = storeToRefs(seriesStore)
 
 const currentTheme = reactive({
