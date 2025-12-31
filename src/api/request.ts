@@ -91,7 +91,7 @@ http.interceptors.response.use(
         Toast('登录过期，请重新登录')
         setTimeout(() => {
           useAuthStore().clear()
-          reLaunch('/pages/login/index')
+          reLaunch('/pages-account/login/index')
         }, 2000)
       }
 

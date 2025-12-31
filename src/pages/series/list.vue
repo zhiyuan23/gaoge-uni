@@ -116,8 +116,8 @@ const getProfile = () => {
 // 查看个人信息
 const goUserPage = () => {
   const url = isLogin.value
-    ? '/pages/profile/index'
-    : '/pages/login/index'
+    ? '/pages-account/profile/index'
+    : '/pages-account/login/index'
 
   navigateTo(url)
 }

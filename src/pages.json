@@ -16,13 +16,6 @@
       }
     },
     {
-      "path": "pages/login/index",
-      "style": {
-        "navigationBarTitleText": "登录授权",
-        "backgroundColor": "#f3f5f7"
-      }
-    },
-    {
       "path": "pages/series/index",
       "style": {
         "navigationBarTitleText": ""
@@ -58,37 +51,6 @@
       "style": {
         "navigationBarTitleText": "1元畅饮赢大奖"
       }
-    },
-    {
-      "path": "pages/profile/index",
-      "style": {
-        "navigationBarTitleText": "个人信息",
-        "backgroundColor": "#f3f4f5"
-      }
-    },
-    {
-      "path": "pages/shop/index",
-      "style": {
-        "navigationBarTitleText": "兑奖点"
-      }
-    },
-    {
-      "path": "pages/shop/feedback",
-      "style": {
-        "navigationBarTitleText": "问题反馈"
-      }
-    },
-    {
-      "path": "pages/prize/index",
-      "style": {
-        "navigationBarTitleText": "我的奖品"
-      }
-    },
-    {
-      "path": "pages/prize/redeem-info",
-      "style": {
-        "navigationBarTitleText": "兑奖信息"
-      }
     }
   ],
   "subPackages": [
@@ -122,12 +84,68 @@
           }
         }
       ]
+    },
+    {
+      "root": "pages-account",
+      "pages": [
+        {
+          "path": "login/index",
+          "style": {
+            "navigationBarTitleText": "登录授权",
+            "backgroundColor": "#f3f5f7"
+          }
+        },
+        {
+          "path": "profile/index",
+          "style": {
+            "navigationBarTitleText": "个人信息",
+            "backgroundColor": "#f3f4f5"
+          }
+        }
+      ]
+    },
+    {
+      "root": "pages-reward",
+      "pages": [
+        {
+          "path": "shop/index",
+          "style": {
+            "navigationBarTitleText": "兑奖点"
+          }
+        },
+        {
+          "path": "shop/feedback",
+          "style": {
+            "navigationBarTitleText": "问题反馈"
+          }
+        },
+        {
+          "path": "prize/index",
+          "style": {
+            "navigationBarTitleText": "我的奖品"
+          }
+        },
+        {
+          "path": "prize/redeem",
+          "style": {
+            "navigationBarTitleText": "兑奖信息"
+          }
+        }
+      ]
     }
   ],
   "preloadRule": {
     "pages/home/index": {
       "network": "all",
-      "packages": ["pages/common"]
+      "packages": ["pages/common", "pages-account"]
+    },
+    "pages/series/index": {
+      "network": "all",
+      "packages": ["pages-reward"]
+    },
+    "pages/series/detail": {
+      "network": "all",
+      "packages": ["pages-reward"]
     }
   },
   "globalStyle": {

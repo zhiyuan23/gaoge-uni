@@ -5,7 +5,7 @@
       <!-- 红包信息 -->
       <view class="relative mb-28 w-687 h-185">
         <image
-          :src="`${IMG_BASE_URL}/prize/redeem-hd-${themeCode}.png`"
+          :src="`/pages-reward/static/images/prize/redeem-hd-${themeCode}.png`"
           class="absolute size-full"
         />
         <view class="relative h-full flex-col-start-center top-0 left-100" :style="{ color: redeem.color }">
@@ -94,7 +94,7 @@
         </view>
         <view class="relative w-full flex-center-end pb-80">
           <image
-            :src="`${IMG_BASE_URL}/prize/ic-service-${themeCode}.png`"
+            :src="`/pages-reward/static/images/prize/ic-service-${themeCode}.png`"
             class="w-98 h-74"
           />
           <button
@@ -119,7 +119,6 @@
 <script setup lang='ts'>
 import { fillInInfo, getMyPrizeDetail } from '@/api'
 import { useTheme } from '@/composables'
-import { IMG_BASE_URL } from '@/constants'
 import { useProfileStore } from '@/store'
 import { Dialog, formatTime, Loading, Toast } from '@/utils'
 import PosterShare from './poster.vue'

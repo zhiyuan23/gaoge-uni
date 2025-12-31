@@ -1,13 +1,13 @@
 <template>
   <!-- 背景图 -->
   <view class="page relative bg-bgSecondary w-750">
-    <image class="w-750" :src="`${IMG_BASE_URL}/login/bg.png`" mode="widthFix" />
+    <image class="w-750" src="../static/images/login/bg.png" mode="widthFix" />
   </view>
 
   <!-- 主体内容 -->
   <view class="absolute flex-col-center-start w-750 top-105">
     <image
-      :src="`${IMG_BASE_URL}/login/logo.png`"
+      src="../static/images/login/logo.png"
       mode="widthFix"
       class="w-300"
     />
@@ -60,7 +60,6 @@
 </template>
 
 <script lang='ts' setup>
-import { IMG_BASE_URL } from '@/constants'
 import { useAuthStore } from '@/store'
 
 const authStore = useAuthStore()

@@ -63,7 +63,7 @@
         >
           <!-- 门店图片 -->
           <image
-            :src="store.cover || `${IMG_BASE_URL}/shop/img-store-${themeCode}.png`"
+            :src="store.cover || `/pages-reward/static/images/shop/img-store-${themeCode}.png`"
             class="size-144 flex-shrink-0 mr-16 -ml-5"
           />
           <view class="flex-1">
@@ -91,7 +91,7 @@
 
           <!-- 导航按钮 -->
           <view class="flex-col-center-center px-20" @click="navigateToStore(store)">
-            <image :src="`${IMG_BASE_URL}/shop/ic-nav-${themeCode}.png`" class="size-48" />
+            <image :src="`/pages-reward/static/images/shop/ic-nav-${themeCode}.png`" class="size-48" />
             <view class="leading-48 text-22">
               去导航
             </view>
@@ -112,7 +112,6 @@
 <script setup lang="ts">
 import { getShopList, validFeedback } from '@/api'
 import { useLocation, useTheme } from '@/composables'
-import { IMG_BASE_URL } from '@/constants'
 import { navigateTo } from '@/utils'
 
 const SCREEN_HEIGHT = uni.getSystemInfoSync().windowHeight
@@ -151,7 +150,7 @@ const markers: any = computed(() => {
     id: index,
     latitude: Number(store.lat),
     longitude: Number(store.lon),
-    iconPath: `${IMG_BASE_URL}/shop/ic-map-mark.png`,
+    iconPath: `/pages-reward/static/images/shop/ic-map-mark.png`,
     width: 40,
     height: 40,
     callout: {
@@ -284,7 +283,7 @@ const navigateToStore = (store: any) => {
 const goFeedback = async (storeId: string) => {
   const data = await validFeedback(storeId)
 
-  navigateTo(`/pages/shop/feedback?storeId=${storeId}&feedbackTypes=${JSON.stringify(data)}`)
+  navigateTo(`/pages-reward/shop/feedback?storeId=${storeId}&feedbackTypes=${JSON.stringify(data)}`)
 }
 
 // 拖拽调整地图高度

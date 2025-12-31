@@ -1,5 +1,5 @@
 <template>
-  <view class="theme page relative overflow-hidden" :style="{ background: currentTheme.bgColor }">
+  <view class="page theme relative overflow-hidden" :style="{ background: currentTheme.bgColor }">
     <!-- 背景图 -->
     <image
       class="absolute w-100vw -mt-165"
@@ -363,7 +363,7 @@ const handlePrizeAction = (type: string, id: string) => {
 
   switch (type) {
     case 'fillInfo':
-      navigateTo(`/pages/prize/redeem-info?id=${id}`)
+      navigateTo(`/pages-reward/prize/redeem?id=${id}`)
       break
     case 'nearbyStore':
       goExchange('')
@@ -407,7 +407,7 @@ const openMyPrize = (e: any) => {
 const goExchange = (e: any) => {
   withAuth(e, async () => {
     await useLocation(true, false)
-    navigateTo('/pages/shop/index')
+    navigateTo('/pages-reward/shop/index')
   })
 }
 

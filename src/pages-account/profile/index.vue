@@ -9,7 +9,7 @@
         <text>头像</text>
         <image
           class="size-120 rounded-full"
-          :src="profile.avatarUrlBase64 || `${IMG_BASE_URL}/icons/ic-avatar.png`"
+          :src="profile.avatarUrlBase64 || `/pages-personal/static/images/icons/ic-avatar.png`"
           mode="aspectFill"
         />
         <button
@@ -104,7 +104,6 @@
 <script setup lang='ts'>
 import { uploadFile } from '@/api'
 import { useAgreement } from '@/composables'
-import { IMG_BASE_URL } from '@/constants'
 import { useProfileStore } from '@/store'
 import { formatTime } from '@/utils'
 
