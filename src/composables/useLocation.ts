@@ -1,4 +1,4 @@
-import { locationInfo } from '@/api/common'
+import { locationInfo } from '@/api'
 import { Toast } from '@/utils'
 
 /**

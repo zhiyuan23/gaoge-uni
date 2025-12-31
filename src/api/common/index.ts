@@ -1,5 +1,5 @@
 import type { UploadReq } from './types'
-import { post, upload } from '@/api'
+import { post, upload } from '@/api/request'
 import { CenterService } from '@/constants'
 
 // 图片上传

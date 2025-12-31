@@ -1,4 +1,4 @@
-import { getProtocolConfig } from '@/api/common'
+import { getProtocolConfig } from '@/api'
 
 const useConfigStore = defineStore(
   'config',

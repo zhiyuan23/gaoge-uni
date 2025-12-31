@@ -1,5 +1,5 @@
 import { THEMES } from '@/constants'
-import useSeriesStore from '@/store/series'
+import { useSeriesStore } from '@/store'
 
 export const useTheme = () => {
   const { themeCode } = storeToRefs(useSeriesStore())

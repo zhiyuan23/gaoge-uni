@@ -61,7 +61,7 @@
 
 <script lang='ts' setup>
 import { IMG_BASE_URL } from '@/constants'
-import useAuthStore from '@/store/auth'
+import { useAuthStore } from '@/store'
 
 const authStore = useAuthStore()
 

@@ -1,4 +1,4 @@
-import { jsonPost, post } from '@/api'
+import { jsonPost, post } from '@/api/request'
 
 // 扫码-活动页
 export const scanByDetail = (data: any) => jsonPost<any>('/wx/mem/act/scanCode/executeByScan', data)

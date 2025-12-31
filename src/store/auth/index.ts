@@ -1,5 +1,5 @@
 import { md5 } from 'js-md5'
-import { getOpenId, getSession, hrAuth, isLoginApi } from '@/api/auth'
+import { getOpenId, getSession, hrAuth, isLoginApi } from '@/api'
 import { APP_ID, PREFIX } from '@/constants'
 import { reLaunch } from '@/utils'
 

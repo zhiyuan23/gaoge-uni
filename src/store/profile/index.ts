@@ -1,5 +1,5 @@
 import type { Profile } from '@/types'
-import { getUserInfo, updateUserInfo } from '@/api/profile'
+import { getUserInfo, updateUserInfo } from '@/api'
 
 const useProfileStore = defineStore(
   'profile',

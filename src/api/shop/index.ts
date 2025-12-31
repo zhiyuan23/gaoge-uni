@@ -1,5 +1,5 @@
 import type { NearbyShopListReq, NearbyShopListRes } from '@/types'
-import { jsonPost, post } from '@/api'
+import { jsonPost, post } from '@/api/request'
 
 // 获取兑奖点列表
 export const getShopList = (data: NearbyShopListReq) => {

@@ -1,5 +1,5 @@
 import type { SeriesItem, SeriesKey } from '@/types'
-import { getSeriesDetail, getSeriesList } from '@/api/series'
+import { getSeriesDetail, getSeriesList } from '@/api'
 import { SERIES_CODES, SERIES_LIST } from '@/constants'
 import { formatTime } from '@/utils'
 
@@ -19,6 +19,11 @@ const useSeriesStore = defineStore(
     // 修改主题代码
     const setThemeCode = (code: SeriesKey) => {
       themeCode.value = code
+    }
+
+    // 修改系列详情
+    const setSeriesDetail = (code: SeriesKey) => {
+      seriesDetail.value = seriesList.value.find(item => item.code === code)!
     }
 
     // 获取系列列表
@@ -49,6 +54,7 @@ const useSeriesStore = defineStore(
       endTime,
 
       setThemeCode,
+      setSeriesDetail,
       fetchSeriesList,
       fetchSeriesDetail,
     }

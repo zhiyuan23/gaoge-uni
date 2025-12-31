@@ -1,4 +1,4 @@
-import { post } from '@/api'
+import { post } from '@/api/request'
 
 // 获取活动主题列表
 export const getSeriesList = () => post<any>('/wx/mem/act/theme/list')

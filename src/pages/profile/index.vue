@@ -102,10 +102,10 @@
 </template>
 
 <script setup lang='ts'>
-import { uploadFile } from '@/api/common'
+import { uploadFile } from '@/api'
 import { useAgreement } from '@/composables'
 import { IMG_BASE_URL } from '@/constants'
-import useProfileStore from '@/store/profile'
+import { useProfileStore } from '@/store'
 import { formatTime } from '@/utils'
 
 const { showSelector } = useAgreement()

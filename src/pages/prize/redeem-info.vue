@@ -117,10 +117,10 @@
 </template>
 
 <script setup lang='ts'>
-import { fillInInfo, getMyPrizeDetail } from '@/api/lottery'
+import { fillInInfo, getMyPrizeDetail } from '@/api'
 import { useTheme } from '@/composables'
 import { IMG_BASE_URL } from '@/constants'
-import useProfileStore from '@/store/profile'
+import { useProfileStore } from '@/store'
 import { Dialog, formatTime, Loading, Toast } from '@/utils'
 import PosterShare from './poster.vue'
 

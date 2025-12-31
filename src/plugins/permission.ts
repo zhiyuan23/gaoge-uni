@@ -6,7 +6,7 @@ import {
   routes,
 } from '@/router'
 
-// import useAuthStore from '@/store/auth'
+// import { useAuthStore } from '@/store'
 
 // const { isLogin } = storeToRefs(useAuthStore())
 const isLogin = true

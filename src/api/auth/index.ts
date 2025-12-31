@@ -1,4 +1,4 @@
-import { post } from '@/api'
+import { post } from '@/api/request'
 
 // 判断是否登陆
 export const isLoginApi = () => post<any>('/wx/mem/userAuth/isLogin', {}, { custom: { skipAuthCheck: true, toast: false } })

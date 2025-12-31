@@ -110,7 +110,7 @@
 </template>
 
 <script setup lang="ts">
-import { getShopList, validFeedback } from '@/api/shop'
+import { getShopList, validFeedback } from '@/api'
 import { useLocation, useTheme } from '@/composables'
 import { IMG_BASE_URL } from '@/constants'
 import { navigateTo } from '@/utils'

@@ -117,7 +117,7 @@
 </template>
 
 <script setup lang='ts'>
-import { submitFeedback } from '@/api/shop'
+import { submitFeedback } from '@/api'
 import { useTheme } from '@/composables'
 import { IMG_BASE_URL } from '@/constants'
 import { delay, navigateBack, Toast } from '@/utils'
