@@ -84,9 +84,7 @@
 <script setup lang='ts'>
 import type { SeriesKey } from '@/types'
 import { IMG_BASE_URL } from '@/constants'
-import useAuthStore from '@/store/auth'
-import useProfileStore from '@/store/profile'
-import useSeriesStore from '@/store/series'
+import { useAuthStore, useProfileStore, useSeriesStore } from '@/store'
 import { navigateTo } from '@/utils'
 
 const STATUS_MAP = {
@@ -124,13 +122,12 @@ const goUserPage = () => {
   navigateTo(url)
 }
 
-// 跳转系列页
+// 跳转系列详情页
 const goDetail = (code: SeriesKey) => {
   seriesStore.setThemeCode(code)
+  seriesStore.setSeriesDetail(code)
 
-  uni.navigateTo({
-    url: `/pages/series/${code}/index`,
-  })
+  navigateTo(`/pages/series/${code}/index`)
 }
 
 onLoad(async () => {

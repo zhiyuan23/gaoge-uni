@@ -109,11 +109,10 @@
 <script setup lang='ts'>
 import type { LocationResult } from '@/composables/useLocation'
 import type { PrizeInfo, SeriesKey } from '@/types'
-import { cashWithdraw, executeLottery, getBingoList, getMyPrizeList, scanByDetail, scanByHome } from '@/api/lottery'
+import { cashWithdraw, executeLottery, getBingoList, getMyPrizeList, scanByHome } from '@/api'
 import { useAuthGuard, useLocation } from '@/composables'
 import { IMG_BASE_URL, THEMES } from '@/constants'
-import useAuthStore from '@/store/auth'
-import useSeriesStore from '@/store/series'
+import { useAuthStore, useSeriesStore } from '@/store'
 import { defaultPrizeInfo } from '@/types'
 import { delay, navigateTo, Toast } from '@/utils'
 
@@ -148,10 +147,10 @@ const prizePage = ref(1)
 const pageSize = 10
 
 // 扫码 & 开奖核心数据
+const scanLogId = ref('')
 const scanLoading = ref(false)
 const drawLoading = ref(false)
-const drawResultInfo = ref<PrizeInfo>(defaultPrizeInfo)
-const scanLogId = ref('')
+const drawResultInfo = reactive<PrizeInfo>(defaultPrizeInfo)
 const drawParams = reactive({
   scanCode: '',
   locationLon: '',
@@ -168,13 +167,14 @@ const drawParams = reactive({
   districtId: '',
   adCode: '',
   themeCode: themeCode.value,
-}) as any
+})
 
 const bingoList = ref([])
 
 // 微信扫码注入二维码
 const wxQrCodeRef = inject<Ref<string>>('wxQrCode', ref(''))
 
+// 微信扫码进入活动页
 watch(wxQrCodeRef, (newCode) => {
   const code = newCode?.trim()
   if (!code) return
@@ -251,10 +251,7 @@ const getSeriesDetail = async () => {
 // 获取中奖人名单
 const fetchBingoList = async () => {
   const themeId = seriesDetail.value.id as string
-  bingoList.value = await withAuthApi(
-    () => getBingoList(themeId),
-    [],
-  )
+  bingoList.value = await withAuthApi(() => getBingoList(themeId))
 }
 
 // 获取我的奖品列表
@@ -275,17 +272,14 @@ const fetchMyPrizeList = async (reset = false) => {
       pageSize,
       themeCode: themeCode.value,
     }
-
-    const { rows, total } = await withAuthApi(
-      () => getMyPrizeList(params),
-      [],
-    )
+    const res = await withAuthApi(() => getMyPrizeList(params))
+    const { rows = [], total = 0 } = res ?? {}
 
     if (reset) {
-      prizeList.value = rows || []
+      prizeList.value = rows
     }
     else {
-      prizeList.value.push(...(rows || []))
+      prizeList.value = [...prizeList.value, ...rows]
     }
 
     prizeHasMore.value = prizeList.value.length < total
@@ -309,28 +303,26 @@ const onScan = async () => {
   const { result } = await uni.scanCode()
   drawParams.scanCode = result
 
-  checkCode('mini')
+  checkScanCode()
 }
 
 // 校验扫描码
-const checkCode = async (type: 'weixin' | 'mini') => {
+const checkScanCode = async () => {
   scanLoading.value = true
 
-  const data = await useLocation(false)
-  assignLocation(drawParams, data)
+  try {
+    const data = await useLocation(false)
+    assignLocation(drawParams, data)
 
-  const fn = type === 'weixin' ? scanByDetail : scanByHome
-  const params = { ...drawParams, openId: openId.value }
-  const { themeCode, logId } = await fn(params)
+    const params = { ...drawParams, openId: openId.value }
+    const { logId } = await scanByHome(params)
 
-  scanLogId.value = logId
-  if (type === 'weixin') {
-    seriesStore.setThemeCode(themeCode)
-
-    getSeriesDetail()
+    scanLogId.value = logId
+    showDraw.value = true
   }
-  scanLoading.value = false
-  showDraw.value = true
+  finally {
+    scanLoading.value = false
+  }
 }
 
 // 开奖
@@ -342,18 +334,17 @@ const drawLottery = async () => {
     assignLocation(drawParams, data)
 
     const params = { ...drawParams, logId: scanLogId.value }
+    const result = await executeLottery(params)
+    Object.assign(drawResultInfo, result)
 
-    drawResultInfo.value = await executeLottery(params)
-
-    if (drawResultInfo.value.bingo === 1) {
+    if (result.bingo === 1) {
       fetchMyPrizeList(true)
       uni.vibrateLong()
 
-      if (drawResultInfo.value.prizeType === 'large_red_envelope') {
+      if (result.prizeType === 'large_red_envelope') {
         setTimeout(() => uni.vibrateLong(), 400)
       }
     }
-
     showDraw.value = false
     showResult.value = true
   }
@@ -413,7 +404,7 @@ const openMyPrize = (e: any) => {
 const goExchange = (e: any) => {
   withAuth(e, async () => {
     await useLocation(true, false)
-    uni.navigateTo({ url: '/pages/shop/index' })
+    navigateTo('/pages/shop/index')
   })
 }
 

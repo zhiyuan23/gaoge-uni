@@ -7,13 +7,12 @@
 </template>
 
 <script setup lang='ts'>
-import { scanByDetail } from '@/api/lottery'
+import { scanByDetail } from '@/api'
 import { useLocation } from '@/composables'
 import SeriesML from '@/pages/series/ml/index.vue'
 import SeriesZBQE from '@/pages/series/zbqr/index.vue'
 import SeriesZWCS from '@/pages/series/zwcs/index.vue'
-import useAuthStore from '@/store/auth'
-import useSeriesStore from '@/store/series'
+import { useAuthStore, useSeriesStore } from '@/store'
 
 const seriesStore = useSeriesStore()
 const authStore = useAuthStore()
@@ -27,17 +26,30 @@ onLoad(async (options: any) => {
   if (options.q) {
     wxQrCode.value = decodeURIComponent(options.q)
   }
-
-  if (wxQrCode.value && openId.value) {
-    handleWeixinScan()
+  else {
+    wxQrCode.value = 'http://spring.ehsure.com:82/a/AHCCJD1ZW9K91'
   }
 })
 
-watch(openId, async (newOpenId) => {
-  if (newOpenId && wxQrCode.value && !themeCode.value) {
+// 微信扫码参与活动 进入活动页满足条件后自动执行扫码操作
+watch(
+  () => [openId.value, wxQrCode.value] as const,
+  ([newOpenId, newQrCode], oldValues) => {
+    if (!oldValues) return
+    const [oldOpenId, oldQrCode] = oldValues
+
+    if (
+      !newOpenId
+      || !newQrCode
+      || (newOpenId === oldOpenId && newQrCode === oldQrCode)
+    ) {
+      return
+    }
+
     handleWeixinScan()
-  }
-}, { immediate: true })
+  },
+  { immediate: true },
+)
 
 // 处理微信扫码逻辑
 const handleWeixinScan = async () => {

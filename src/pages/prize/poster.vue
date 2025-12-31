@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { Loading } from '@/utils'
+import { Loading, Toast } from '@/utils'
 
 interface Props {
   bgImg: string;
@@ -116,7 +116,7 @@ const generateSharePoster = async () => {
           },
           fail: (err) => {
             Loading.hide()
-            uni.showToast({ title: '生成失败', icon: 'none' })
+            Toast('生成失败')
             console.error(err)
           },
           complete: () => {

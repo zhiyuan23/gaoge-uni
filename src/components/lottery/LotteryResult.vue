@@ -92,13 +92,13 @@
 </template>
 
 <script setup lang='ts'>
+import type { PrizeInfo } from '@/types'
 import { useTheme } from '@/composables'
 import { IMG_BASE_URL } from '@/constants'
-import { defaultPrizeInfo, type PrizeInfo } from '@/types/modules/prize'
 import { navigateToMiniApp } from '@/utils'
 
 const props = defineProps<{
-  prizeInfo?: PrizeInfo;
+  prizeInfo: PrizeInfo;
 }>()
 
 const emit = defineEmits<{
@@ -110,7 +110,7 @@ const { themeCode, lotteryColor } = useTheme()
 
 const show = defineModel<boolean>({ required: true })
 
-const prizeInfo = computed(() => props.prizeInfo ?? defaultPrizeInfo)
+const prizeInfo = computed(() => props.prizeInfo)
 
 const isPass = computed(() => prizeInfo.value.drawResult === 'pass') // 通过了
 const isWon = computed(() => isPass.value && prizeInfo.value.bingo === 1) // 中奖了
