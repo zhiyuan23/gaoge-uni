@@ -154,11 +154,11 @@ const markers: any = computed(() => {
     width: 40,
     height: 40,
     callout: {
-      content: store.name,
+      content: `\u3000${store.name}\u3000`,
       color: mapPopTitColor,
       fontSize: '20rpx',
       bgColor: mapPopBgColor,
-      padding: 10,
+      padding: '8rpx',
       borderRadius: 20,
       display: 'ALWAYS',
       textAlign: 'center',
