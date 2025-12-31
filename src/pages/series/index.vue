@@ -21,13 +21,11 @@ const { openId } = storeToRefs(authStore)
 
 const themeCode = ref('')
 const wxQrCode = ref('')
+const logId = ref('')
 
 onLoad(async (options: any) => {
   if (options.q) {
     wxQrCode.value = decodeURIComponent(options.q)
-  }
-  else {
-    wxQrCode.value = 'http://spring.ehsure.com:82/a/AHCCJD1ZW9K91'
   }
 })
 
@@ -74,10 +72,12 @@ const handleWeixinScan = async () => {
 
   const res = await scanByDetail(params)
 
+  logId.value = res.logId
   themeCode.value = res.themeCode
   seriesStore.setThemeCode(res.themeCode)
   seriesStore.fetchSeriesDetail()
 }
 
 provide('wxQrCode', wxQrCode)
+provide('logId', logId)
 </script>

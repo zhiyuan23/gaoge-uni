@@ -132,6 +132,10 @@ const currentTheme = reactive({
   bgColor: '',
 })
 
+// 微信扫码注入二维码
+const wxQrCodeRef = inject<Ref<string>>('wxQrCode', ref(''))
+const logIdRef = inject<Ref<string>>('logId', ref(''))
+
 // 弹窗控制
 const showRule = ref(false)
 const showService = ref(false)
@@ -147,10 +151,10 @@ const prizePage = ref(1)
 const pageSize = 10
 
 // 扫码 & 开奖核心数据
-const scanLogId = ref('')
+const scanLogId = ref(logIdRef)
 const scanLoading = ref(false)
 const drawLoading = ref(false)
-const drawResultInfo = reactive<PrizeInfo>(defaultPrizeInfo)
+const drawResultInfo = ref<PrizeInfo>(defaultPrizeInfo)
 const drawParams = reactive({
   scanCode: '',
   locationLon: '',
@@ -169,10 +173,8 @@ const drawParams = reactive({
   themeCode: themeCode.value,
 })
 
+// 轮播中奖人数据
 const bingoList = ref([])
-
-// 微信扫码注入二维码
-const wxQrCodeRef = inject<Ref<string>>('wxQrCode', ref(''))
 
 // 微信扫码进入活动页
 watch(wxQrCodeRef, (newCode) => {
@@ -335,7 +337,8 @@ const drawLottery = async () => {
 
     const params = { ...drawParams, logId: scanLogId.value }
     const result = await executeLottery(params)
-    Object.assign(drawResultInfo, result)
+
+    drawResultInfo.value = result
 
     if (result.bingo === 1) {
       fetchMyPrizeList(true)
