@@ -1,5 +1,5 @@
 import { getProtocolConfig } from '@/api'
-import { Dialog, navigateTo } from '@/utils'
+import { Dialog, Loading, navigateTo } from '@/utils'
 
 const privacy = ref({
   privacyPolicy: '',
@@ -49,11 +49,41 @@ export function useAgreement() {
     }
 
     const title = type === 'userAgreement' ? '服务协议' : '隐私政策'
+    const isPdf = url.trim().toLowerCase().endsWith('.pdf')
 
-    navigateTo(
-      `/pages/common/webview/index?url=${encodeURIComponent(url)}&title=${title}`,
-    )
+    if (isPdf) {
+      handleOpenPdf(url, title)
+    }
+    else {
+      navigateTo(
+        `/pages/common/webview/index?url=${encodeURIComponent(url)}&title=${title}`,
+      )
+    }
     return true
+  }
+
+  const handleOpenPdf = (url: string, title: string) => {
+    Loading.show('正在加载文档...')
+
+    uni.downloadFile({
+      url,
+      success: (res) => {
+        uni.openDocument({
+          filePath: res.tempFilePath,
+          showMenu: true,
+          fileType: 'pdf',
+          success: () => {
+            console.log(`${title}打开成功`)
+          },
+          fail: () => {
+            Dialog('无法打开该类型的文件，请检查手机是否安装了相关查看器')
+          },
+        })
+      },
+      complete: () => {
+        Loading.hide()
+      },
+    })
   }
 
   const showSelector = async () => {

@@ -10,8 +10,17 @@
       </view>
       <view class="text-center px-18 pt-90">
         为了更好地保障您的合法权益，请您阅读并同意 以下协议
-        <text class="color-primary">
-          《用户协议》《隐私政策》
+        <text
+          class="color-primary"
+          @click.stop="openPrivacyPolicy"
+        >
+          《服务协议》
+        </text>
+        <text
+          class="color-primary"
+          @click.stop="openUserAgreement"
+        >
+          《隐私政策》
         </text>
         ，未注册手 机号将自动注册
       </view>
@@ -42,10 +51,14 @@
 </template>
 
 <script setup lang='ts'>
+import { useAgreement } from '@/composables'
+
 const emit = defineEmits<{
   agree: [];
   disagree: [];
 }>()
+
+const { openUserAgreement, openPrivacyPolicy } = useAgreement()
 
 const show = defineModel<boolean>({
   default: false,

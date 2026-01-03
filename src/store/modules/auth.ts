@@ -43,9 +43,11 @@ const useAuthStore = defineStore(
 
     // 静默登录：获取 基础用户权限信息
     const silentLogin = async () => {
-      initUserAuth()
-      checkLogin()
-      initHuarunAuth()
+      await Promise.all([
+        initUserAuth(),
+        checkLogin(),
+        initHuarunAuth(),
+      ])
     }
 
     // 检查是否登录
@@ -97,6 +99,10 @@ const useAuthStore = defineStore(
         else {
           useProfileStore().fetchProfile()
         }
+      }
+      catch {
+        // 初始化用户信息失败可能导致登录失败，进行静默登录重试
+        silentLogin()
       }
       finally {
         loading.value = false

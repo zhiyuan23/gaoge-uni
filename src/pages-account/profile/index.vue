@@ -1,5 +1,5 @@
 <template>
-  <view class="page container">
+  <view class="container page">
     <view class="w-full h-20" />
 
     <!-- 个人信息卡片 -->
@@ -49,7 +49,7 @@
       <!-- 手机号（不可编辑） -->
       <view class="row">
         <text>手机号</text>
-        <view>{{ userInfo.mobilePhone || '未绑定' }}</view>
+        <view>{{ userInfo.mobilePhone }}</view>
       </view>
     </view>
 
@@ -58,7 +58,7 @@
       <!-- 性别 -->
       <view class="row" @tap="handleEditGender">
         <text>性别</text>
-        <view>{{ userInfo.genderName || '未设置' }}</view>
+        <view>{{ userInfo.genderName || '去完善' }}</view>
         <view class="icon">
           <u-icon name="arrow-right" color="#909399" />
         </view>
@@ -68,7 +68,7 @@
       <!-- 生日 -->
       <view class="row" @tap="handleEditBirthday">
         <text>生日</text>
-        <view>{{ userInfo.birthDate || '未设置' }}</view>
+        <view>{{ userInfo.birthDate || '去完善' }}</view>
         <view class="icon">
           <u-icon name="arrow-right" color="#909399" />
         </view>
