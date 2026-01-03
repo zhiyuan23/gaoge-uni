@@ -8,8 +8,8 @@
       :key="currentWinner.id"
       class="animate-marquee mx-auto inline-flex items-center rounded-full bg-white/60 text-black shadow-sm backdrop-blur-sm px-24 h-40 text-22"
     >
-      <text class="truncate max-w-400">
-        {{ currentWinner.userName || '神秘用户' }}，抽中
+      <text class="truncate">
+        恭喜用户{{ currentWinner.userName || '神秘用户' }}，抽中
         <text>
           {{ currentWinner.prizeName || '神秘大奖' }}
         </text>！
