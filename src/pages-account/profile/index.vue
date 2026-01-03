@@ -1,5 +1,5 @@
 <template>
-  <view class="container page">
+  <view class="page container">
     <view class="w-full h-20" />
 
     <!-- 个人信息卡片 -->
@@ -9,7 +9,7 @@
         <text>头像</text>
         <image
           class="size-120 rounded-full"
-          :src="profile.avatarUrlBase64 || `/static/images/icons/ic-avatar.png`"
+          :src="userInfo.avatarUrlBase64 || `/static/images/icons/ic-avatar.png`"
           mode="aspectFill"
         />
         <button
@@ -26,7 +26,7 @@
       <!-- 用户名（不可编辑） -->
       <view class="row">
         <text>用户名</text>
-        <view>{{ profile.userName || '未设置' }}</view>
+        <view>{{ userInfo.userName || '未设置' }}</view>
       </view>
       <view class="line" />
 
@@ -34,7 +34,7 @@
       <view class="row">
         <text>昵称</text>
         <input
-          v-model="profile.nickName"
+          v-model="userInfo.nickName"
           type="nickname"
           placeholder="请输入昵称"
           class="flex-1 text-right text-26"
@@ -49,7 +49,7 @@
       <!-- 手机号（不可编辑） -->
       <view class="row">
         <text>手机号</text>
-        <view>{{ profile.mobilePhone || '未绑定' }}</view>
+        <view>{{ userInfo.mobilePhone || '未绑定' }}</view>
       </view>
     </view>
 
@@ -58,7 +58,7 @@
       <!-- 性别 -->
       <view class="row" @tap="handleEditGender">
         <text>性别</text>
-        <view>{{ profile.genderName || '未设置' }}</view>
+        <view>{{ userInfo.genderName || '未设置' }}</view>
         <view class="icon">
           <u-icon name="arrow-right" color="#909399" />
         </view>
@@ -68,7 +68,7 @@
       <!-- 生日 -->
       <view class="row" @tap="handleEditBirthday">
         <text>生日</text>
-        <view>{{ profile.birthDate || '未设置' }}</view>
+        <view>{{ userInfo.birthDate || '未设置' }}</view>
         <view class="icon">
           <u-icon name="arrow-right" color="#909399" />
         </view>
@@ -110,7 +110,7 @@ import { formatTime } from '@/utils'
 const { showSelector } = useAgreement()
 
 const profileStore = useProfileStore()
-const { profile } = storeToRefs(profileStore)
+const { userInfo } = storeToRefs(profileStore)
 
 const genderOptions = ['女', '男']
 
@@ -119,11 +119,6 @@ const showDatePicker = ref(false)
 const birthdayTimestamp = ref(Date.now())
 const minDate = new Date('1900-01-01').getTime()
 const maxDate = Date.now()
-
-// 初始化加载用户信息
-onLoad(() => {
-  profileStore.fetchProfile()
-})
 
 // 修改头像
 const onChooseAvatar = async (e: any) => {
@@ -136,9 +131,9 @@ const onChooseAvatar = async (e: any) => {
 
 // 修改昵称（失去焦点时保存）
 const onChangeNickname = async () => {
-  if (!profile.value.nickName.trim()) return
+  if (!userInfo.value.nickName.trim()) return
 
-  await profileStore.updateProfile({ nickName: profile.value.nickName })
+  await profileStore.updateProfile({ nickName: userInfo.value.nickName })
 }
 
 // 修改性别
@@ -153,7 +148,7 @@ const handleEditGender = async () => {
 
 // 打开生日选择器
 const handleEditBirthday = () => {
-  const birth = profile.value.birthDate
+  const birth = userInfo.value.birthDate
   birthdayTimestamp.value = birth ? new Date(birth).getTime() : Date.now()
   showDatePicker.value = true
 }

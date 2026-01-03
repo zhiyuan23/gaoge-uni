@@ -12,7 +12,7 @@ const http = new Request()
  */
 http.setConfig((config: HttpRequestConfig) => {
   config.baseURL = import.meta.env.VITE_API_BASE_URL
-  config.timeout = 15000
+  config.timeout = 10000
   config.header = {
     'content-type': 'application/x-www-form-urlencoded',
     ...config.header,

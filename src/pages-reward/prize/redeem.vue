@@ -110,8 +110,8 @@
   <PosterShare
     ref="posterGenerator"
     :bg-img="`http://spring.ehsure.com:82/image/member/card-bg-${themeCode}.png`"
-    :avatar="profile.avatarUrl"
-    :nickname="profile.nickName"
+    :avatar="userInfo.avatarUrlBase64"
+    :nickname="userInfo.nickName"
     :money="prizeDetail.bonus"
   />
 </template>
@@ -124,7 +124,7 @@ import { Dialog, formatTime, Loading, Toast } from '@/utils'
 import PosterShare from './poster.vue'
 
 const profileStore = useProfileStore()
-const { profile } = storeToRefs(profileStore)
+const { userInfo } = storeToRefs(profileStore)
 const { themeCode, color, redeem } = useTheme()
 
 const posterGenerator = ref<any>(null)
@@ -147,7 +147,6 @@ onLoad((options: any) => {
   form.id = options.id
 
   getDetail(options.id)
-  profileStore.fetchProfile()
 })
 
 const getDetail = async (id: string) => {

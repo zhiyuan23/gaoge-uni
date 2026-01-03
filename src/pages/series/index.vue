@@ -13,6 +13,7 @@ import SeriesML from '@/pages/series/ml/index.vue'
 import SeriesZBQE from '@/pages/series/zbqr/index.vue'
 import SeriesZWCS from '@/pages/series/zwcs/index.vue'
 import { useAuthStore, useSeriesStore } from '@/store'
+import { delay, reLaunch } from '@/utils'
 
 const seriesStore = useSeriesStore()
 const authStore = useAuthStore()
@@ -51,31 +52,37 @@ watch(
 
 // 处理微信扫码逻辑
 const handleWeixinScan = async () => {
-  const data = await useLocation(false)
+  try {
+    const data = await useLocation(false)
 
-  const params = {
-    scanCode: wxQrCode.value,
-    openId: openId.value,
-    locationLat: data.lat,
-    locationLon: data.lng,
-    locationProvince: data.province.name,
-    locationCity: data.city.name,
-    locationDistrict: data.district.name,
-    locationAdCode: data.adCode,
-    locationAddress: data.street,
-    locationFullAddress: data.fullAddress,
-    provinceId: data.province.code,
-    cityId: data.city.code,
-    districtId: data.district.code,
-    adCode: data.adCode,
+    const params = {
+      scanCode: wxQrCode.value,
+      openId: openId.value,
+      locationLat: data.lat,
+      locationLon: data.lng,
+      locationProvince: data.province.name,
+      locationCity: data.city.name,
+      locationDistrict: data.district.name,
+      locationAdCode: data.adCode,
+      locationAddress: data.street,
+      locationFullAddress: data.fullAddress,
+      provinceId: data.province.code,
+      cityId: data.city.code,
+      districtId: data.district.code,
+      adCode: data.adCode,
+    }
+
+    const res = await scanByDetail(params)
+
+    logId.value = res.logId
+    themeCode.value = res.themeCode
+    seriesStore.setThemeCode(res.themeCode)
+    seriesStore.fetchSeriesDetail()
   }
-
-  const res = await scanByDetail(params)
-
-  logId.value = res.logId
-  themeCode.value = res.themeCode
-  seriesStore.setThemeCode(res.themeCode)
-  seriesStore.fetchSeriesDetail()
+  catch {
+    await delay(2000)
+    reLaunch('/pages/home/index')
+  }
 }
 
 provide('wxQrCode', wxQrCode)

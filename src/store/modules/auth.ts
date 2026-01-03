@@ -2,6 +2,7 @@ import { md5 } from 'js-md5'
 import { getOpenId, getSession, hrAuth, isLoginApi } from '@/api'
 import { APP_ID, PREFIX } from '@/constants'
 import { reLaunch } from '@/utils'
+import useProfileStore from './profile'
 
 const useAuthStore = defineStore(
   'auth',
@@ -78,21 +79,24 @@ const useAuthStore = defineStore(
     }
 
     // 授权登录
-    const login = async (phoneCode = '', needJump = false) => {
+    const login = async (phoneCode = '', redirect = false) => {
       if (loading.value) return
 
       loading.value = true
-
-      const { code } = await uni.login()
-
       try {
+        const { code } = await uni.login()
         const res = await getSession({ wxCode: code, phoneCode })
 
         sessionKey.value = res.thirdSessionKey
         isLogin.value = true
         isMember.value = 1
 
-        if (needJump) reLaunch('/pages/home/index')
+        if (redirect) {
+          reLaunch('/pages/home/index')
+        }
+        else {
+          useProfileStore().fetchProfile()
+        }
       }
       finally {
         loading.value = false

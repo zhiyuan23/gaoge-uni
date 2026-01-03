@@ -4,7 +4,7 @@ import { getUserInfo, updateUserInfo } from '@/api'
 const useProfileStore = defineStore(
   'profile',
   () => {
-    const profile = ref<Profile>({
+    const userInfo = ref<Profile>({
       userName: '',
       mobilePhone: '',
       nickName: '',
@@ -18,8 +18,7 @@ const useProfileStore = defineStore(
 
     // 获取用户信息
     const fetchProfile = async () => {
-      const res = await getUserInfo()
-      profile.value = { ...profile.value, ...res }
+      userInfo.value = await getUserInfo()
     }
 
     // 更新用户信息
@@ -30,11 +29,14 @@ const useProfileStore = defineStore(
     }
 
     return {
-      profile,
+      userInfo,
 
       fetchProfile,
       updateProfile,
     }
+  },
+  {
+    persist: true,
   },
 )
 

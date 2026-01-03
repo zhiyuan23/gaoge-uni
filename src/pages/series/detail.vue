@@ -1,5 +1,5 @@
 <template>
-  <view class="theme page relative overflow-hidden" :style="{ background: currentTheme.bgColor }">
+  <view class="page theme relative overflow-hidden" :style="{ background: currentTheme.bgColor }">
     <!-- 背景图 -->
     <image
       class="absolute w-100vw -mt-165"
@@ -216,6 +216,13 @@ watch(isLogin, (newLoginStatus, oldLoginStatus) => {
     fetchMyPrizeList(true)
   }
 }, { immediate: false })
+
+// 监听我的奖品弹窗变化
+watch(showMyPrize, (newShow) => {
+  if (newShow && prizeList.value.length === 0) {
+    fetchMyPrizeList(true)
+  }
+})
 
 /**
  * 将 useLocation 返回的位置信息赋值到 drawParams 对象

@@ -14,7 +14,7 @@
       <view class="absolute h-full flex-center-start top-0" @click="goUserPage">
         <view class="pl-32 pr-25">
           <u-avatar
-            :src="profile?.avatarUrlBase64"
+            :src="userInfo?.avatarUrlBase64"
             :default-url="`${IMG_BASE_URL}/icons/ic-avatar.png`"
             size="55"
           />
@@ -22,7 +22,7 @@
         <view class="flex-col-center">
           <view class="font-bold pb-5 text-34">
             <text v-if="isLogin">
-              Hey, {{ profile?.nickName }}
+              Hey, {{ userInfo?.nickName }}
             </text>
             <text v-else>
               去登录
@@ -98,7 +98,7 @@ const profileStore = useProfileStore()
 const seriesStore = useSeriesStore()
 
 const { isLogin } = storeToRefs(authStore)
-const { profile } = storeToRefs(profileStore)
+const { userInfo } = storeToRefs(profileStore)
 const { seriesList } = storeToRefs(seriesStore)
 
 // 获取主题列表
@@ -108,7 +108,7 @@ const getSeriesList = () => {
 
 // 获取用户信息
 const getProfile = () => {
-  if (isLogin.value && !profile.value.userName) {
+  if (isLogin.value && !userInfo.value.userName) {
     profileStore.fetchProfile()
   }
 }
