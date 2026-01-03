@@ -1,9 +1,12 @@
-import type { NearbyShopListReq, NearbyShopListRes } from '@/types'
 import { jsonPost, post } from '@/api/request'
+import { CenterService } from '@/constants'
 
 // 获取兑奖点列表
-export const getShopList = (data: NearbyShopListReq) => {
-  return post<NearbyShopListRes>('/wx/mem/act/prizePlace/nearby', data)
+export const getShopList = (data: any) => {
+  return post<any>('/wx/sto/nearBy', {
+    ...data,
+    _center: CenterService.Md,
+  })
 }
 
 // 门店问题反馈校验

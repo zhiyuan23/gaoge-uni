@@ -222,25 +222,24 @@ const fetchList = async (reset = false) => {
   try {
     const params = {
       words: searchText.value.trim(),
-      lon: location.lng,
-      lat: location.lat,
+      longitude: location.lng,
+      latitude: location.lat,
       page: page.value,
       pageSize,
-      provinceCode: selectedRegion.value?.province?.code,
-      cityCode: selectedRegion.value?.city?.code,
+      cityId: selectedRegion.value?.city?.code,
     }
-    const { rows, total } = await getShopList(params)
+    const list = await getShopList(params)
 
     if (reset) {
-      shopList.value = rows
+      shopList.value = list
     }
     else {
-      shopList.value.push(...rows)
+      shopList.value.push(...list)
     }
 
-    hasMore.value = shopList.value.length < total
+    hasMore.value = list.length === pageSize
 
-    if (rows.length > 0) {
+    if (list.length > 0) {
       page.value += 1
     }
   }
