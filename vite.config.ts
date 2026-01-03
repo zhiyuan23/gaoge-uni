@@ -33,6 +33,14 @@ export default defineConfig(({ command, mode }): UserConfig => {
       hmr: true,
       host: true,
       open: true,
+      watch: {
+        ignored: [
+          '**/node_modules/**',
+          '**/dist/**',
+          '**/.git/**',
+          '**/unpackage/**',
+        ],
+      },
       proxy: createViteProxy(env),
     },
     // 设置scss的api类型为modern-compiler
