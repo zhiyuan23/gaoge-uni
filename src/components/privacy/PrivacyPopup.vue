@@ -14,7 +14,7 @@
           class="color-primary"
           @click.stop="openPrivacyPolicy"
         >
-          《服务协议》
+          《用户协议》
         </text>
         <text
           class="color-primary"

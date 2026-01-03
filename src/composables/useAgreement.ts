@@ -48,7 +48,7 @@ export function useAgreement() {
       return false
     }
 
-    const title = type === 'userAgreement' ? '服务协议' : '隐私政策'
+    const title = type === 'userAgreement' ? '用户协议' : '隐私政策'
     const isPdf = url.trim().toLowerCase().endsWith('.pdf')
 
     if (isPdf) {
@@ -87,7 +87,7 @@ export function useAgreement() {
   }
 
   const showSelector = async () => {
-    const itemList = ['服务协议', '隐私政策']
+    const itemList = ['用户协议', '隐私政策']
 
     const { tapIndex } = await uni.showActionSheet({ itemList })
 
