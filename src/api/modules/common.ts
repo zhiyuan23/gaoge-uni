@@ -1,9 +1,8 @@
-import type { UploadReq } from './types'
 import { post, upload } from '@/api/request'
 import { CenterService } from '@/constants'
 
 // 图片上传
-export const uploadFile = (options: UploadReq) => {
+export const uploadFile = (options: any) => {
   const { filePath, name = 'file', extraData = {} } = options
   return upload<any>('/wx/mem/user/upload', extraData, { filePath, name })
 }

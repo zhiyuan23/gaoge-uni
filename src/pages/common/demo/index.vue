@@ -60,8 +60,7 @@
 </template>
 
 <script setup lang='ts'>
-import { Dialog, Loading, Toast } from '@/utils/modals'
-import storage from '@/utils/storage'
+import { Dialog, Loading, storage, Toast } from '@/utils'
 
 const showPicker = ref(false)
 const selectedArea = ref<any>([])

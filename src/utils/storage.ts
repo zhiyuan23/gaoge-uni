@@ -1,4 +1,4 @@
-const storage = {
+export const storage = {
   set(key: string | null, value: string | null) {
     if (key !== null && value !== null)
       uni.setStorageSync(key, value)
@@ -21,5 +21,3 @@ const storage = {
     uni.removeStorageSync(key)
   },
 }
-
-export default storage
