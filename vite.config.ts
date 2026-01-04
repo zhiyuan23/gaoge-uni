@@ -34,6 +34,8 @@ export default defineConfig(({ command, mode }): UserConfig => {
       host: true,
       open: true,
       watch: {
+        usePolling: true,
+        interval: 1000,
         ignored: [
           '**/node_modules/**',
           '**/dist/**',
@@ -55,14 +57,18 @@ export default defineConfig(({ command, mode }): UserConfig => {
     },
     build: {
       minify: 'terser',
+      // 禁用 sourcemap 减小内存占用
+      sourcemap: false,
+      // 减小分块大小监控
+      chunkSizeWarningLimit: 1500,
       terserOptions: {
         compress: {
-          drop_console: true,
-          drop_debugger: true,
+          drop_console: isBuild,
+          drop_debugger: isBuild,
         },
       },
     },
     plugins: createVitePlugins(isBuild),
-    esbuild: { drop: JSON.parse(env.VITE_DROP_CONSOLE) ? ['console', 'debugger'] : [] },
+    esbuild: { drop: isBuild ? ['console', 'debugger'] : [] },
   }
 })

@@ -33,7 +33,7 @@
     "preinstall": "npx only-allow pnpm",
     "uvm": "npx @dcloudio/uvm@latest",
     "uvm-rm": "node ./scripts/post-upgrade.js",
-    "dev": "cross-env NODE_OPTIONS=\"--max-old-space-size=2048 --expose-gc\" uni -p mp-weixin",
+    "dev": "cross-env NODE_OPTIONS=\"--max-old-space-size=2048\" uni -p mp-weixin",
     "dev:mp-weixin": "uni -p mp-weixin",
     "dev:mp-weixin-test": "uni -p mp-weixin --mode test",
     "dev:mp-weixin-prod": "uni -p mp-weixin --mode production",
