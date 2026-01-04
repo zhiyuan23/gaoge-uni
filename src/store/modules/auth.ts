@@ -103,6 +103,7 @@ const useAuthStore = defineStore(
       catch {
         // 初始化用户信息失败可能导致登录失败，进行静默登录重试
         silentLogin()
+        throw new Error('登录失败')
       }
       finally {
         loading.value = false
