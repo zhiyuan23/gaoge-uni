@@ -14,7 +14,7 @@
       <view class="absolute h-full flex-center-start top-0" @click="goUserPage">
         <view class="pl-32 pr-25">
           <u-avatar
-            :src="userInfo?.avatarUrlBase64"
+            :src="userInfo?.avatarUrl"
             :default-url="`${IMG_BASE_URL}/icons/ic-avatar.png`"
             size="55"
           />

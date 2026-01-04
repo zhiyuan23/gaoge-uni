@@ -1,5 +1,5 @@
 <template>
-  <view class="theme page relative overflow-hidden" :style="{ background: currentTheme.bgColor }">
+  <view class="page theme relative overflow-hidden" :style="{ background: currentTheme.bgColor }">
     <!-- 背景图 -->
     <image
       class="absolute w-100vw -mt-165"
@@ -109,7 +109,7 @@
     <LotteryPoster
       ref="posterGenerator"
       :bg-img="seriesDetail.poster"
-      :avatar="userInfo.avatarUrlBase64"
+      :avatar="userInfo.avatarUrl"
       :nickname="userInfo.nickName"
       :money="drawResultInfo.bonus || ''"
     />

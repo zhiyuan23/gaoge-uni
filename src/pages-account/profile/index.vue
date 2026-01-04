@@ -9,7 +9,7 @@
         <text>头像</text>
         <image
           class="size-120 rounded-full"
-          :src="userInfo.avatarUrlBase64 || `/static/images/icons/ic-avatar.png`"
+          :src="userInfo.avatarUrl || `/static/images/icons/ic-avatar.png`"
           mode="aspectFill"
         />
         <button
@@ -133,8 +133,8 @@ const onChooseAvatar = async (e: any) => {
   const { avatarUrl } = e.detail
   if (!avatarUrl) return
 
-  const { filePath } = await uploadFile({ filePath: avatarUrl })
-  await profileStore.updateProfile({ avatarUrl: filePath })
+  const { previewURL } = await uploadFile({ filePath: avatarUrl })
+  await profileStore.updateProfile({ avatarUrl: previewURL })
 }
 
 // 修改昵称（失去焦点时保存）

@@ -12,7 +12,6 @@ const useProfileStore = defineStore(
       gender: 0,
       genderName: '',
       avatarUrl: '',
-      avatarUrlBase64: '',
       birthDate: '',
     })
 

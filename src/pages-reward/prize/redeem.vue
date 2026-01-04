@@ -110,7 +110,7 @@
   <LotteryPoster
     ref="posterGenerator"
     :bg-img="seriesDetail.poster"
-    :avatar="userInfo.avatarUrlBase64"
+    :avatar="userInfo.avatarUrl"
     :nickname="userInfo.nickName"
     :money="prizeDetail.bonus"
   />

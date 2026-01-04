@@ -4,7 +4,7 @@ import { CenterService } from '@/constants'
 // 图片上传
 export const uploadFile = (options: any) => {
   const { filePath, name = 'file', extraData = {} } = options
-  return upload<any>('/wx/mem/user/upload', extraData, { filePath, name })
+  return upload<any>('/wx/mem/common/upload', extraData, { filePath, name })
 }
 
 // 地址逆解析

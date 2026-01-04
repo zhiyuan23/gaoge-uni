@@ -21,9 +21,6 @@ export interface Profile {
   /** 头像URL地址 */
   avatarUrl: string;
 
-  /** 头像 Base64 数据 */
-  avatarUrlBase64: string;
-
   /** 出生日期，格式 YYYY-MM-DD */
   birthDate: string;
 }
