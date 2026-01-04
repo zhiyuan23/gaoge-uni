@@ -95,7 +95,7 @@
 import type { PrizeInfo } from '@/types'
 import { useTheme } from '@/composables'
 import { IMG_BASE_URL } from '@/constants'
-import { navigateToMiniApp } from '@/utils'
+import { formatTime, navigateToMiniApp } from '@/utils'
 
 const props = defineProps<{
   prizeInfo: PrizeInfo;
@@ -141,25 +141,27 @@ const displayErrorText = computed(() => {
 // 显示的时间逻辑
 const timeLines = computed(() => {
   const p = prizeInfo.value
+  const targetFormat = 'YYYY年MM月DD日 HH:mm:ss'
 
   const configs = [
-    { key: 'scanTime' as const, label: '扫码时间', condition: () => true },
-    { key: 'exchangeTime' as const, label: '兑奖时间', condition: () => true },
-    { key: 'eventBeginTime' as const, label: '开始时间', condition: () => true },
-    { key: 'eventEndTime' as const, label: '结束时间', condition: () => true },
+    { key: 'scanTime', label: '扫码时间' },
+    { key: 'exchangeTime', label: '兑奖时间' },
+    { key: 'eventBeginTime', label: '开始时间' },
+    { key: 'eventEndTime', label: '结束时间' },
     {
-      key: 'exchangeEndTime' as const,
+      key: 'exchangeEndTime',
       label: () => isExpired.value ? '过期时间' : '兑奖截止',
-      condition: () => !!p.exchangeEndTime,
     },
   ] as const
 
   return configs
-    .map(({ key, label, condition }) => {
-      const value = p[key] as string | undefined
-      if (value && condition()) {
+    .map(({ key, label }) => {
+      const rawValue = p[key as keyof PrizeInfo] as string | number | undefined
+
+      if (rawValue) {
+        const formatted = formatTime(rawValue, { format: targetFormat })
         const displayLabel = typeof label === 'function' ? label() : label
-        return `${displayLabel}：${value}`
+        return `${displayLabel}：${formatted}`
       }
       return null
     })
