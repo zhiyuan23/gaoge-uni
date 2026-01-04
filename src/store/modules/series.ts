@@ -8,7 +8,7 @@ const format = 'YYYY年MM月DD日'
 const useSeriesStore = defineStore(
   'series',
   () => {
-    const themeCode = ref<SeriesKey>()
+    const themeCode = ref<SeriesKey>('zbqr')
     const seriesList = ref<SeriesItem[]>(SERIES_LIST)
     const seriesDetail = ref<SeriesItem>(SERIES_LIST[0])
 

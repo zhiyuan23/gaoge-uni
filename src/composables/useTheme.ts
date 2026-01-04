@@ -4,7 +4,7 @@ import { useSeriesStore } from '@/store'
 export const useTheme = () => {
   const { themeCode } = storeToRefs(useSeriesStore())
 
-  const config = computed(() => THEMES[themeCode.value!])
+  const config = computed(() => THEMES[themeCode.value])
 
   return {
     themeCode,
