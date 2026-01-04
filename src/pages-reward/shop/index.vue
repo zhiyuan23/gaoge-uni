@@ -82,10 +82,10 @@
             </view>
 
             <view class="text-secondary mt-5 leading-40 text-22">
-              距您{{ store.distance }}
+              距您{{ formatDistance(store.distance) }}
             </view>
             <view class="text-secondary leading-40 text-22">
-              {{ store.address }}
+              {{ store.fullAddress }}
             </view>
           </view>
 
@@ -112,7 +112,7 @@
 <script setup lang="ts">
 import { getShopList, validFeedback } from '@/api'
 import { useLocation, useTheme } from '@/composables'
-import { navigateTo } from '@/utils'
+import { formatDistance, navigateTo } from '@/utils'
 
 const SCREEN_HEIGHT = uni.getSystemInfoSync().windowHeight
 const { themeCode, shopBtnColor, mapPopBgColor, mapPopTitColor } = useTheme()
