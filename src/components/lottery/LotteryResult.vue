@@ -41,10 +41,10 @@
                 {{ displayErrorText }}
               </text>
               <view v-if="isExchanged" class="mt-24">
-                已兑换
+                已兑奖
               </view>
               <view v-if="noExchanged" class="mt-24">
-                尚未兑换
+                尚未兑奖
               </view>
             </view>
 
@@ -194,7 +194,7 @@ const displayTipsText = computed(() => {
     },
     one_yuan_exchange: {
       won: `请于中奖后${deadline}内带上实物瓶盖到兑奖点兑奖`,
-      noExchange: '需持实物瓶盖兑奖',
+      noExchange: '需持实物瓶盖兑奖，',
     },
   } as const
 
