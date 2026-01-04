@@ -71,7 +71,7 @@
         </view>
 
         <!-- 提示话术 -->
-        <view class="mx-120 mt-40">
+        <view class="mx-110 mt-40">
           <text class="color-white leading-46">
             {{ displayTipsText }}
           </text>
@@ -94,7 +94,7 @@
 <script setup lang='ts'>
 import type { PrizeInfo } from '@/types'
 import { useTheme } from '@/composables'
-import { IMG_BASE_URL } from '@/constants'
+import { IMG_BASE_URL, THIRD_PARTY_APPS } from '@/constants'
 import { formatTime, navigateToMiniApp } from '@/utils'
 
 const props = defineProps<{
@@ -170,7 +170,8 @@ const timeLines = computed(() => {
 
 // 显示的底部说明文字
 const displayTipsText = computed(() => {
-  const { prizeType, isExchanged } = prizeInfo.value
+  const { prizeType, isExchanged, memExchangeTimeLimit, memExchangeTimeUnit } = prizeInfo.value
+  const deadline = memExchangeTimeLimit + memExchangeTimeUnit === 'day' ? '天' : '小时'
 
   const expiredTips = '逾期未兑换将视为自动放弃领奖，不予补发'
 
@@ -184,15 +185,15 @@ const displayTipsText = computed(() => {
 
   const tipsConfig = {
     small_red_envelope: {
-      won: '请于24小时内完成领取，逾期红包失效',
-      noExchange: '请于中奖后24小时内完成领取',
+      won: `请于${deadline}内完成领取，逾期红包失效`,
+      noExchange: `请于中奖后${deadline}内完成领取`,
     },
     large_red_envelope: {
-      won: '请于中奖后30天内填写兑奖信息',
-      noExchange: '请于中奖后30天内填写兑奖信息',
+      won: `请于中奖后${deadline}内填写兑奖信息`,
+      noExchange: `请于中奖后${deadline}内填写兑奖信息`,
     },
     one_yuan_exchange: {
-      won: '请于中奖后30天内带上实物瓶盖到兑奖点兑奖',
+      won: `请于中奖后${deadline}内带上实物瓶盖到兑奖点兑奖`,
       noExchange: '需持实物瓶盖兑奖',
     },
   } as const
@@ -235,9 +236,9 @@ const prizeTypeButtonMap = {
 
 // 按钮配置
 const buttonConfig = computed(() => {
-  const { prizeType, isExchanged } = prizeInfo.value
+  const { prizeType, isExchanged, isContinueScanCode } = prizeInfo.value
 
-  if (noWon.value) {
+  if (noWon.value || isContinueScanCode) {
     return {
       label: '再扫一瓶',
       type: 'scan',
@@ -262,9 +263,7 @@ const handleConfirm = (type: string, id: any) => {
 }
 
 const handleGoShop = () => {
-  navigateToMiniApp({
-    appId: 'wx6fb110526c12fc40',
-    path: 'sub1/pages/ys-Exchange/ys-Exchange',
-  })
+  const { MALL } = THIRD_PARTY_APPS
+  navigateToMiniApp(MALL)
 }
 </script>

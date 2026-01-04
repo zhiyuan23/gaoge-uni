@@ -56,6 +56,15 @@ export interface PrizeInfo {
 
   /** 奖品状态（待兑换 / 已兑换 / 已过期） */
   status?: 'to_be_exchange' | 'exchanged' | 'expired';
+
+  /** 是否继续扫码 */
+  isContinueScanCode: 0 | 1;
+
+  /** 会员兑换期限数值 */
+  memExchangeTimeLimit: number;
+
+  /** 会员兑换期限单位 hour--小时 day--天 */
+  memExchangeTimeUnit: 'hour' | 'day';
 }
 
 /** 奖品信息默认值 */
@@ -78,4 +87,7 @@ export const defaultPrizeInfo: PrizeInfo = {
   prizeImage: '',
   bonus: '',
   giftCouponId: '',
+  isContinueScanCode: 0,
+  memExchangeTimeLimit: 30,
+  memExchangeTimeUnit: 'hour',
 }
