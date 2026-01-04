@@ -107,9 +107,9 @@
     <view class="w-100vw h-30" />
   </view>
 
-  <PosterShare
+  <LotteryPoster
     ref="posterGenerator"
-    :bg-img="`http://spring.ehsure.com:82/image/member/card-bg-${themeCode}.png`"
+    :bg-img="seriesDetail.poster"
     :avatar="userInfo.avatarUrlBase64"
     :nickname="userInfo.nickName"
     :money="prizeDetail.bonus"
@@ -119,13 +119,15 @@
 <script setup lang='ts'>
 import { fillInInfo, getMyPrizeDetail } from '@/api'
 import { useTheme } from '@/composables'
-import { useProfileStore } from '@/store'
+import { useProfileStore, useSeriesStore } from '@/store'
 import { Dialog, formatTime, Loading, Toast } from '@/utils'
-import PosterShare from './poster.vue'
 
 const profileStore = useProfileStore()
-const { userInfo } = storeToRefs(profileStore)
+const seriesStore = useSeriesStore()
+
 const { themeCode, color, redeem } = useTheme()
+const { userInfo } = storeToRefs(profileStore)
+const { seriesDetail } = storeToRefs(seriesStore)
 
 const posterGenerator = ref<any>(null)
 

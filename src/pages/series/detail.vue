@@ -1,5 +1,5 @@
 <template>
-  <view class="theme page relative overflow-hidden" :style="{ background: currentTheme.bgColor }">
+  <view class="page theme relative overflow-hidden" :style="{ background: currentTheme.bgColor }">
     <!-- 背景图 -->
     <image
       class="absolute w-100vw -mt-165"
@@ -104,6 +104,15 @@
       :prize-info="drawResultInfo"
       @confirm="handlePrizeAction"
     />
+
+    <!-- 提现成功分享海报 -->
+    <LotteryPoster
+      ref="posterGenerator"
+      :bg-img="seriesDetail.poster"
+      :avatar="userInfo.avatarUrlBase64"
+      :nickname="userInfo.nickName"
+      :money="drawResultInfo.bonus || ''"
+    />
   </view>
 </template>
 
@@ -113,7 +122,7 @@ import type { PrizeInfo, SeriesKey } from '@/types'
 import { cashWithdraw, executeLottery, getBingoList, getMyPrizeList, scanByHome } from '@/api'
 import { useAuthGuard, useLocation } from '@/composables'
 import { IMG_BASE_URL, THEMES } from '@/constants'
-import { useAuthStore, useSeriesStore } from '@/store'
+import { useAuthStore, useProfileStore, useSeriesStore } from '@/store'
 import { defaultPrizeInfo } from '@/types'
 import { delay, navigateTo, Toast } from '@/utils'
 
@@ -124,9 +133,11 @@ const props = defineProps<{
 const { withAuth, withAuthApi } = useAuthGuard()
 const authStore = useAuthStore()
 const seriesStore = useSeriesStore()
+const profileStore = useProfileStore()
 
 const { isLogin, isMember, openId, loading: authLoading } = storeToRefs(authStore)
 const { themeCode, seriesDetail, beginDate, endDate, endTime } = storeToRefs(seriesStore)
+const { userInfo } = storeToRefs(profileStore)
 
 const currentTheme = reactive({
   color: '',
@@ -176,6 +187,9 @@ const drawParams = reactive({
 
 // 轮播中奖人数据
 const bingoList = ref([])
+
+// 提现成功分享海报
+const posterGenerator = ref<any>(null)
 
 // 微信扫码进入活动页
 watch(wxQrCodeRef, (newCode) => {
@@ -396,6 +410,9 @@ const handleWithdraw = async (id: string) => {
     appId: data.appId,
     success: () => {
       fetchMyPrizeList(true)
+      if (Number(drawResultInfo.value.bonus) > 0.4) {
+        posterGenerator.value?.generateSharePoster()
+      }
     },
     fail: ({ result }: any) => {
       if (result !== 'cancel') {

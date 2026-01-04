@@ -18,7 +18,7 @@
             <view class="flex-center-center">
               <u-icon name="kefu-ermai" :color="phoneColor" size="28" />
               <view class="font-bold pl-20 text-38" :style="{ color: phoneColor }">
-                400-123-1234
+                400-8884-933
               </view>
             </view>
             <view class="mt-20">
@@ -36,7 +36,7 @@
             <view
               class="button text-white w-240 h-76"
               :style="{ background: color, borderColor: color }"
-              @click="handleCall('400-123-1234')"
+              @click="handleCall('400-8884-933')"
             >
               呼叫
             </view>

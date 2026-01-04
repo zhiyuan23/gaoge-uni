@@ -97,6 +97,14 @@
           <u-icon name="arrow-right" color="#909399" />
         </view>
       </view>
+
+      <view class="line" />
+      <view class="row" @tap="handleLogout">
+        <text>退出登录</text>
+        <view class="icon">
+          <u-icon name="arrow-right" color="#909399" />
+        </view>
+      </view>
     </view>
   </view>
 </template>
@@ -104,8 +112,8 @@
 <script setup lang='ts'>
 import { uploadFile } from '@/api'
 import { useAgreement } from '@/composables'
-import { useProfileStore } from '@/store'
-import { formatTime } from '@/utils'
+import { useAuthStore, useProfileStore } from '@/store'
+import { formatTime, reLaunch } from '@/utils'
 
 const { showSelector } = useAgreement()
 
@@ -158,6 +166,13 @@ const onConfirmBirthday = async ({ value }: any) => {
   const birthDate = formatTime(value, { format: 'YYYY-MM-DD' })
   await profileStore.updateProfile({ birthDate })
   showDatePicker.value = false
+}
+
+// 退出登录
+const handleLogout = () => {
+  useAuthStore().clear()
+  useAuthStore().silentLogin()
+  reLaunch('/pages/home/index')
 }
 </script>
 

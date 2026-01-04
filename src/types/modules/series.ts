@@ -17,6 +17,9 @@ export interface SeriesItem {
   /** 活动状态 */
   status: ActivityStatus;
 
+  /** 分享海报图片 */
+  poster: string;
+
   /** 短名称 */
   shortName?: string;
 
