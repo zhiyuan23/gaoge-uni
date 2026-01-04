@@ -124,7 +124,9 @@ const showCart = computed(() => {
   const isRedEnvelope = prizeInfo.value.prizeType === 'small_red_envelope'
     || prizeInfo.value.prizeType === 'large_red_envelope'
 
-  return !(isRedEnvelope && noExchanged.value)
+  const baseShow = !(isRedEnvelope && noExchanged.value)
+
+  return baseShow && !prizeInfo.value.msg
 })
 
 // 显示的提示文字
@@ -133,7 +135,7 @@ const displayErrorText = computed(() => {
     return '这瓶没中奖哦\n再扫一瓶试试'
   }
 
-  return prizeInfo.value.drawResultError || '抽奖失败\n请重新扫码抽奖'
+  return prizeInfo.value.drawResultError || prizeInfo.value.msg || '抽奖失败\n请重新扫码抽奖'
 })
 
 // 显示的时间逻辑

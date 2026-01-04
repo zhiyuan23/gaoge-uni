@@ -13,7 +13,7 @@ import SeriesML from '@/pages/series/ml/index.vue'
 import SeriesZBQE from '@/pages/series/zbqr/index.vue'
 import SeriesZWCS from '@/pages/series/zwcs/index.vue'
 import { useAuthStore, useSeriesStore } from '@/store'
-import { delay, reLaunch } from '@/utils'
+import { reLaunch } from '@/utils'
 
 const seriesStore = useSeriesStore()
 const authStore = useAuthStore()
@@ -27,6 +27,9 @@ const logId = ref('')
 onLoad(async (options: any) => {
   if (options.q) {
     wxQrCode.value = decodeURIComponent(options.q)
+  }
+  else {
+    reLaunch('/pages/home/index')
   }
 })
 
@@ -79,9 +82,9 @@ const handleWeixinScan = async () => {
     seriesStore.setThemeCode(res.themeCode)
     seriesStore.fetchSeriesDetail()
   }
-  catch {
-    await delay(2000)
-    reLaunch('/pages/home/index')
+  catch (error) {
+    seriesStore.setThemeCode('zbqr')
+    reLaunch(`/pages/home/index?prizeInfo=${JSON.stringify(error)}`)
   }
 }
 

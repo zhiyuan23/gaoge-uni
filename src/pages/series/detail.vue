@@ -1,5 +1,5 @@
 <template>
-  <view class="page theme relative overflow-hidden" :style="{ background: currentTheme.bgColor }">
+  <view class="theme page relative overflow-hidden" :style="{ background: currentTheme.bgColor }">
     <!-- 背景图 -->
     <image
       class="absolute w-100vw -mt-165"
@@ -325,6 +325,7 @@ const handleLoadMore = () => {
 
 // 点击扫一扫
 const onScan = async () => {
+  console.log('点击扫一扫')
   const { result } = await uni.scanCode()
   drawParams.scanCode = result
 
@@ -344,6 +345,10 @@ const checkScanCode = async () => {
 
     scanLogId.value = logId
     showDraw.value = true
+  }
+  catch (error: any) {
+    drawResultInfo.value = error
+    showResult.value = true
   }
   finally {
     scanLoading.value = false

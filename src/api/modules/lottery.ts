@@ -1,10 +1,10 @@
 import { jsonPost, post } from '@/api/request'
 
 // 扫码-活动页
-export const scanByDetail = (data: any) => jsonPost<any>('/wx/mem/act/scanCode/executeByScan', data)
+export const scanByDetail = (data: any) => jsonPost<any>('/wx/mem/act/scanCode/executeByScan', data, { custom: { toast: false } })
 
 // 扫码-首页
-export const scanByHome = (data: any) => jsonPost<any>('/wx/mem/act/scanCode/executeByHome', data)
+export const scanByHome = (data: any) => jsonPost<any>('/wx/mem/act/scanCode/executeByHome', data, { custom: { toast: false } })
 
 // 开奖
 export const executeLottery = (data: any) => jsonPost<any>('/wx/mem/act/prizeDraw/execute', data)

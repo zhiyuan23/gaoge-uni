@@ -15,6 +15,9 @@ export interface PrizeInfo {
   /** 抽奖失败原因描述 */
   drawResultError: string;
 
+  /** 扫码失败错误信息描述 */
+  msg?: string;
+
   /** 是否已兑奖 0-否 1-是 2-已逾期 */
   isExchanged: 0 | 1 | 2 | null;
 
@@ -62,6 +65,7 @@ export const defaultPrizeInfo: PrizeInfo = {
   drawResult: '',
   drawResultErrorCode: '',
   drawResultError: '',
+  msg: '',
   isExchanged: 0,
   scanTime: '',
   exchangeTime: '',
