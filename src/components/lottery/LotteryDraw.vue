@@ -1,3 +1,58 @@
+<script setup lang="ts">
+import { useTheme } from '@/composables'
+import { IMG_BASE_URL } from '@/constants'
+import { useAuthStore } from '@/store'
+
+const props = defineProps<{
+  loading?: boolean;
+  loadingText?: string;
+}>()
+
+const emit = defineEmits<{
+  close: any;
+  confirm: any;
+}>()
+
+const authStore = useAuthStore()
+
+const { themeCode } = useTheme()
+const { isLogin, isMember, loading: authLoading } = storeToRefs(authStore)
+
+const show = defineModel<boolean>({ required: true })
+
+const loading = computed(() => props.loading || false)
+const loadingText = computed(() => props.loadingText || '点击开奖')
+
+const btnStyle = reactive({
+  width: '540rpx',
+  height: '102rpx',
+})
+
+// 隐私协议相关
+const isAgree = ref(false)
+const showPrivacy = ref(false)
+
+// 点击登录
+const handleLogin = (e: any) => {
+  const phoneCode = e ? e.detail.code : ''
+  authStore.login(phoneCode, false)
+}
+
+// 同意用户协议
+const onAgree = () => {
+  isAgree.value = true
+}
+
+const handleClose = () => {
+  show.value = false
+  emit('close')
+}
+
+const handleConfirm = () => {
+  emit('confirm')
+}
+</script>
+
 <template>
   <u-popup
     :show="show"
@@ -70,58 +125,3 @@
   <!-- 隐私协议弹窗组件 -->
   <PrivacyPopup v-model="showPrivacy" @agree="onAgree" />
 </template>
-
-<script setup lang='ts'>
-import { useTheme } from '@/composables'
-import { IMG_BASE_URL } from '@/constants'
-import { useAuthStore } from '@/store'
-
-const props = defineProps<{
-  loading?: boolean;
-  loadingText?: string;
-}>()
-
-const emit = defineEmits<{
-  close: any;
-  confirm: any;
-}>()
-
-const authStore = useAuthStore()
-
-const { themeCode } = useTheme()
-const { isLogin, isMember, loading: authLoading } = storeToRefs(authStore)
-
-const show = defineModel<boolean>({ required: true })
-
-const loading = computed(() => props.loading || false)
-const loadingText = computed(() => props.loadingText || '点击开奖')
-
-const btnStyle = reactive({
-  width: '540rpx',
-  height: '102rpx',
-})
-
-// 隐私协议相关
-const isAgree = ref(false)
-const showPrivacy = ref(false)
-
-// 点击登录
-const handleLogin = (e: any) => {
-  const phoneCode = e ? e.detail.code : ''
-  authStore.login(phoneCode, false)
-}
-
-// 同意用户协议
-const onAgree = () => {
-  isAgree.value = true
-}
-
-const handleClose = () => {
-  show.value = false
-  emit('close')
-}
-
-const handleConfirm = () => {
-  emit('confirm')
-}
-</script>

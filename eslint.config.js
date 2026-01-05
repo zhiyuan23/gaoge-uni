@@ -17,7 +17,7 @@ export default antfu(
   {
     rules: {
       // vue顶级标签的顺序
-      'vue/block-order': ['error', { order: ['template', 'script', 'style'] }],
+      'vue/block-order': ['error', { order: ['script', 'template', 'style'] }],
       // 需要尾随逗号
       'comma-dangle': ['error', 'only-multiline'],
       // 允许console
@@ -32,6 +32,9 @@ export default antfu(
       'node/prefer-global/process': 'off',
       // 禁止未使用的捕获组
       'regexp/no-unused-capturing-group': 'off',
+      // 模版使用 define 语法
+      'vue/define-props-declaration': ['error', 'type-based'],
+      'vue/define-emits-declaration': ['error', 'type-based'],
       // 允许接口和类型别名中的成员之间使用三个分隔符
       '@stylistic/member-delimiter-style': ['error', {
         multiline: {

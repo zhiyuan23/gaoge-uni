@@ -1,3 +1,27 @@
+<script setup lang="ts">
+import { useAgreement } from '@/composables'
+
+const props = defineProps<{
+  labelColor?: 'black' | 'white';
+}>()
+
+const { openUserAgreement, openPrivacyPolicy } = useAgreement()
+
+const agree = defineModel<boolean>({ required: true })
+
+const checkboxValue = computed<string[]>(() => {
+  return agree.value ? ['1'] : []
+})
+
+const labelColorClass = computed(() => {
+  return props.labelColor === 'white' ? 'text-white' : 'text-black'
+})
+
+const handleChange = (val: string[]) => {
+  agree.value = val.includes('1')
+}
+</script>
+
 <template>
   <u-checkbox-group
     :model-value="checkboxValue"
@@ -28,27 +52,3 @@
     </view>
   </u-checkbox-group>
 </template>
-
-<script setup lang='ts'>
-import { useAgreement } from '@/composables'
-
-const props = defineProps<{
-  labelColor?: 'black' | 'white';
-}>()
-
-const { openUserAgreement, openPrivacyPolicy } = useAgreement()
-
-const agree = defineModel<boolean>({ required: true })
-
-const checkboxValue = computed<string[]>(() => {
-  return agree.value ? ['1'] : []
-})
-
-const labelColorClass = computed(() => {
-  return props.labelColor === 'white' ? 'text-white' : 'text-black'
-})
-
-const handleChange = (val: string[]) => {
-  agree.value = val.includes('1')
-}
-</script>

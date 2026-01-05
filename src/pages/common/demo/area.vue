@@ -1,21 +1,4 @@
-<template>
-  <view class="min-h-screen bg-background">
-    <view @click="open">
-      选择省市区
-    </view>
-
-    <RegionPicker
-      v-model:show="showPicker"
-      :level="2"
-      @confirm="onSelect"
-    />
-
-    <view>{{ selectedArea.province }}</view>
-    <view>{{ selectedArea.city }}</view>
-  </view>
-</template>
-
-<script setup lang='ts'>
+<script setup lang="ts">
 const showPicker = ref(false)
 const selectedArea = reactive({
   province: '',
@@ -32,3 +15,20 @@ const onSelect = (value: any) => {
   selectedArea.city = value[1].name
 }
 </script>
+
+<template>
+  <view class="min-h-screen bg-background">
+    <view @click="open">
+      选择省市区
+    </view>
+
+    <RegionPicker
+      v-model:show="showPicker"
+      :level="2"
+      @confirm="onSelect"
+    />
+
+    <view>{{ selectedArea.province }}</view>
+    <view>{{ selectedArea.city }}</view>
+  </view>
+</template>

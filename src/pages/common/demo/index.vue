@@ -1,3 +1,63 @@
+<script setup lang="ts">
+import { Dialog, Loading, storage, Toast } from '@/utils'
+
+const showPicker = ref(false)
+const selectedArea = ref<any>([])
+
+const open = () => {
+  showPicker.value = true
+}
+
+const onSelect = (value: any) => {
+  selectedArea.value = value
+}
+
+const getArea = () => {
+  const areaData = storage.get('areaData')
+  if (areaData) {
+    selectedArea.value = areaData
+  }
+}
+
+const setArea = () => {
+  const areaData = selectedArea.value
+  if (areaData.length === 0) {
+    Dialog('请先选择地址')
+    return
+  }
+  storage.set('areaData', areaData)
+}
+
+const removeArea = () => {
+  storage.remove('areaData')
+}
+
+const showLoading = () => {
+  Loading.show()
+  setTimeout(() => {
+    Loading.hide()
+  }, 1500)
+}
+
+const showToast = () => {
+  Toast('这条为轻提示')
+}
+
+const showModal = () => {
+  Dialog('这条为确认提示')
+}
+
+const showConfirm = async () => {
+  await Dialog('这条为确认提示', {
+    showCancel: true,
+  })
+
+  Toast('已确认', {
+    icon: 'success',
+  })
+}
+</script>
+
 <template>
   <!-- 省市区选择 使用 -->
   <view class="p-40" @click="open">
@@ -58,63 +118,3 @@
     </u-button>
   </view>
 </template>
-
-<script setup lang='ts'>
-import { Dialog, Loading, storage, Toast } from '@/utils'
-
-const showPicker = ref(false)
-const selectedArea = ref<any>([])
-
-const open = () => {
-  showPicker.value = true
-}
-
-const onSelect = (value: any) => {
-  selectedArea.value = value
-}
-
-const getArea = () => {
-  const areaData = storage.get('areaData')
-  if (areaData) {
-    selectedArea.value = areaData
-  }
-}
-
-const setArea = () => {
-  const areaData = selectedArea.value
-  if (areaData.length === 0) {
-    Dialog('请先选择地址')
-    return
-  }
-  storage.set('areaData', areaData)
-}
-
-const removeArea = () => {
-  storage.remove('areaData')
-}
-
-const showLoading = () => {
-  Loading.show()
-  setTimeout(() => {
-    Loading.hide()
-  }, 1500)
-}
-
-const showToast = () => {
-  Toast('这条为轻提示')
-}
-
-const showModal = () => {
-  Dialog('这条为确认提示')
-}
-
-const showConfirm = async () => {
-  await Dialog('这条为确认提示', {
-    showCancel: true,
-  })
-
-  Toast('已确认', {
-    icon: 'success',
-  })
-}
-</script>

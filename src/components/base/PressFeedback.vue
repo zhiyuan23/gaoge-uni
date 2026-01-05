@@ -1,21 +1,4 @@
-<template>
-  <view
-    class="relative inline-block"
-    @touchstart="handleTouchStart"
-    @touchend="handleTouchEnd"
-    @touchcancel="handleTouchEnd"
-  >
-    <view
-      :style="pressedStyle"
-      :class="{ 'press-active': pressed }"
-      class="press-btn origin-bottom transition-all"
-    >
-      <slot />
-    </view>
-  </view>
-</template>
-
-<script setup lang='ts'>
+<script setup lang="ts">
 const props = defineProps<{
   durationPress?: number; // 按下时长，默认 80ms
   durationRelease?: number; // 释放时长，默认 150ms
@@ -59,6 +42,23 @@ const pressedStyle = computed(() => {
   }
 })
 </script>
+
+<template>
+  <view
+    class="relative inline-block"
+    @touchstart="handleTouchStart"
+    @touchend="handleTouchEnd"
+    @touchcancel="handleTouchEnd"
+  >
+    <view
+      :style="pressedStyle"
+      :class="{ 'press-active': pressed }"
+      class="press-btn origin-bottom transition-all"
+    >
+      <slot />
+    </view>
+  </view>
+</template>
 
 <style scoped>
 .press-btn {

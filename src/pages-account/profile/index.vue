@@ -1,3 +1,70 @@
+<script setup lang="ts">
+import { uploadFile } from '@/api'
+import { useAgreement } from '@/composables'
+import { useAuthStore, useProfileStore } from '@/store'
+import { formatTime, reLaunch } from '@/utils'
+
+const { showSelector } = useAgreement()
+
+const profileStore = useProfileStore()
+const { userInfo } = storeToRefs(profileStore)
+
+const genderOptions = ['女', '男']
+
+// 生日选择器
+const showDatePicker = ref(false)
+const birthdayTimestamp = ref(Date.now())
+const minDate = new Date('1900-01-01').getTime()
+const maxDate = Date.now()
+
+// 修改头像
+const onChooseAvatar = async (e: any) => {
+  const { avatarUrl } = e.detail
+  if (!avatarUrl) return
+
+  const { previewURL } = await uploadFile({ filePath: avatarUrl })
+  await profileStore.updateProfile({ avatarUrl: previewURL })
+}
+
+// 修改昵称（失去焦点时保存）
+const onChangeNickname = async () => {
+  if (!userInfo.value.nickName.trim()) return
+
+  await profileStore.updateProfile({ nickName: userInfo.value.nickName })
+}
+
+// 修改性别
+const handleEditGender = async () => {
+  const { tapIndex } = await uni.showActionSheet({ itemList: genderOptions })
+
+  const genderName = genderOptions[tapIndex]
+  const gender = tapIndex === 0 ? 0 : 1
+
+  await profileStore.updateProfile({ gender, genderName })
+}
+
+// 打开生日选择器
+const handleEditBirthday = () => {
+  const birth = userInfo.value.birthDate
+  birthdayTimestamp.value = birth ? new Date(birth).getTime() : Date.now()
+  showDatePicker.value = true
+}
+
+// 确认生日
+const onConfirmBirthday = async ({ value }: any) => {
+  const birthDate = formatTime(value, { format: 'YYYY-MM-DD' })
+  await profileStore.updateProfile({ birthDate })
+  showDatePicker.value = false
+}
+
+// 退出登录
+const handleLogout = () => {
+  useAuthStore().clear()
+  useAuthStore().silentLogin()
+  reLaunch('/pages/home/index')
+}
+</script>
+
 <template>
   <view class="container page">
     <view class="w-full h-20" />
@@ -108,73 +175,6 @@
     </view>
   </view>
 </template>
-
-<script setup lang='ts'>
-import { uploadFile } from '@/api'
-import { useAgreement } from '@/composables'
-import { useAuthStore, useProfileStore } from '@/store'
-import { formatTime, reLaunch } from '@/utils'
-
-const { showSelector } = useAgreement()
-
-const profileStore = useProfileStore()
-const { userInfo } = storeToRefs(profileStore)
-
-const genderOptions = ['女', '男']
-
-// 生日选择器
-const showDatePicker = ref(false)
-const birthdayTimestamp = ref(Date.now())
-const minDate = new Date('1900-01-01').getTime()
-const maxDate = Date.now()
-
-// 修改头像
-const onChooseAvatar = async (e: any) => {
-  const { avatarUrl } = e.detail
-  if (!avatarUrl) return
-
-  const { previewURL } = await uploadFile({ filePath: avatarUrl })
-  await profileStore.updateProfile({ avatarUrl: previewURL })
-}
-
-// 修改昵称（失去焦点时保存）
-const onChangeNickname = async () => {
-  if (!userInfo.value.nickName.trim()) return
-
-  await profileStore.updateProfile({ nickName: userInfo.value.nickName })
-}
-
-// 修改性别
-const handleEditGender = async () => {
-  const { tapIndex } = await uni.showActionSheet({ itemList: genderOptions })
-
-  const genderName = genderOptions[tapIndex]
-  const gender = tapIndex === 0 ? 0 : 1
-
-  await profileStore.updateProfile({ gender, genderName })
-}
-
-// 打开生日选择器
-const handleEditBirthday = () => {
-  const birth = userInfo.value.birthDate
-  birthdayTimestamp.value = birth ? new Date(birth).getTime() : Date.now()
-  showDatePicker.value = true
-}
-
-// 确认生日
-const onConfirmBirthday = async ({ value }: any) => {
-  const birthDate = formatTime(value, { format: 'YYYY-MM-DD' })
-  await profileStore.updateProfile({ birthDate })
-  showDatePicker.value = false
-}
-
-// 退出登录
-const handleLogout = () => {
-  useAuthStore().clear()
-  useAuthStore().silentLogin()
-  reLaunch('/pages/home/index')
-}
-</script>
 
 <style scoped lang="scss">
 page {

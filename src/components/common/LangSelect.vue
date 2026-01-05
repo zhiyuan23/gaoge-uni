@@ -1,6 +1,58 @@
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+/**
+ * 1. 满足 'vue/define-props-declaration': ['error', 'type-based']
+ * 使用 TS 接口定义，而非对象定义
+ */
+interface Props {
+  size?: number;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  size: 40,
+})
+
+/**
+ * 2. 满足 'vue/define-emits-declaration': ['error', 'type-based']
+ */
+const emit = defineEmits<{
+  change: [lang: string];
+}>()
+
+const { locale, t } = useI18n()
+
+/**
+ * 3. 逻辑优化：langStyle 建议使用 computed，以保持响应式一致性
+ */
+const langStyle = computed(() => ({
+  fontSize: `${props.size}rpx`,
+}))
+
+const langOptions = computed(() => [
+  { label: t('locale.en'), value: 'en' },
+  { label: t('locale.zh-hans'), value: 'zh-Hans' },
+])
+
+const langIndex = computed(() => {
+  return langOptions.value.findIndex(item => item.value === locale.value)
+})
+
+/**
+ * 4. 类型增强：为小程序事件提供更准确的类型（如果使用了 UniApp 类型库）
+ */
+const handleLangChange = (event: any) => {
+  const index = event.detail.value
+  const lang = langOptions.value[index].value
+  locale.value = lang
+  uni.setLocale(lang)
+  emit('change', lang)
+}
+</script>
+
 <template>
   <view>
-    <picker
+    <Picker
       range-key="label"
       :range="langOptions"
       :value="langIndex"
@@ -9,43 +61,8 @@
       <slot>
         <view class="i-mdi-language" :style="langStyle" />
       </slot>
-    </picker>
+    </Picker>
   </view>
 </template>
-
-<script setup lang='ts'>
-import { useI18n } from 'vue-i18n'
-
-const props = defineProps({
-  size: {
-    type: Number,
-    default: 40,
-    required: false,
-  },
-})
-const emit = defineEmits(['change'])
-const { locale, t } = useI18n()
-const langStyle = {
-  fontSize: `${props.size}rpx`,
-}
-const langOptions = computed(() => {
-  return [
-    { label: t('locale.en'), value: 'en' },
-    { label: t('locale.zh-hans'), value: 'zh-Hans' },
-  ]
-})
-const langIndex = computed(() => {
-  return langOptions.value.findIndex((item) => {
-    return item.value === locale.value
-  })
-})
-
-const handleLangChange = (event: any) => {
-  const lang = langOptions.value[event.detail.value].value
-  locale.value = lang
-  uni.setLocale(lang)
-  emit('change', lang)
-}
-</script>
 
 <style lang="scss" scoped></style>

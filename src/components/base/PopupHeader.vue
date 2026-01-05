@@ -1,3 +1,14 @@
+<script setup lang="ts">
+import { useTheme } from '@/composables'
+import { IMG_BASE_URL } from '@/constants'
+
+const props = defineProps<{
+  title?: string;
+}>()
+
+const { themeCode, titleColor } = useTheme()
+</script>
+
 <template>
   <view class="relative h-118">
     <image
@@ -9,14 +20,3 @@
     </view>
   </view>
 </template>
-
-<script setup lang='ts'>
-import { useTheme } from '@/composables'
-import { IMG_BASE_URL } from '@/constants'
-
-const props = defineProps<{
-  title?: string;
-}>()
-
-const { themeCode, titleColor } = useTheme()
-</script>

@@ -1,12 +1,4 @@
-<template>
-  <view>
-    <SeriesZBQE v-if="themeCode === 'zbqr'" />
-    <SeriesZWCS v-if="themeCode === 'zwcs'" />
-    <SeriesML v-if="themeCode === 'ml'" />
-  </view>
-</template>
-
-<script setup lang='ts'>
+<script setup lang="ts">
 import { scanByDetail } from '@/api'
 import { useLocation } from '@/composables'
 import SeriesML from '@/pages/series/ml/index.vue'
@@ -91,3 +83,11 @@ const handleWeixinScan = async () => {
 provide('wxQrCode', wxQrCode)
 provide('logId', logId)
 </script>
+
+<template>
+  <view>
+    <SeriesZBQE v-if="themeCode === 'zbqr'" />
+    <SeriesZWCS v-if="themeCode === 'zwcs'" />
+    <SeriesML v-if="themeCode === 'ml'" />
+  </view>
+</template>

@@ -1,3 +1,15 @@
+<script lang='ts' setup>
+import { IMG_BASE_URL } from '@/constants'
+import { HOME_PATH } from '@/router'
+
+const handleBack = () => {
+  uni.$u.route({
+    type: 'reLaunch',
+    url: HOME_PATH,
+  })
+}
+</script>
+
 <template>
   <div class="h-screen flex-col-center">
     <u-navbar @left-click="handleBack" />
@@ -10,15 +22,3 @@
     />
   </div>
 </template>
-
-<script lang='ts' setup>
-import { IMG_BASE_URL } from '@/constants'
-import { HOME_PATH } from '@/router'
-
-const handleBack = () => {
-  uni.$u.route({
-    type: 'reLaunch',
-    url: HOME_PATH,
-  })
-}
-</script>

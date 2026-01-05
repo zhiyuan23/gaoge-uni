@@ -1,114 +1,3 @@
-<template>
-  <view class="fixed z-9 w-100vw flex-center-center bg-white h-104 border-b-1-solid-#e6e6e6 border-t-1-solid-#e6e6e6">
-    <SearchBar
-      v-model="searchText"
-      :city-name="selectedRegion?.city?.name || '请选择'"
-      :default-area="[
-        selectedRegion?.province?.code,
-        selectedRegion?.city?.code,
-      ]"
-      placeholder="输入兑奖点名称或地址搜索"
-      @search="onSearch"
-      @region-confirm="onRegionConfirm"
-    />
-  </view>
-
-  <view class="fixed flex flex-col overflow-hidden inset-0">
-    <!-- 地图区域（可拖拽调整高度） -->
-    <view
-      class="relative flex-shrink-0 transition-all duration-300"
-      :style="{ height: `${mapHeight}px` }"
-    >
-      <map
-        class="h-full w-full"
-        :latitude="center.lat"
-        :longitude="center.lng"
-        :scale="15"
-        :markers="markers"
-        show-location
-        @markertap="onMarkerTap"
-      />
-
-      <!-- 回到当前位置按钮 -->
-      <view
-        class="absolute z-20 size-48 flex-center rounded-full bg-white shadow-lg right-16 bottom-80"
-        @click.stop="reLocate"
-      >
-        <u-icon name="map" size="32" color="#07c160" />
-      </view>
-    </view>
-
-    <!-- 拖拽把手 -->
-    <PopupHeader
-      title="为您找到附近最近的兑奖点"
-      @touchstart.stop="onTouchStart"
-      @touchmove.stop.prevent="onTouchMove"
-      @touchend.stop="onTouchEnd"
-    />
-
-    <!-- 门店列表 -->
-    <scroll-view
-      scroll-y
-      class="flex-1 bg-white"
-      :style="{ height: `calc(100vh - ${mapHeight}px - 48px)` }"
-      @scrolltolower="onReachBottom"
-    >
-      <view class="bg-white pb-50">
-        <view
-          v-for="store in shopList"
-          :key="store.hotPointID"
-          class="flex-center bg-white mx-25 h-184 border-b-1-solid-#e0e0e0 last:border-b-0"
-          :class="{ 'bg-#07c160': currentStoreId === store.hotPointID }"
-          @click="selectStore(store)"
-        >
-          <!-- 门店图片 -->
-          <image
-            :src="store.cover || `/pages-reward/static/images/shop/img-store-${themeCode}.png`"
-            class="size-144 flex-shrink-0 mr-16 -ml-5"
-          />
-          <view class="flex-1">
-            <!-- 门店信息 -->
-            <view class="flex-center">
-              <view class="font-bold mt-4">
-                {{ store.name }}
-              </view>
-              <view
-                class="u-press flex-center-center flex-shrink-0 rounded-20 ml-10 w-130 h-40 text-20 border-2-solid-#FFF"
-                :style="{ color: shopBtnColor, borderColor: shopBtnColor }"
-                @click="goFeedback(store.hotPointID)"
-              >
-                我要反馈
-              </view>
-            </view>
-
-            <view class="text-secondary mt-5 leading-40 text-22">
-              距您{{ formatDistance(store.distance) }}
-            </view>
-            <view class="text-secondary leading-40 text-22">
-              {{ store.fullAddress }}
-            </view>
-          </view>
-
-          <!-- 导航按钮 -->
-          <view class="flex-col-center-center px-20" @click="navigateToStore(store)">
-            <image :src="`/pages-reward/static/images/shop/ic-nav-${themeCode}.png`" class="size-48" />
-            <view class="leading-48 text-22">
-              去导航
-            </view>
-          </view>
-        </view>
-
-        <view v-if="!initialized || loading" class="text-center text-#999 py-40">
-          加载中...
-        </view>
-        <view v-else-if="!loading && shopList.length === 0" class="text-center text-#999 py-20">
-          附近暂无门店
-        </view>
-      </view>
-    </scroll-view>
-  </view>
-</template>
-
 <script setup lang="ts">
 import { getShopList, validFeedback } from '@/api'
 import { useLocation, useTheme } from '@/composables'
@@ -314,3 +203,114 @@ const onTouchEnd = () => {
   }
 }
 </script>
+
+<template>
+  <view class="fixed z-9 w-100vw flex-center-center bg-white h-104 border-b-1-solid-#e6e6e6 border-t-1-solid-#e6e6e6">
+    <SearchBar
+      v-model="searchText"
+      :city-name="selectedRegion?.city?.name || '请选择'"
+      :default-area="[
+        selectedRegion?.province?.code,
+        selectedRegion?.city?.code,
+      ]"
+      placeholder="输入兑奖点名称或地址搜索"
+      @search="onSearch"
+      @region-confirm="onRegionConfirm"
+    />
+  </view>
+
+  <view class="fixed flex flex-col overflow-hidden inset-0">
+    <!-- 地图区域（可拖拽调整高度） -->
+    <view
+      class="relative flex-shrink-0 transition-all duration-300"
+      :style="{ height: `${mapHeight}px` }"
+    >
+      <map
+        class="h-full w-full"
+        :latitude="center.lat"
+        :longitude="center.lng"
+        :scale="15"
+        :markers="markers"
+        show-location
+        @markertap="onMarkerTap"
+      />
+
+      <!-- 回到当前位置按钮 -->
+      <view
+        class="absolute z-20 size-48 flex-center rounded-full bg-white shadow-lg right-16 bottom-80"
+        @click.stop="reLocate"
+      >
+        <u-icon name="map" size="32" color="#07c160" />
+      </view>
+    </view>
+
+    <!-- 拖拽把手 -->
+    <PopupHeader
+      title="为您找到附近最近的兑奖点"
+      @touchstart.stop="onTouchStart"
+      @touchmove.stop.prevent="onTouchMove"
+      @touchend.stop="onTouchEnd"
+    />
+
+    <!-- 门店列表 -->
+    <scroll-view
+      scroll-y
+      class="flex-1 bg-white"
+      :style="{ height: `calc(100vh - ${mapHeight}px - 48px)` }"
+      @scrolltolower="onReachBottom"
+    >
+      <view class="bg-white pb-50">
+        <view
+          v-for="store in shopList"
+          :key="store.hotPointID"
+          class="flex-center bg-white mx-25 h-184 border-b-1-solid-#e0e0e0 last:border-b-0"
+          :class="{ 'bg-#07c160': currentStoreId === store.hotPointID }"
+          @click="selectStore(store)"
+        >
+          <!-- 门店图片 -->
+          <image
+            :src="store.cover || `/pages-reward/static/images/shop/img-store-${themeCode}.png`"
+            class="size-144 flex-shrink-0 mr-16 -ml-5"
+          />
+          <view class="flex-1">
+            <!-- 门店信息 -->
+            <view class="flex-center">
+              <view class="font-bold mt-4">
+                {{ store.name }}
+              </view>
+              <view
+                class="u-press flex-center-center flex-shrink-0 rounded-20 ml-10 w-130 h-40 text-20 border-2-solid-#FFF"
+                :style="{ color: shopBtnColor, borderColor: shopBtnColor }"
+                @click="goFeedback(store.hotPointID)"
+              >
+                我要反馈
+              </view>
+            </view>
+
+            <view class="text-secondary mt-5 leading-40 text-22">
+              距您{{ formatDistance(store.distance) }}
+            </view>
+            <view class="text-secondary leading-40 text-22">
+              {{ store.fullAddress }}
+            </view>
+          </view>
+
+          <!-- 导航按钮 -->
+          <view class="flex-col-center-center px-20" @click="navigateToStore(store)">
+            <image :src="`/pages-reward/static/images/shop/ic-nav-${themeCode}.png`" class="size-48" />
+            <view class="leading-48 text-22">
+              去导航
+            </view>
+          </view>
+        </view>
+
+        <view v-if="!initialized || loading" class="text-center text-#999 py-40">
+          加载中...
+        </view>
+        <view v-else-if="!loading && shopList.length === 0" class="text-center text-#999 py-20">
+          附近暂无门店
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</template>

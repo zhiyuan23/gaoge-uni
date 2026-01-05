@@ -1,13 +1,3 @@
-<template>
-  <canvas
-    id="sharePosterCanvas"
-    canvas-id="sharePosterCanvas"
-    class="fixed opacity-0"
-    style=" top: -9999px;left: -9999px;"
-    :style="{ width: `${canvasWidth}px`, height: `${canvasHeight}px` }"
-  />
-</template>
-
 <script setup lang="ts">
 import { Loading, Toast } from '@/utils'
 
@@ -135,3 +125,13 @@ const generateSharePoster = async () => {
 
 defineExpose({ generateSharePoster })
 </script>
+
+<template>
+  <canvas
+    id="sharePosterCanvas"
+    canvas-id="sharePosterCanvas"
+    class="fixed opacity-0"
+    style=" top: -9999px;left: -9999px;"
+    :style="{ width: `${canvasWidth}px`, height: `${canvasHeight}px` }"
+  />
+</template>

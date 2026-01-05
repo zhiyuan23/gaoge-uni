@@ -1,3 +1,58 @@
+<script setup lang="ts">
+import type { SeriesKey } from '@/types'
+import { IMG_BASE_URL } from '@/constants'
+import { useAuthStore, useProfileStore, useSeriesStore } from '@/store'
+import { navigateTo } from '@/utils'
+
+const STATUS_MAP = {
+  not_started: { name: '未开始', color: '#864227' },
+  in_progress: { name: '进行中', color: '#8BC200' },
+  end: { name: '已结束', color: '#363636' },
+}
+
+const authStore = useAuthStore()
+const profileStore = useProfileStore()
+const seriesStore = useSeriesStore()
+
+const { isLogin } = storeToRefs(authStore)
+const { userInfo } = storeToRefs(profileStore)
+const { seriesList } = storeToRefs(seriesStore)
+
+// 获取主题列表
+const getSeriesList = () => {
+  seriesStore.fetchSeriesList()
+}
+
+// 获取用户信息
+const getProfile = () => {
+  if (isLogin.value && !userInfo.value.userName) {
+    profileStore.fetchProfile()
+  }
+}
+
+// 查看个人信息
+const goUserPage = () => {
+  const url = isLogin.value
+    ? '/pages-account/profile/index'
+    : '/pages-account/login/index'
+
+  navigateTo(url)
+}
+
+// 跳转系列详情页
+const goDetail = (code: SeriesKey) => {
+  seriesStore.setThemeCode(code)
+  seriesStore.setSeriesDetail(code)
+
+  navigateTo(`/pages/series/${code}/index`)
+}
+
+onLoad(async () => {
+  getSeriesList()
+  getProfile()
+})
+</script>
+
 <template>
   <!-- 顶部区域 -->
   <view class="relative w-100vw mb-96 pt-80 h-500">
@@ -80,58 +135,3 @@
   </PressFeedback>
   <view class="h-1" />
 </template>
-
-<script setup lang='ts'>
-import type { SeriesKey } from '@/types'
-import { IMG_BASE_URL } from '@/constants'
-import { useAuthStore, useProfileStore, useSeriesStore } from '@/store'
-import { navigateTo } from '@/utils'
-
-const STATUS_MAP = {
-  not_started: { name: '未开始', color: '#864227' },
-  in_progress: { name: '进行中', color: '#8BC200' },
-  end: { name: '已结束', color: '#363636' },
-}
-
-const authStore = useAuthStore()
-const profileStore = useProfileStore()
-const seriesStore = useSeriesStore()
-
-const { isLogin } = storeToRefs(authStore)
-const { userInfo } = storeToRefs(profileStore)
-const { seriesList } = storeToRefs(seriesStore)
-
-// 获取主题列表
-const getSeriesList = () => {
-  seriesStore.fetchSeriesList()
-}
-
-// 获取用户信息
-const getProfile = () => {
-  if (isLogin.value && !userInfo.value.userName) {
-    profileStore.fetchProfile()
-  }
-}
-
-// 查看个人信息
-const goUserPage = () => {
-  const url = isLogin.value
-    ? '/pages-account/profile/index'
-    : '/pages-account/login/index'
-
-  navigateTo(url)
-}
-
-// 跳转系列详情页
-const goDetail = (code: SeriesKey) => {
-  seriesStore.setThemeCode(code)
-  seriesStore.setSeriesDetail(code)
-
-  navigateTo(`/pages/series/${code}/index`)
-}
-
-onLoad(async () => {
-  getSeriesList()
-  getProfile()
-})
-</script>

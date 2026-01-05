@@ -1,8 +1,4 @@
-<template>
-  <web-view class="h-full" :src="url" />
-</template>
-
-<script setup lang='ts'>
+<script setup lang="ts">
 const url = ref<string>('')
 
 const setTitle = (title = '网页') => {
@@ -17,3 +13,7 @@ onLoad((options: any) => {
   setTitle(options.title)
 })
 </script>
+
+<template>
+  <web-view class="h-full" :src="url" />
+</template>

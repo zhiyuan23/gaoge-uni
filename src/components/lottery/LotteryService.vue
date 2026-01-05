@@ -1,3 +1,21 @@
+<script setup lang="ts">
+import { useTheme } from '@/composables'
+
+const { color, phoneColor } = useTheme()
+
+const show = defineModel<boolean>({ required: true })
+
+const handleCall = (phoneNumber: string) => {
+  uni.makePhoneCall({
+    phoneNumber,
+  })
+}
+
+const handleClose = () => {
+  show.value = false
+}
+</script>
+
 <template>
   <u-popup
     :show="show"
@@ -46,21 +64,3 @@
     </view>
   </u-popup>
 </template>
-
-<script setup lang='ts'>
-import { useTheme } from '@/composables'
-
-const { color, phoneColor } = useTheme()
-
-const show = defineModel<boolean>({ required: true })
-
-const handleCall = (phoneNumber: string) => {
-  uni.makePhoneCall({
-    phoneNumber,
-  })
-}
-
-const handleClose = () => {
-  show.value = false
-}
-</script>

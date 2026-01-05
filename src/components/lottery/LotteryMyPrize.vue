@@ -1,3 +1,78 @@
+<script setup lang="ts">
+import { useTheme } from '@/composables'
+import { IMG_BASE_URL } from '@/constants'
+
+const props = defineProps<{
+  data?: Array<any>;
+  // 分页状态，由父组件控制
+  loading?: boolean; // 是否正在加载下一页
+  hasMore?: boolean; // 是否还有更多数据
+}>()
+
+const emit = defineEmits<{
+  close: [];
+  action: [item: any, type: 'nearbyStore' | 'fillInfo' | 'withdraw'];
+  loadmore: [];
+}>()
+
+const { color } = useTheme()
+const show = defineModel<boolean>({ required: true })
+
+// 关闭弹窗
+const handleClose = () => {
+  show.value = false
+  emit('close')
+}
+
+// 操作按钮
+const handleAction = (type: 'nearbyStore' | 'fillInfo' | 'withdraw', id: any) => {
+  emit('action', type, id)
+}
+
+// 状态颜色
+const getStatusColor = (status: string) => {
+  switch (status) {
+    case 'to_be_exchange': return color
+    case 'exchanged': return '#000'
+    case 'expired': return '#999'
+    default: return '#666'
+  }
+}
+
+// 触发加载更多
+const loadMore = () => {
+  if (!props.loading && props.hasMore) {
+    emit('loadmore')
+  }
+}
+
+// 手势下滑关闭
+const startY = ref(0)
+const currentY = ref(0)
+const deltaY = ref(0)
+const threshold = 100 // 下滑阈值
+
+const handleTouchStart = (e: TouchEvent) => {
+  startY.value = e.touches[0].pageY
+}
+
+const handleTouchMove = (e: TouchEvent) => {
+  currentY.value = e.touches[0].pageY
+  deltaY.value = currentY.value - startY.value
+  if (deltaY.value > 0) {
+    // 可以添加视觉反馈，如移动弹窗位置
+    // 例如：弹窗样式 transform: translateY(${deltaY.value}px)
+  }
+}
+
+const handleTouchEnd = () => {
+  if (deltaY.value > threshold) {
+    handleClose()
+  }
+  deltaY.value = 0
+}
+</script>
+
 <template>
   <u-popup
     :show="show"
@@ -130,81 +205,6 @@
     </view>
   </u-popup>
 </template>
-
-<script setup lang='ts'>
-import { useTheme } from '@/composables'
-import { IMG_BASE_URL } from '@/constants'
-
-const props = defineProps<{
-  data?: Array<any>;
-  // 分页状态，由父组件控制
-  loading?: boolean; // 是否正在加载下一页
-  hasMore?: boolean; // 是否还有更多数据
-}>()
-
-const emit = defineEmits<{
-  close: [];
-  action: [item: any, type: 'nearbyStore' | 'fillInfo' | 'withdraw'];
-  loadmore: [];
-}>()
-
-const { color } = useTheme()
-const show = defineModel<boolean>({ required: true })
-
-// 关闭弹窗
-const handleClose = () => {
-  show.value = false
-  emit('close')
-}
-
-// 操作按钮
-const handleAction = (type: 'nearbyStore' | 'fillInfo' | 'withdraw', id: any) => {
-  emit('action', type, id)
-}
-
-// 状态颜色
-const getStatusColor = (status: string) => {
-  switch (status) {
-    case 'to_be_exchange': return color
-    case 'exchanged': return '#000'
-    case 'expired': return '#999'
-    default: return '#666'
-  }
-}
-
-// 触发加载更多
-const loadMore = () => {
-  if (!props.loading && props.hasMore) {
-    emit('loadmore')
-  }
-}
-
-// 手势下滑关闭
-const startY = ref(0)
-const currentY = ref(0)
-const deltaY = ref(0)
-const threshold = 100 // 下滑阈值
-
-const handleTouchStart = (e: TouchEvent) => {
-  startY.value = e.touches[0].pageY
-}
-
-const handleTouchMove = (e: TouchEvent) => {
-  currentY.value = e.touches[0].pageY
-  deltaY.value = currentY.value - startY.value
-  if (deltaY.value > 0) {
-    // 可以添加视觉反馈，如移动弹窗位置
-    // 例如：弹窗样式 transform: translateY(${deltaY.value}px)
-  }
-}
-
-const handleTouchEnd = () => {
-  if (deltaY.value > threshold) {
-    handleClose()
-  }
-  deltaY.value = 0
-}
-</script>
 
 <style scoped>
 .btn {

@@ -1,122 +1,4 @@
-<template>
-  <view class="page theme relative overflow-hidden" :style="{ background: currentTheme.bgColor }">
-    <!-- 背景图 -->
-    <image
-      class="absolute w-100vw -mt-165"
-      :src="`${IMG_BASE_URL}/lottery/detail-${themeCode}.png`"
-      mode="widthFix"
-    />
-
-    <view v-if="bingoList?.length !== 0" class="fixed top-134 right-100">
-      <LotteryWinner :list="bingoList" />
-    </view>
-
-    <view class="absolute text-center text-white top-40 right-10 leading-30">
-      <view class="flex-center-end w-100" @click="showRule = true">
-        <view class="u-press vertical-btn">
-          活动规则
-        </view>
-      </view>
-      <view class="h-28" />
-      <view class="flex-center-end w-100" @click="showService = true">
-        <view class="u-press vertical-btn">
-          联系客服
-        </view>
-      </view>
-    </view>
-
-    <!-- 主体区域 -->
-    <view class="relative z-9 w-100vw flex-col-center-center font-bold mt-1090 pb-50">
-      <view class="h-150">
-        <!-- 扫一扫按钮 -->
-        <MainButton
-          v-if="seriesDetail.status === 'in_progress'"
-          label="点击扫一扫"
-          icon="scan"
-          :loading="scanLoading"
-          @click="onScan"
-        />
-
-        <!-- 活动为开始/已结束 -->
-        <view v-else class="text-center">
-          <view class="color-[var(--color)] leading-100 text-46">
-            <text v-if="seriesDetail.status === 'not_started'">
-              活动未开始，敬请期待
-            </text>
-            <text v-if="seriesDetail.status === 'end'">
-              活动已结束，感谢参与
-            </text>
-          </view>
-          <view class="color-black font-normal leading-22 text-22">
-            {{ beginDate }}-{{ endDate }}
-          </view>
-        </view>
-      </view>
-
-      <view class="relative flex-center-between w-540 text-30">
-        <view class="u-press button w-240 h-70" @click="openMyPrize">
-          <u-icon name="gift" :color="currentTheme.color" size="22" />
-          我的奖品
-        </view>
-        <view class="u-press button w-240 h-70" @click="goExchange">
-          <u-icon name="map" :color="currentTheme.color" size="22" class="pr-10" />
-          兑奖点
-        </view>
-        <view v-if="!isLogin && !isMember" class="absolute w-full flex-center-between opacity-0 h-70">
-          <u-button open-type="getPhoneNumber" @getphonenumber="openMyPrize" />
-          <u-button open-type="getPhoneNumber" @getphonenumber="goExchange" />
-        </view>
-        <view v-if="authLoading" class="absolute w-full h-70" />
-      </view>
-    </view>
-
-    <!-- 活动规则 -->
-    <LotteryRule
-      v-model="showRule"
-      :rule-info="seriesDetail.ruleDescription"
-      :end-date="endTime"
-    />
-
-    <!-- 客服电话 -->
-    <LotteryService v-model="showService" />
-
-    <!-- 我的奖品 -->
-    <LotteryMyPrize
-      v-model="showMyPrize"
-      :data="prizeList"
-      :loading="prizeLoading"
-      :has-more="prizeHasMore"
-      @loadmore="handleLoadMore"
-      @action="handlePrizeAction"
-    />
-
-    <!-- 开奖弹窗 -->
-    <LotteryDraw
-      v-model="showDraw"
-      :loading="drawLoading"
-      loading-text="开奖中..."
-      @confirm="drawLottery"
-    />
-
-    <!-- 扫码结果弹窗 -->
-    <LotteryResult
-      v-model="showResult"
-      :prize-info="drawResultInfo"
-      @confirm="handlePrizeAction"
-    />
-
-    <!-- 提现成功分享海报 -->
-    <LotteryPoster
-      ref="posterGenerator"
-      :bg-img="seriesDetail.poster"
-      :avatar="userInfo.avatarUrl"
-      :nickname="userInfo.nickName"
-      :money="drawResultInfo.bonus || ''"
-    />
-  </view>
-</template>
-
-<script setup lang='ts'>
+<script setup lang="ts">
 import type { LocationResult } from '@/composables/useLocation'
 import type { PrizeInfo, SeriesKey } from '@/types'
 import { cashWithdraw, executeLottery, getBingoList, getMyPrizeList, scanByHome } from '@/api'
@@ -446,6 +328,124 @@ defineExpose({
   fetchMyPrizeList,
 })
 </script>
+
+<template>
+  <view class="page theme relative overflow-hidden" :style="{ background: currentTheme.bgColor }">
+    <!-- 背景图 -->
+    <image
+      class="absolute w-100vw -mt-165"
+      :src="`${IMG_BASE_URL}/lottery/detail-${themeCode}.png`"
+      mode="widthFix"
+    />
+
+    <view v-if="bingoList?.length !== 0" class="fixed top-134 right-100">
+      <LotteryWinner :list="bingoList" />
+    </view>
+
+    <view class="absolute text-center text-white top-40 right-10 leading-30">
+      <view class="flex-center-end w-100" @click="showRule = true">
+        <view class="u-press vertical-btn">
+          活动规则
+        </view>
+      </view>
+      <view class="h-28" />
+      <view class="flex-center-end w-100" @click="showService = true">
+        <view class="u-press vertical-btn">
+          联系客服
+        </view>
+      </view>
+    </view>
+
+    <!-- 主体区域 -->
+    <view class="relative z-9 w-100vw flex-col-center-center font-bold mt-1090 pb-50">
+      <view class="h-150">
+        <!-- 扫一扫按钮 -->
+        <MainButton
+          v-if="seriesDetail.status === 'in_progress'"
+          label="点击扫一扫"
+          icon="scan"
+          :loading="scanLoading"
+          @click="onScan"
+        />
+
+        <!-- 活动为开始/已结束 -->
+        <view v-else class="text-center">
+          <view class="color-[var(--color)] leading-100 text-46">
+            <text v-if="seriesDetail.status === 'not_started'">
+              活动未开始，敬请期待
+            </text>
+            <text v-if="seriesDetail.status === 'end'">
+              活动已结束，感谢参与
+            </text>
+          </view>
+          <view class="color-black font-normal leading-22 text-22">
+            {{ beginDate }}-{{ endDate }}
+          </view>
+        </view>
+      </view>
+
+      <view class="relative flex-center-between w-540 text-30">
+        <view class="u-press button w-240 h-70" @click="openMyPrize">
+          <u-icon name="gift" :color="currentTheme.color" size="22" />
+          我的奖品
+        </view>
+        <view class="u-press button w-240 h-70" @click="goExchange">
+          <u-icon name="map" :color="currentTheme.color" size="22" class="pr-10" />
+          兑奖点
+        </view>
+        <view v-if="!isLogin && !isMember" class="absolute w-full flex-center-between opacity-0 h-70">
+          <u-button open-type="getPhoneNumber" @getphonenumber="openMyPrize" />
+          <u-button open-type="getPhoneNumber" @getphonenumber="goExchange" />
+        </view>
+        <view v-if="authLoading" class="absolute w-full h-70" />
+      </view>
+    </view>
+
+    <!-- 活动规则 -->
+    <LotteryRule
+      v-model="showRule"
+      :rule-info="seriesDetail.ruleDescription"
+      :end-date="endTime"
+    />
+
+    <!-- 客服电话 -->
+    <LotteryService v-model="showService" />
+
+    <!-- 我的奖品 -->
+    <LotteryMyPrize
+      v-model="showMyPrize"
+      :data="prizeList"
+      :loading="prizeLoading"
+      :has-more="prizeHasMore"
+      @loadmore="handleLoadMore"
+      @action="handlePrizeAction"
+    />
+
+    <!-- 开奖弹窗 -->
+    <LotteryDraw
+      v-model="showDraw"
+      :loading="drawLoading"
+      loading-text="开奖中..."
+      @confirm="drawLottery"
+    />
+
+    <!-- 扫码结果弹窗 -->
+    <LotteryResult
+      v-model="showResult"
+      :prize-info="drawResultInfo"
+      @confirm="handlePrizeAction"
+    />
+
+    <!-- 提现成功分享海报 -->
+    <LotteryPoster
+      ref="posterGenerator"
+      :bg-img="seriesDetail.poster"
+      :avatar="userInfo.avatarUrl"
+      :nickname="userInfo.nickName"
+      :money="drawResultInfo.bonus || ''"
+    />
+  </view>
+</template>
 
 <style scoped>
 .theme {

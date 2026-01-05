@@ -1,3 +1,31 @@
+<script setup lang="ts">
+import { useAgreement } from '@/composables'
+
+const emit = defineEmits<{
+  agree: [];
+  disagree: [];
+}>()
+
+const { openUserAgreement, openPrivacyPolicy } = useAgreement()
+
+const show = defineModel<boolean>({
+  default: false,
+  required: false,
+})
+
+// 同意并关闭
+const agree = () => {
+  emit('agree')
+  show.value = false
+}
+
+// 拒绝并关闭
+const disagree = () => {
+  emit('disagree')
+  show.value = false
+}
+</script>
+
 <template>
   <u-popup
     :show="show"
@@ -49,31 +77,3 @@
     </view>
   </u-popup>
 </template>
-
-<script setup lang='ts'>
-import { useAgreement } from '@/composables'
-
-const emit = defineEmits<{
-  agree: [];
-  disagree: [];
-}>()
-
-const { openUserAgreement, openPrivacyPolicy } = useAgreement()
-
-const show = defineModel<boolean>({
-  default: false,
-  required: false,
-})
-
-// 同意并关闭
-const agree = () => {
-  emit('agree')
-  show.value = false
-}
-
-// 拒绝并关闭
-const disagree = () => {
-  emit('disagree')
-  show.value = false
-}
-</script>

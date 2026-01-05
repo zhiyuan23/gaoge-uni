@@ -1,3 +1,36 @@
+<script lang='ts' setup>
+import { useAuthStore } from '@/store'
+
+const authStore = useAuthStore()
+
+const { isMember, loading } = storeToRefs(authStore)
+
+// 隐私协议相关
+const isAgree = ref(false)
+const showPrivacy = ref(false)
+
+// 提交按钮相关
+const btnStyle = reactive({
+  fontSize: '32rpx',
+  height: '80rpx',
+})
+
+// 点击登录
+const handleLogin = (e: any) => {
+  const phoneCode = e ? e.detail.code : ''
+  authStore.login(phoneCode, true)
+}
+
+// 同意用户协议
+const onAgree = () => {
+  isAgree.value = true
+
+  // if (isMember.value) {
+  //   authStore.login()
+  // }
+}
+</script>
+
 <template>
   <!-- 背景图 -->
   <view class="page relative bg-bgSecondary w-750">
@@ -58,39 +91,6 @@
   <!-- 隐私协议弹窗组件 -->
   <PrivacyPopup v-model="showPrivacy" @agree="onAgree" />
 </template>
-
-<script lang='ts' setup>
-import { useAuthStore } from '@/store'
-
-const authStore = useAuthStore()
-
-const { isMember, loading } = storeToRefs(authStore)
-
-// 隐私协议相关
-const isAgree = ref(false)
-const showPrivacy = ref(false)
-
-// 提交按钮相关
-const btnStyle = reactive({
-  fontSize: '32rpx',
-  height: '80rpx',
-})
-
-// 点击登录
-const handleLogin = (e: any) => {
-  const phoneCode = e ? e.detail.code : ''
-  authStore.login(phoneCode, true)
-}
-
-// 同意用户协议
-const onAgree = () => {
-  isAgree.value = true
-
-  // if (isMember.value) {
-  //   authStore.login()
-  // }
-}
-</script>
 
 <style scpoed>
 :deep(.u-checkbox__label-wrap text) {

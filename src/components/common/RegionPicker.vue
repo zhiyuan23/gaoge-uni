@@ -1,17 +1,3 @@
-<template>
-  <u-picker
-    ref="pickerRef"
-    :show="show"
-    :columns="columns"
-    key-name="name"
-    :close-on-click-overlay="true"
-    @confirm="onConfirm"
-    @cancel="onCancel"
-    @close="onCancel"
-    @change="changeHandler"
-  />
-</template>
-
 <script setup>
 import { areaList } from '@vant/area-data'
 
@@ -153,3 +139,17 @@ watch(() => props.show, (val) => {
   }
 })
 </script>
+
+<template>
+  <u-picker
+    ref="pickerRef"
+    :show="show"
+    :columns="columns"
+    key-name="name"
+    :close-on-click-overlay="true"
+    @confirm="onConfirm"
+    @cancel="onCancel"
+    @close="onCancel"
+    @change="changeHandler"
+  />
+</template>

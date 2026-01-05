@@ -1,24 +1,4 @@
-<template>
-  <view
-    v-if="currentWinner"
-    class="pointer-events-none z-50 flex justify-center top-24 right-0 left-0"
-  >
-    <view
-      v-if="shouldRender"
-      :key="currentWinner.id"
-      class="animate-marquee mx-auto inline-flex items-center rounded-full bg-white/60 text-black shadow-sm backdrop-blur-sm px-24 h-40 text-22"
-    >
-      <text class="truncate">
-        恭喜用户{{ currentWinner.userName || '神秘用户' }}，抽中
-        <text>
-          {{ currentWinner.prizeName || '神秘大奖' }}
-        </text>！
-      </text>
-    </view>
-  </view>
-</template>
-
-<script setup lang='ts'>
+<script setup lang="ts">
 import { onHide, onShow } from '@dcloudio/uni-app'
 import { onUnmounted, ref, watch } from 'vue'
 
@@ -98,6 +78,26 @@ onShow(() => {
   }
 })
 </script>
+
+<template>
+  <view
+    v-if="currentWinner"
+    class="pointer-events-none z-50 flex justify-center top-24 right-0 left-0"
+  >
+    <view
+      v-if="shouldRender"
+      :key="currentWinner.id"
+      class="animate-marquee mx-auto inline-flex items-center rounded-full bg-white/60 text-black shadow-sm backdrop-blur-sm px-24 h-40 text-22"
+    >
+      <text class="truncate">
+        恭喜用户{{ currentWinner.userName || '神秘用户' }}，抽中
+        <text>
+          {{ currentWinner.prizeName || '神秘大奖' }}
+        </text>！
+      </text>
+    </view>
+  </view>
+</template>
 
 <style scoped>
 @keyframes marquee {

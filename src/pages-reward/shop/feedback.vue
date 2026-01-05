@@ -1,3 +1,90 @@
+<script setup lang="ts">
+import { submitFeedback } from '@/api'
+import { useTheme } from '@/composables'
+import { delay, navigateBack, Toast } from '@/utils'
+
+const { themeCode, shopBgColor, color } = useTheme()
+
+const loading = ref(false)
+const form = reactive({
+  storeId: '',
+  feedbackType: '', // 存储选中的 code
+  problemDescription: '',
+  isRevisitNeeded: 0, // 0: 无需回访  1: 需回访
+  revisitPhone: '',
+})
+
+// 默认反馈类型
+const defaultFeedbackTypes = [
+  { code: 'store_info_error', name: '兑奖点找不到' },
+  { code: 'store_no_stock', name: '门店缺货' },
+  { code: 'store_no_exchange', name: '门店不愿兑奖' },
+  { code: 'store_not_operate', name: '门店不会操作' },
+]
+
+// 反馈类型
+const feedbackTypes = ref(defaultFeedbackTypes)
+
+// 是否需要回访选项
+const returnVisitType = [
+  { value: 0, label: '无需回访' },
+  { value: 1, label: '需回访' },
+]
+
+onLoad((options?: Record<string, any>) => {
+  form.storeId = options?.storeId ?? ''
+
+  feedbackTypes.value = JSON.parse(options?.feedbackTypes)
+})
+
+// 提交校验 + 提交
+const handleSubmit = async () => {
+  // 1. 校验反馈类型
+  if (!form.feedbackType) {
+    Toast('请选择反馈类型')
+    return
+  }
+
+  // 2. 校验是否需要回访
+  if (form.isRevisitNeeded !== 0 && form.isRevisitNeeded !== 1) {
+    Toast('请选择是否需要回访')
+    return
+  }
+
+  // 3. 需要回访时校验手机号
+  if (form.isRevisitNeeded === 1) {
+    if (!form.revisitPhone) {
+      Toast('请填写回访手机号')
+      return
+    }
+    if (!/^1[3-9]\d{9}$/.test(form.revisitPhone)) {
+      Toast('手机号格式不正确')
+      return
+    }
+  }
+
+  // 4. 校验问题描述
+  if (!form.problemDescription.trim()) {
+    Toast('请填写问题描述')
+    return
+  }
+
+  try {
+    loading.value = true
+
+    await submitFeedback({ ...form })
+    Toast('提交成功！感谢您的反馈~', { icon: 'success' })
+    loading.value = false
+
+    await delay(2000)
+    navigateBack()
+  }
+  finally {
+    loading.value = false
+  }
+}
+</script>
+
 <template>
   <view class="page min-h-screen" :style="{ background: shopBgColor }">
     <!-- 背景图 -->
@@ -115,93 +202,6 @@
     </view>
   </view>
 </template>
-
-<script setup lang='ts'>
-import { submitFeedback } from '@/api'
-import { useTheme } from '@/composables'
-import { delay, navigateBack, Toast } from '@/utils'
-
-const { themeCode, shopBgColor, color } = useTheme()
-
-const loading = ref(false)
-const form = reactive({
-  storeId: '',
-  feedbackType: '', // 存储选中的 code
-  problemDescription: '',
-  isRevisitNeeded: 0, // 0: 无需回访  1: 需回访
-  revisitPhone: '',
-})
-
-// 默认反馈类型
-const defaultFeedbackTypes = [
-  { code: 'store_info_error', name: '兑奖点找不到' },
-  { code: 'store_no_stock', name: '门店缺货' },
-  { code: 'store_no_exchange', name: '门店不愿兑奖' },
-  { code: 'store_not_operate', name: '门店不会操作' },
-]
-
-// 反馈类型
-const feedbackTypes = ref(defaultFeedbackTypes)
-
-// 是否需要回访选项
-const returnVisitType = [
-  { value: 0, label: '无需回访' },
-  { value: 1, label: '需回访' },
-]
-
-onLoad((options?: Record<string, any>) => {
-  form.storeId = options?.storeId ?? ''
-
-  feedbackTypes.value = JSON.parse(options?.feedbackTypes)
-})
-
-// 提交校验 + 提交
-const handleSubmit = async () => {
-  // 1. 校验反馈类型
-  if (!form.feedbackType) {
-    Toast('请选择反馈类型')
-    return
-  }
-
-  // 2. 校验是否需要回访
-  if (form.isRevisitNeeded !== 0 && form.isRevisitNeeded !== 1) {
-    Toast('请选择是否需要回访')
-    return
-  }
-
-  // 3. 需要回访时校验手机号
-  if (form.isRevisitNeeded === 1) {
-    if (!form.revisitPhone) {
-      Toast('请填写回访手机号')
-      return
-    }
-    if (!/^1[3-9]\d{9}$/.test(form.revisitPhone)) {
-      Toast('手机号格式不正确')
-      return
-    }
-  }
-
-  // 4. 校验问题描述
-  if (!form.problemDescription.trim()) {
-    Toast('请填写问题描述')
-    return
-  }
-
-  try {
-    loading.value = true
-
-    await submitFeedback({ ...form })
-    Toast('提交成功！感谢您的反馈~', { icon: 'success' })
-    loading.value = false
-
-    await delay(2000)
-    navigateBack()
-  }
-  finally {
-    loading.value = false
-  }
-}
-</script>
 
 <style scoped>
 .page {

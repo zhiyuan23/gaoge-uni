@@ -1,16 +1,4 @@
-<template>
-  <view>
-    <SeriesList />
-
-    <!-- 扫码结果弹窗 -->
-    <LotteryResult
-      v-model="showResult"
-      :prize-info="drawResultInfo"
-    />
-  </view>
-</template>
-
-<script setup lang='ts'>
+<script setup lang="ts">
 import type { PrizeInfo } from '@/types'
 import SeriesList from '@/pages/series/list.vue'
 import { defaultPrizeInfo } from '@/types'
@@ -28,3 +16,15 @@ onLoad(async (options) => {
   }
 })
 </script>
+
+<template>
+  <view>
+    <SeriesList />
+
+    <!-- 扫码结果弹窗 -->
+    <LotteryResult
+      v-model="showResult"
+      :prize-info="drawResultInfo"
+    />
+  </view>
+</template>

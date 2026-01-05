@@ -1,28 +1,4 @@
-<template>
-  <view class="min-h-screen bg-gray-100 p-20">
-    <!-- 列表 -->
-    <view v-for="item in list" :key="item.id" class="rounded bg-white shadow mb-16 p-20">
-      <view class="text-lg font-bold">
-        {{ item.title }}
-      </view>
-      <view class="text-sm text-gray-500 mt-2">
-        {{ item.desc }}
-      </view>
-    </view>
-
-    <!-- 上拉加载中 -->
-    <view v-if="loadingMore" class="text-center text-gray-500 py-4">
-      加载中...
-    </view>
-
-    <!-- 没有更多 -->
-    <view v-if="noMore" class="text-center text-gray-400 py-4">
-      —— 没有更多了 ——
-    </view>
-  </view>
-</template>
-
-<script setup lang='ts'>
+<script setup lang="ts">
 // 列表数据
 const list = ref<Array<{ id: number;title: string;desc: string }>>([])
 const pageNo = ref(1)
@@ -66,3 +42,27 @@ onMounted(() => {
   loadList(true)
 })
 </script>
+
+<template>
+  <view class="min-h-screen bg-gray-100 p-20">
+    <!-- 列表 -->
+    <view v-for="item in list" :key="item.id" class="rounded bg-white shadow mb-16 p-20">
+      <view class="text-lg font-bold">
+        {{ item.title }}
+      </view>
+      <view class="text-sm text-gray-500 mt-2">
+        {{ item.desc }}
+      </view>
+    </view>
+
+    <!-- 上拉加载中 -->
+    <view v-if="loadingMore" class="text-center text-gray-500 py-4">
+      加载中...
+    </view>
+
+    <!-- 没有更多 -->
+    <view v-if="noMore" class="text-center text-gray-400 py-4">
+      —— 没有更多了 ——
+    </view>
+  </view>
+</template>

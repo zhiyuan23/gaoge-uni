@@ -1,97 +1,4 @@
-<template>
-  <u-popup
-    :show="show"
-    mode="center"
-    bg-color="transparent"
-    overlay-opacity="0.8"
-    :safe-area-inset-bottom="false"
-    :close-on-click-overlay="false"
-  >
-    <view class="flex-col-center -mt-80">
-      <!-- 关闭按钮 -->
-      <view class="mb-30 w-640 h-140">
-        <image
-          src="/static/images/icons/ic-close.png"
-          class="float-right size-60 mr-20 p-40"
-          @click="handleClose"
-        />
-      </view>
-
-      <view class="relative z-2 flex-col-center overflow-hidden">
-        <!-- 中奖提示 -->
-        <view v-if="isWon" class="flex-start">
-          <image
-            :src="prizeInfo.prizeImage"
-            mode="aspectFit"
-            class="relative w-680 h-490"
-          />
-        </view>
-
-        <!-- 未中奖提示 -->
-        <view v-else class="relative flex-start-center w-680 h-490">
-          <!-- 背景图 -->
-          <view class="absolute w-full h-490 top-0">
-            <image :src="`${IMG_BASE_URL}/lottery/win-popup-${themeCode}.png`" class="size-full" />
-          </view>
-
-          <!-- 未中奖信息 -->
-          <view class="relative z-1 flex-col-center-center w-593 h-466">
-            <view class="flex-col-center-center font-bold pt-60 h-140 text-44" :style="{ color: lotteryColor }">
-              <text class="text-center mx-25 leading-75">
-                {{ displayErrorText }}
-              </text>
-              <view v-if="isExchanged" class="mt-24">
-                已兑奖
-              </view>
-              <view v-if="noExchanged" class="mt-24">
-                尚未兑奖
-              </view>
-            </view>
-
-            <!-- 时间信息 -->
-            <view v-if="timeLines.length" class="mt-48 h-72 leading-48">
-              <view v-for="line in timeLines" :key="line">
-                {{ line }}
-              </view>
-            </view>
-          </view>
-          <!-- /未中奖信息 -->
-        </view>
-      </view>
-
-      <view class="w-full text-center mt-42 h-230">
-        <!-- 操作按钮 -->
-        <view class="h-102">
-          <MainButton
-            v-if="buttonConfig"
-            :label="buttonConfig?.label"
-            :icon="buttonConfig?.icon"
-            @click="handleConfirm(buttonConfig?.type, prizeInfo?.giftCouponId)"
-          />
-        </view>
-
-        <!-- 提示话术 -->
-        <view class="mx-110 mt-40">
-          <text class="color-white leading-46">
-            {{ displayTipsText }}
-          </text>
-        </view>
-      </view>
-    </view>
-
-    <!-- 购物车图标 -->
-    <view v-if="showCart" class="fixed top-50% mt-500 w-95 h-101 right-15">
-      <image
-        :src="`${IMG_BASE_URL}/lottery/win-cart-${themeCode}.png`"
-        mode="aspectFit"
-        class="size-full"
-        @click="handleGoShop"
-      />
-    </view>
-  </u-popup>
-</template>
-
-<script setup lang='ts'>
+<script setup lang="ts">
 import type { PrizeInfo } from '@/types'
 import { useTheme } from '@/composables'
 import { IMG_BASE_URL, THIRD_PARTY_APPS } from '@/constants'
@@ -267,3 +174,96 @@ const handleGoShop = () => {
   navigateToMiniApp(MALL)
 }
 </script>
+
+<template>
+  <u-popup
+    :show="show"
+    mode="center"
+    bg-color="transparent"
+    overlay-opacity="0.8"
+    :safe-area-inset-bottom="false"
+    :close-on-click-overlay="false"
+  >
+    <view class="flex-col-center -mt-80">
+      <!-- 关闭按钮 -->
+      <view class="mb-30 w-640 h-140">
+        <image
+          src="/static/images/icons/ic-close.png"
+          class="float-right size-60 mr-20 p-40"
+          @click="handleClose"
+        />
+      </view>
+
+      <view class="relative z-2 flex-col-center overflow-hidden">
+        <!-- 中奖提示 -->
+        <view v-if="isWon" class="flex-start">
+          <image
+            :src="prizeInfo.prizeImage"
+            mode="aspectFit"
+            class="relative w-680 h-490"
+          />
+        </view>
+
+        <!-- 未中奖提示 -->
+        <view v-else class="relative flex-start-center w-680 h-490">
+          <!-- 背景图 -->
+          <view class="absolute w-full h-490 top-0">
+            <image :src="`${IMG_BASE_URL}/lottery/win-popup-${themeCode}.png`" class="size-full" />
+          </view>
+
+          <!-- 未中奖信息 -->
+          <view class="relative z-1 flex-col-center-center w-593 h-466">
+            <view class="flex-col-center-center font-bold pt-60 h-140 text-44" :style="{ color: lotteryColor }">
+              <text class="text-center mx-25 leading-75">
+                {{ displayErrorText }}
+              </text>
+              <view v-if="isExchanged" class="mt-24">
+                已兑奖
+              </view>
+              <view v-if="noExchanged" class="mt-24">
+                尚未兑奖
+              </view>
+            </view>
+
+            <!-- 时间信息 -->
+            <view v-if="timeLines.length" class="mt-48 h-72 leading-48">
+              <view v-for="line in timeLines" :key="line">
+                {{ line }}
+              </view>
+            </view>
+          </view>
+          <!-- /未中奖信息 -->
+        </view>
+      </view>
+
+      <view class="w-full text-center mt-42 h-230">
+        <!-- 操作按钮 -->
+        <view class="h-102">
+          <MainButton
+            v-if="buttonConfig"
+            :label="buttonConfig?.label"
+            :icon="buttonConfig?.icon"
+            @click="handleConfirm(buttonConfig?.type, prizeInfo?.giftCouponId)"
+          />
+        </view>
+
+        <!-- 提示话术 -->
+        <view class="mx-110 mt-40">
+          <text class="color-white leading-46">
+            {{ displayTipsText }}
+          </text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 购物车图标 -->
+    <view v-if="showCart" class="fixed top-50% mt-500 w-95 h-101 right-15">
+      <image
+        :src="`${IMG_BASE_URL}/lottery/win-cart-${themeCode}.png`"
+        mode="aspectFit"
+        class="size-full"
+        @click="handleGoShop"
+      />
+    </view>
+  </u-popup>
+</template>
