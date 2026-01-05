@@ -30,9 +30,10 @@
   },
   "scripts": {
     "new": "plop",
-    "preinstall": "npx only-allow pnpm",
     "uvm": "npx @dcloudio/uvm@latest",
     "uvm-rm": "node ./scripts/post-upgrade.js",
+    "prepare": "git config blame.ignoreRevsFile .git-blame-ignore-revs && simple-git-hooks",
+    "preinstall": "npx only-allow pnpm",
     "dev": "cross-env NODE_OPTIONS=\"--max-old-space-size=2048\" uni -p mp-weixin",
     "dev:mp-weixin": "uni -p mp-weixin",
     "dev:mp-weixin-test": "uni -p mp-weixin --mode test",
@@ -61,7 +62,6 @@
     "stylelint": "stylelint \"src/**/*.{vue,scss,css,sass,less}\"",
     "stylelint:fix": "stylelint \"src/**/*.{vue,scss,css,sass,less}\" --fix",
     "cz": "git add . && npx czg",
-    "postinstall": "simple-git-hooks",
     "clean": "npx rimraf node_modules",
     "clean:cache": "npx rimraf node_modules/.cache",
     "lint:fix": "eslint --fix . --ext .js,.jsx,.ts,.tsx"
