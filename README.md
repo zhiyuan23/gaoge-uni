@@ -1,4 +1,4 @@
-# uniapp 团队协作开发实践模板(Vue3)
+# 怡宝消费者小程序 (Vue3)
 
 
 使用uniapp+vite+vue3+typescript+uview-plus+unocss 搭建的适合团队协作的快速开发模版
@@ -24,7 +24,7 @@
 ### 目录结构
 项目中采用目前最新的技术方案来实现，目录结构清晰。
 ```
-uniapp-vue3-project
+yibao-uni
 ├ build                 vite配置统一管理
 │  ├ config
 │  └ plugins
@@ -39,6 +39,8 @@ uniapp-vue3-project
 │  ├ constants          常量
 │  ├ locale             国际化语言管理
 │  ├ pages              页面管理
+│  ├ pages-account      个人资料分包
+│  ├ pages-reward       中奖相关分包
 │  ├ plugins            插件管理
 │  ├ router             路由管理
 │  ├ static             静态资源
@@ -93,21 +95,13 @@ build
 #### 接口管理
 ```
 api
-├ auth
-│  └ index.ts
-├ common        通用api
-│  ├ index.ts
-│  └ types.ts
-├ lottery
-│  └ index.ts
-├ prize
-│  └ index.ts
-├ profile
-│  └ index.ts
-├ series
-│  └ index.ts
-├ shop
-│  └ index.ts
+├ modules
+│  ├ auth.ts
+│  ├ common.ts
+│  ├ lottery.ts
+│  ├ profile.ts
+│  ├ series.ts
+│  └ shop.ts
 └ index.ts     入口文件
 ```
 
@@ -124,59 +118,59 @@ hooks
 ### 页面管理
 ```
 pages
-├ common              公共页面（分包common）
+├ common
 │  ├ 404
 │  │  └ index.vue
 │  └ webview
 │     └ index.vue
 ├ home 
-│  └ index.vue
+│  └ index.vue        小程序首页
+└ series
+   ├ ml
+   ├ zbqr
+   ├ zwcs
+   ├ detail.vue       活动详情页
+   ├ index.vue        活动主页
+   └ list.vue         活动列表页
+
+pages-account
 ├ login 
 │  └ index.vue
+└ profile 
+  └ index.vue
+
+pages-reward
 ├ prize 
 │  ├ index.vue
-│  ├ poster.vue       分中奖享海报
-│  └ redeem-info.vue  填写兑奖信息
-├ profile 
-│  └ index.vue
-├ series
-│  ├ ml
-│  ├ zbqr
-│  ├ zwcs
-│  ├ detail.vue       活动详情页
-│  ├ index.vue        活动主页
-│  └ list.vue         活动列表页
+│  ├ poster.vue
+│  └ redeem-info.vue
 └ shop 
-  └ index.vue
+   └ index.vue
 ```
 
 #### 状态管理
 ```
 store
-├ app             程序系统状态  
-│  └ index.vue
-├ auth            权限状态
-│  └ index.vue
-├ profile         用户信息状态
-│  └ index.vue
-├ series          产品系列状态
-│  └ index.vue
-└ index.ts
+├ modules
+│  ├ app.ts
+│  ├ auth.ts
+│  ├ config.ts
+│  ├ profile.ts
+│  └ series.ts
+└ index.ts     入口文件
 ```
 
 ### 工具方法
 ```
 utils
-├ common          通用方法
-│  └ index.ts
-├ modals          弹窗相关方法
-│  └ index.ts
-├ navigate        导航跳转
-│  └ index.ts
-├ storage         使用缓存
-│  └ index.ts
-├ time            时间格式化
-│  └ index.ts
+├ common .ts
+├ delay.ts
+├ format.ts
+├ modals.ts
+├ navigate.ts
+├ storage.ts
+├ throttle.ts
+├ time.ts
 └ index.ts        入口文件
 ```
 
