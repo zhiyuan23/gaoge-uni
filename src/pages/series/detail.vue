@@ -1,5 +1,5 @@
 <template>
-  <view class="page theme relative overflow-hidden" :style="{ background: currentTheme.bgColor }">
+  <view class="theme page relative overflow-hidden" :style="{ background: currentTheme.bgColor }">
     <!-- 背景图 -->
     <image
       class="absolute w-100vw -mt-165"
@@ -376,10 +376,14 @@ const drawLottery = async () => {
         setTimeout(() => uni.vibrateLong(), 400)
       }
     }
-    showDraw.value = false
+    showResult.value = true
+  }
+  catch (error: any) {
+    drawResultInfo.value = error
     showResult.value = true
   }
   finally {
+    showDraw.value = false
     await delay(200)
     drawLoading.value = false
   }

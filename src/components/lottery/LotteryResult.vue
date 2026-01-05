@@ -194,7 +194,7 @@ const displayTipsText = computed(() => {
     },
     one_yuan_exchange: {
       won: `请于中奖后${deadline}内带上实物瓶盖到兑奖点兑奖`,
-      noExchange: '需持实物瓶盖兑奖，',
+      noExchange: '需持实物瓶盖兑奖',
     },
   } as const
 
@@ -209,7 +209,7 @@ const displayTipsText = computed(() => {
 
   // 未兑换状态
   if (noExchanged.value) {
-    return `${config.noExchange}${expiredTips}`
+    return `${config.noExchange}，${expiredTips}`
   }
 
   return null

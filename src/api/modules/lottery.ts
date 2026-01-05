@@ -7,7 +7,7 @@ export const scanByDetail = (data: any) => jsonPost<any>('/wx/mem/act/scanCode/e
 export const scanByHome = (data: any) => jsonPost<any>('/wx/mem/act/scanCode/executeByHome', data, { custom: { toast: false } })
 
 // 开奖
-export const executeLottery = (data: any) => jsonPost<any>('/wx/mem/act/prizeDraw/execute', data)
+export const executeLottery = (data: any) => jsonPost<any>('/wx/mem/act/prizeDraw/execute', data, { custom: { toast: false } })
 
 // 获取中奖人名单
 export const getBingoList = (themeId: string) => post<any>('/wx/mem/act/prizeDraw/listBingoLimit', { themeId }, { custom: { skipAuthCheck: true } })
