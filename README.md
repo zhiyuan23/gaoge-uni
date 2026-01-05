@@ -1,7 +1,8 @@
-# 怡宝消费者小程序 (Vue3)
+# 五码合一营销系统 · 消费者端小程序
 
 
-使用uniapp+vite+vue3+typescript+uview-plus+unocss 搭建的适合团队协作的快速开发模版
+**技术选型**：
+`Vue 3.4` · `Vite 5` · `TypeScript` · `uniapp` · `uview-plus` · `UnoCSS`
 
 
 ### 特性
@@ -22,9 +23,8 @@
 - [x] 支持国际化
 
 ### 目录结构
-项目中采用目前最新的技术方案来实现，目录结构清晰。
 ```
-yibao-uni
+dicp-wmhy-member-wechat
 ├ build                 vite配置统一管理
 │  ├ config
 │  └ plugins
@@ -62,7 +62,6 @@ yibao-uni
 │  ├ global.d.ts
 │  ├ module.d.ts
 │  └ index.ts           入口文件 
-├ LICENSE
 ├ README.md
 ├ cz.config.js          cz-git配置
 ├ eslint.config.js      eslint配置
