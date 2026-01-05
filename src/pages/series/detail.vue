@@ -227,14 +227,13 @@ watch(isLogin, (newLoginStatus, oldLoginStatus) => {
     if (showDraw.value) {
       drawLottery()
     }
-    fetchMyPrizeList(true)
     fetchBingoList()
   }
 }, { immediate: false })
 
 // 监听我的奖品弹窗变化
 watch(showMyPrize, (newShow) => {
-  if (newShow && prizeList.value.length === 0) {
+  if (newShow) {
     fetchMyPrizeList(true)
   }
 })
@@ -263,7 +262,6 @@ const assignLocation = (target: typeof drawParams, data: LocationResult) => {
 
 onLoad(() => {
   getSeriesDetail()
-  fetchMyPrizeList(true)
 })
 
 // 获取系列详情信息
@@ -325,7 +323,6 @@ const handleLoadMore = () => {
 
 // 点击扫一扫
 const onScan = async () => {
-  console.log('点击扫一扫')
   const { result } = await uni.scanCode()
   drawParams.scanCode = result
 
@@ -369,7 +366,6 @@ const drawLottery = async () => {
     drawResultInfo.value = result
 
     if (result.bingo === 1) {
-      fetchMyPrizeList(true)
       uni.vibrateLong()
 
       if (result.prizeType === 'large_red_envelope') {
@@ -418,7 +414,6 @@ const handleWithdraw = async (id: string) => {
     package: data.packageInfo,
     appId: data.appId,
     success: () => {
-      fetchMyPrizeList(true)
       if (Number(drawResultInfo.value.bonus) > 0.4) {
         posterGenerator.value?.generateSharePoster()
       }
