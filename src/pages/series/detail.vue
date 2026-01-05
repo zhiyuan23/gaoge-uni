@@ -414,6 +414,7 @@ const handleWithdraw = async (id: string) => {
     package: data.packageInfo,
     appId: data.appId,
     success: () => {
+      fetchMyPrizeList(true)
       if (Number(drawResultInfo.value.bonus) > 0.4) {
         posterGenerator.value?.generateSharePoster()
       }

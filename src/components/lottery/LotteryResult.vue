@@ -246,7 +246,7 @@ const buttonConfig = computed(() => {
     }
   }
 
-  if (prizeType && isExchanged !== 1 && prizeType in prizeTypeButtonMap) {
+  if (prizeType && isExchanged === 0 && prizeType in prizeTypeButtonMap) {
     return prizeTypeButtonMap[prizeType as keyof typeof prizeTypeButtonMap]
   }
 
