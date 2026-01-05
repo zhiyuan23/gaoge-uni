@@ -56,9 +56,9 @@
       <view class="bg-white pb-50">
         <view
           v-for="store in shopList"
-          :key="store.hotPointID"
+          :key="store.id"
           class="flex-center bg-white mx-25 h-184 border-b-1-solid-#e0e0e0 last:border-b-0"
-          :class="{ 'bg-#07c160': currentStoreId === store.hotPointID }"
+          :class="{ 'bg-#07c160': currentStoreId === store.id }"
           @click="selectStore(store)"
         >
           <!-- 门店图片 -->
@@ -75,7 +75,7 @@
               <view
                 class="u-press flex-center-center flex-shrink-0 rounded-20 ml-10 w-130 h-40 text-20 border-2-solid-#FFF"
                 :style="{ color: shopBtnColor, borderColor: shopBtnColor }"
-                @click="goFeedback(store.hotPointID)"
+                @click="goFeedback(store.id)"
               >
                 我要反馈
               </view>
@@ -250,7 +250,7 @@ const fetchList = async (reset = false) => {
 
 // 点击列表门店
 const selectStore = (store: any) => {
-  currentStoreId.value = store.hotPointID
+  currentStoreId.value = store.id
   center.lat = Number(store.lat)
   center.lng = Number(store.lon)
 }
