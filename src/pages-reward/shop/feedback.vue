@@ -119,7 +119,7 @@
 <script setup lang='ts'>
 import { submitFeedback } from '@/api'
 import { useTheme } from '@/composables'
-import { delay, navigateBack, Toast } from '@/utils'
+import { navigateBack, sleep, Toast } from '@/utils'
 
 const { themeCode, shopBgColor, color } = useTheme()
 
@@ -194,7 +194,7 @@ const handleSubmit = async () => {
     Toast('提交成功！感谢您的反馈~', { icon: 'success' })
     loading.value = false
 
-    await delay(2000)
+    await sleep(2000)
     navigateBack()
   }
   finally {

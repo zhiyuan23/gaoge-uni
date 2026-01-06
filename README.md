@@ -163,13 +163,11 @@ store
 ```
 utils
 ├ common .ts
-├ delay.ts
 ├ format.ts
 ├ modals.ts
 ├ navigate.ts
 ├ storage.ts
-├ throttle.ts
-├ time.ts
+├ timing.ts
 └ index.ts        入口文件
 ```
 

@@ -51,3 +51,9 @@ export function throttleWithOptions<T extends any[]>(
     }, delay) as any
   }
 }
+
+/**
+ * 延迟执行（返回 Promise）
+ */
+export const sleep = (ms: number) =>
+  new Promise(resolve => setTimeout(resolve, ms))

@@ -1,5 +1,5 @@
 <template>
-  <view class="theme page relative overflow-hidden" :style="{ background: currentTheme.bgColor }">
+  <view class="page theme relative overflow-hidden" :style="{ background: currentTheme.bgColor }">
     <!-- 背景图 -->
     <image
       class="absolute w-100vw -mt-165"
@@ -124,7 +124,7 @@ import { useAuthGuard, useLocation } from '@/composables'
 import { IMG_BASE_URL, THEMES } from '@/constants'
 import { useAuthStore, useProfileStore, useSeriesStore } from '@/store'
 import { defaultPrizeInfo } from '@/types'
-import { delay, navigateTo, Toast } from '@/utils'
+import { navigateTo, sleep, Toast } from '@/utils'
 
 const props = defineProps<{
   seriesCode?: SeriesKey;
@@ -380,7 +380,7 @@ const drawLottery = async () => {
   }
   finally {
     showDraw.value = false
-    await delay(200)
+    await sleep(200)
     drawLoading.value = false
   }
 }

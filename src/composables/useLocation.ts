@@ -153,8 +153,8 @@ export async function useLocation(
     }
   }
   catch (reverseErr) {
+    // 获取城市信息失败，仅使用经纬度
     console.warn('逆地理编码失败:', reverseErr)
-    Toast('获取城市信息失败，仅使用经纬度')
     return {
       ...defaultEmpty,
       lat: basic.lat,
