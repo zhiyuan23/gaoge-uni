@@ -23,7 +23,7 @@
         class="h-full w-full"
         :latitude="center.lat"
         :longitude="center.lng"
-        :scale="15"
+        :scale="12"
         :markers="markers"
         show-location
         @markertap="onMarkerTap"
@@ -148,8 +148,8 @@ const currentStoreId = ref<number | null>(null)
 const markers: any = computed(() => {
   return shopList.value.map((store, index) => ({
     id: index,
-    latitude: Number(store.lat),
-    longitude: Number(store.lon),
+    latitude: Number(store.latitude),
+    longitude: Number(store.longitude),
     iconPath: `/pages-reward/static/images/shop/ic-map-mark.png`,
     width: 40,
     height: 40,
@@ -251,8 +251,8 @@ const fetchList = async (reset = false) => {
 // 点击列表门店
 const selectStore = (store: any) => {
   currentStoreId.value = store.id
-  center.lat = Number(store.lat)
-  center.lng = Number(store.lon)
+  center.lat = Number(store.latitude)
+  center.lng = Number(store.longitude)
 }
 
 // 点击地图标记点
@@ -270,8 +270,8 @@ const reLocate = async () => {
 // 前往导航
 const navigateToStore = (store: any) => {
   uni.openLocation({
-    latitude: Number(store.lat),
-    longitude: Number(store.lon),
+    latitude: Number(store.latitude),
+    longitude: Number(store.longitude),
     name: store.name,
     address: store.address,
     scale: 18,

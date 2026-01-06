@@ -66,6 +66,10 @@ export async function useLocation(
     basic = await getBasicLocation()
   }
   catch (err: any) {
+    if (!required) {
+      return defaultEmpty
+    }
+
     const isAuthDenied
       = err.errMsg?.includes('auth')
         || err.errMsg?.includes('deny')
@@ -74,10 +78,6 @@ export async function useLocation(
     if (!isAuthDenied) {
       Toast('获取位置失败，请检查定位服务')
       throw new Error('获取定位失败')
-    }
-
-    if (!required) {
-      return defaultEmpty
     }
 
     // 必须权限：引导开启

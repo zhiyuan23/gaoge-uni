@@ -1,5 +1,5 @@
 <template>
-  <view class="page theme relative overflow-hidden" :style="{ background: currentTheme.bgColor }">
+  <view class="theme page relative overflow-hidden" :style="{ background: currentTheme.bgColor }">
     <!-- 背景图 -->
     <image
       class="absolute w-100vw -mt-165"
@@ -360,7 +360,7 @@ const drawLottery = async () => {
     const data = await useLocation()
     assignLocation(drawParams, data)
 
-    const params = { ...drawParams, logId: scanLogId.value }
+    const params = { ...drawParams, scanLogId: scanLogId.value }
     const result = await executeLottery(params)
 
     drawResultInfo.value = result
