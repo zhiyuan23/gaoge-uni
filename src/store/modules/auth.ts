@@ -21,8 +21,6 @@ const useAuthStore = defineStore(
       isLogin.value = false
       isMember.value = 0
       openId.value = ''
-      accessToken.value = ''
-      userIdentity.value = ''
       sessionKey.value = ''
       unionid.value = ''
     }
@@ -44,9 +42,8 @@ const useAuthStore = defineStore(
     // 静默登录：获取 基础用户权限信息
     const silentLogin = async () => {
       await Promise.all([
-        initUserAuth(),
         checkLogin(),
-        initHuarunAuth(),
+        initUserAuth(),
       ])
     }
 
@@ -121,6 +118,7 @@ const useAuthStore = defineStore(
       loading,
 
       clear,
+      initHuarunAuth,
       setLoginStatus,
       setUserAuth,
       setHuarunAuth,

@@ -7,7 +7,7 @@ export const isLoginApi = () => post<any>('/wx/mem/userAuth/isLogin', {}, { cust
 export const getOpenId = (data: any) => post<any>('/wx/mem/userAuth/getOpenId', data)
 
 // 华润门户快捷健鉴权接口
-export const hrAuth = (data: any) => post<any>('/wx/mem/userAuth/portal/auth', data)
+export const hrAuth = (data: any) => post<any>('/wx/mem/userAuth/portal/auth', data, { custom: { skipHRAuth: true } })
 
 // 登录
 export const getSession = (data: any) => post<any>('/wx/mem/userAuth/getSession', data)

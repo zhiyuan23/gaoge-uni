@@ -6,6 +6,42 @@ import { Loading, reLaunch, Toast } from '@/utils'
 
 const http = new Request()
 
+// 添加华润鉴权状态管理
+let hrAuthPromise: Promise<void> | null = null
+let isHrAuthReady = false
+
+// 确保华润鉴权完成
+const ensureHrAuth = async (): Promise<void> => {
+  const auth = useAuthStore()
+
+  // 如果已经就绪且有 accessToken，直接返回
+  if (isHrAuthReady && auth.accessToken) {
+    return
+  }
+
+  // 如果已经有进行中的鉴权请求，等待它完成
+  if (hrAuthPromise) {
+    return hrAuthPromise
+  }
+
+  // 创建新的鉴权请求
+  hrAuthPromise = (async () => {
+    try {
+      // 调用华润鉴权方法
+      await auth.initHuarunAuth()
+      isHrAuthReady = true
+    }
+    catch (error) {
+      // 鉴权失败，重置状态
+      hrAuthPromise = null
+      isHrAuthReady = false
+      throw error
+    }
+  })()
+
+  return hrAuthPromise
+}
+
 // ==================== 全局默认配置 ====================
 /**
  * 全局请求配置
@@ -37,8 +73,19 @@ http.setConfig((config: HttpRequestConfig) => {
  * cpm-client-type: web
  * thirdSessionKey (sessionKey)
  */
-http.interceptors.request.use((config: HttpRequestConfig) => {
+http.interceptors.request.use(async (config: HttpRequestConfig) => {
   const auth = useAuthStore()
+
+  // 如果不是需要跳过的接口，确保华润鉴权完成
+  if (!config.custom?.skipHRAuth) {
+    try {
+      await ensureHrAuth()
+    }
+    catch {
+      Toast('系统初始化失败，请稍后重试')
+      return Promise.reject(new Error('华润鉴权失败'))
+    }
+  }
 
   const headers = config.header = config.header ?? {}
 
