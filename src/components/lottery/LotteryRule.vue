@@ -21,27 +21,19 @@
       <view class="overflow-hidden rounded-2.5 w-680">
         <PopupHeader title="活动规则" />
 
-        <view class="[web-kit-overflow-scrolling:touch] max-h-70vh overflow-y-scroll bg-background px-30 pb-40">
-          <!-- <view class="title" :style="{ color }">
-            活动说明
-          </view> -->
-          <rich-text
-            class="rich-content leading-38 text-22"
-            :nodes="formattedRuleInfo"
-          />
-          <!-- <view class="title" :style="{ color }">
-            活动范围
-          </view>
-          <view class="leading-38 text-22">
-            中国境内(不含港、澳、台)
-          </view>
-
-          <view class="title" :style="{ color }">
-            活动时间
-          </view>
-          <view class="leading-38 text-22">
-            {{ props.endDate }}截止
-          </view> -->
+        <view class="bg-background px-20 pb-30">
+          <scroll-view
+            scroll-y
+            class="max-h-70vh"
+          >
+            <!-- <view class="title" :style="{ color }">
+              活动说明
+            </view> -->
+            <rich-text
+              class="rich-content leading-38 text-22"
+              :nodes="formattedRuleInfo"
+            />
+          </scroll-view>
         </view>
       </view>
     </view>

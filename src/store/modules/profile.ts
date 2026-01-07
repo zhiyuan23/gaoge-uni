@@ -16,9 +16,20 @@ const useProfileStore = defineStore(
       birthDate: '',
     })
 
+    const getGenderName = (gender: number | null): string => {
+      if (gender === 1) return '男'
+      if (gender === 0) return '女'
+      return ''
+    }
+
     // 获取用户信息
     const fetchProfile = async () => {
-      userInfo.value = await getUserInfo()
+      const raw = await getUserInfo()
+
+      userInfo.value = {
+        ...raw,
+        genderName: getGenderName(raw.gender),
+      }
     }
 
     // 更新用户信息
