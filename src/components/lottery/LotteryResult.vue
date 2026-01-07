@@ -170,9 +170,10 @@ const timeLines = computed(() => {
 
 // 显示的底部说明文字
 const displayTipsText = computed(() => {
-  const { prizeType, isExchanged, memExchangeTimeLimit, memExchangeTimeUnit } = prizeInfo.value
-  const deadline = memExchangeTimeLimit + memExchangeTimeUnit === 'day' ? '天' : '小时'
+  const { prizeType, memExchangeTimeLimit, memExchangeTimeUnit } = prizeInfo.value
 
+  const unitText = memExchangeTimeUnit === 'day' ? '天' : '小时'
+  const deadline = memExchangeTimeLimit + unitText
   const expiredTips = '逾期未兑换将视为自动放弃领奖，不予补发'
 
   // 逾期未兑奖
@@ -181,7 +182,7 @@ const displayTipsText = computed(() => {
   }
 
   // 未中奖 或 已兑换 不显示
-  if (noWon.value || isExchanged) return null
+  if (noWon.value || isExchanged.value) return null
 
   const tipsConfig = {
     small_red_envelope: {
@@ -236,7 +237,7 @@ const prizeTypeButtonMap = {
 
 // 按钮配置
 const buttonConfig = computed(() => {
-  const { prizeType, isExchanged, isContinueScanCode } = prizeInfo.value
+  const { prizeType, isContinueScanCode } = prizeInfo.value
 
   if (noWon.value || isContinueScanCode) {
     return {
@@ -246,7 +247,7 @@ const buttonConfig = computed(() => {
     }
   }
 
-  if (prizeType && isExchanged === 0 && prizeType in prizeTypeButtonMap) {
+  if ((isWon.value || noExchanged.value) && prizeType) {
     return prizeTypeButtonMap[prizeType as keyof typeof prizeTypeButtonMap]
   }
 

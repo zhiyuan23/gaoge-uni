@@ -116,7 +116,7 @@ const generateSharePoster = async () => {
           },
           fail: (err) => {
             Loading.hide()
-            Toast('生成失败')
+            Toast('海报生成失败')
             console.error(err)
           },
           complete: () => {
@@ -128,6 +128,7 @@ const generateSharePoster = async () => {
   }
   catch (err) {
     Loading.hide()
+    Toast('海报生成失败')
     console.error(err)
     generating.value = false
   }

@@ -7,6 +7,7 @@ const useProfileStore = defineStore(
     const userInfo = ref<Profile>({
       userName: '',
       mobilePhone: '',
+      fullPhone: '',
       nickName: '',
       realName: '',
       gender: 0,

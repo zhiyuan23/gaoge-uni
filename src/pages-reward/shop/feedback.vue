@@ -81,22 +81,18 @@
       <!-- 问题描述（必填） -->
       <view class="card mb-64">
         <view class="flex-center font-bold mx-20 h-64">
-          <text class="color-red mr-7">
-            *
-          </text>
           问题描述
         </view>
         <view class="rounded-1 mx-4 border-2-solid-#B2B2B2">
           <u-textarea
             v-model="form.problemDescription"
             type="text"
-            :focus="false"
+            :maxlength="200"
             placeholder="填写问题越全面，问题越有效解决"
             placeholder-style="color:#C0C4CC;font-size: 26rpx"
             :custom-style="{
               padding: '5rpx 10rpx',
               fontSize: '26rpx',
-              height: '200rpx',
               lineHeight: '40rpx',
             }"
           />
@@ -119,8 +115,11 @@
 <script setup lang='ts'>
 import { submitFeedback } from '@/api'
 import { useTheme } from '@/composables'
+import { useProfileStore } from '@/store'
 import { navigateBack, sleep, Toast } from '@/utils'
 
+const profileStore = useProfileStore()
+const { userInfo } = storeToRefs(profileStore)
 const { themeCode, shopBgColor, color } = useTheme()
 
 const loading = ref(false)
@@ -128,8 +127,8 @@ const form = reactive({
   storeId: '',
   feedbackType: '', // 存储选中的 code
   problemDescription: '',
-  isRevisitNeeded: 0, // 0: 无需回访  1: 需回访
-  revisitPhone: '',
+  isRevisitNeeded: 1, // 0: 无需回访  1: 需要回访
+  revisitPhone: userInfo.value.fullPhone,
 })
 
 // 默认反馈类型
@@ -146,7 +145,7 @@ const feedbackTypes = ref(defaultFeedbackTypes)
 // 是否需要回访选项
 const returnVisitType = [
   { value: 0, label: '无需回访' },
-  { value: 1, label: '需回访' },
+  { value: 1, label: '需要回访' },
 ]
 
 onLoad((options?: Record<string, any>) => {
@@ -179,12 +178,6 @@ const handleSubmit = async () => {
       Toast('手机号格式不正确')
       return
     }
-  }
-
-  // 4. 校验问题描述
-  if (!form.problemDescription.trim()) {
-    Toast('请填写问题描述')
-    return
   }
 
   try {

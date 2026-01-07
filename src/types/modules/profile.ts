@@ -3,8 +3,11 @@ export interface Profile {
   /** 用户名（不可编辑） */
   userName: string;
 
-  /** 手机号（不可编辑） */
+  /** 加密手机号（不可编辑） */
   mobilePhone: string;
+
+  /** 完整手机号（不可编辑） */
+  fullPhone: string;
 
   /** 昵称 */
   nickName: string;
