@@ -79,3 +79,25 @@ export const formatDistance = (distance: number | string | undefined | null, dec
   const km = num / 1000
   return `${Number.parseFloat(km.toFixed(decimal))}km`
 }
+
+/**
+ * 格式化富文本内容，优化图片样式
+ * @param htmlStr 原始 HTML 字符串
+ * @returns 格式化后的 HTML 字符串
+ */
+export const formatRichText = (htmlStr: string): string => {
+  if (!htmlStr) return ''
+
+  let content = htmlStr
+
+  // 图片样式处理
+  content = content.replace(/<img[^>]*\sstyle=['"][^'"]*['"][^>]*>/gi, (match) => {
+    return match.replace(/\s+style=['"][^'"]*['"]/i, '')
+  })
+  content = content.replace(
+    /<img/gi,
+    '<img style="max-width:100%; max-height:80vh; height:auto; display:block; margin:10px auto; object-fit:contain;"',
+  )
+
+  return content
+}

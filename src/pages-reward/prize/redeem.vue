@@ -86,11 +86,14 @@
 
       <!-- 温馨提示 -->
       <view class="flex-col-center mx-28" :style="{ color: redeem.color }">
-        <view class="font-bold pt-68 pb-34">
+        <!-- <view class="font-bold pt-68 pb-34">
           温馨提示
-        </view>
+        </view> -->
         <view class="pb-84 leading-38 text-22">
-          收集个人信息用于代缴中奖者个人所得税，信息提交后无法更改，请确认正确无误后再进行提交，信息确认后会在72小时内转账至银行卡，如因所提供的信息不准确而造成无法兑换奖品的，损失由消费者自行承担。消费者因奖品过期失效而无法填写信息的，将视为自动放弃兑奖。
+          <rich-text
+            class="rich-content leading-38 text-22"
+            :nodes="formattedNotice"
+          />
         </view>
         <view class="relative w-full flex-center-end pb-80">
           <image
@@ -111,7 +114,7 @@
     ref="posterGenerator"
     :bg-img="seriesDetail.poster"
     :avatar="userInfo.avatarUrl"
-    :nickname="userInfo.nickName"
+    :nickname="userInfo.mobilePhone"
     :money="prizeDetail.bonus"
   />
 </template>
@@ -120,7 +123,7 @@
 import { fillInInfo, getMyPrizeDetail } from '@/api'
 import { useTheme } from '@/composables'
 import { useProfileStore, useSeriesStore } from '@/store'
-import { Dialog, formatTime, Loading, Toast } from '@/utils'
+import { Dialog, formatRichText, formatTime, Loading, Toast } from '@/utils'
 
 const profileStore = useProfileStore()
 const seriesStore = useSeriesStore()
@@ -141,6 +144,10 @@ const form = reactive({
 
 const beginDate = computed(() => formatTime(prizeDetail.value?.memExchangeBeginTime, { format: 'YYYY.MM.DD' }))
 const endDate = computed(() => formatTime(prizeDetail.value?.memExchangeEndTime, { format: 'YYYY.MM.DD' }))
+
+const formattedNotice = computed(() => {
+  return formatRichText(prizeDetail.value.memExchangeNotice)
+})
 
 // 身份证正则（支持15/18位）
 const idCardReg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}([\dX])$)/i

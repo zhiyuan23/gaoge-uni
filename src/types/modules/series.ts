@@ -30,5 +30,5 @@ export interface SeriesItem {
   endTime?: string;
 
   /** 活动规则描述 */
-  ruleDescription?: string;
+  ruleDescription: string;
 }
