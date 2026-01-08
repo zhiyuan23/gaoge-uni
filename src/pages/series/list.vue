@@ -108,7 +108,7 @@ const getSeriesList = () => {
 
 // 获取用户信息
 const getProfile = () => {
-  if (isLogin.value && !userInfo.value.userName) {
+  if (isLogin.value) {
     profileStore.fetchProfile()
   }
 }

@@ -25,20 +25,6 @@ const useAuthStore = defineStore(
       unionid.value = ''
     }
 
-    const setLoginStatus = (status: boolean) => {
-      isLogin.value = status
-    }
-
-    const setUserAuth = (openIdVal: string, isMemberVal: number) => {
-      openId.value = openIdVal
-      isMember.value = isMemberVal
-    }
-
-    const setHuarunAuth = (accessTokenVal: string, userIdentityVal: string) => {
-      accessToken.value = accessTokenVal
-      userIdentity.value = userIdentityVal
-    }
-
     // 静默登录：获取 基础用户权限信息
     const silentLogin = async () => {
       await Promise.all([
@@ -51,10 +37,10 @@ const useAuthStore = defineStore(
     const checkLogin = async () => {
       try {
         await isLoginApi()
-        setLoginStatus(true)
+        isLogin.value = true
       }
       catch {
-        setLoginStatus(false)
+        isLogin.value = false
       }
     }
 
@@ -63,18 +49,27 @@ const useAuthStore = defineStore(
       const { code } = await uni.login()
       const res = await getOpenId({ wxCode: code })
 
-      setUserAuth(res.openId, res.isMember)
+      openId.value = res.openId
+      isMember.value = res.isMember
     }
 
     // 华润快捷鉴权
     const initHuarunAuth = async () => {
-      const timestamp = Math.floor(Date.now() / 1000).toString()
-      const signStr = PREFIX + APP_ID + timestamp
-      const sign = md5(signStr)
+      try {
+        const timestamp = Math.floor(Date.now() / 1000).toString()
+        const signStr = PREFIX + APP_ID + timestamp
+        const sign = md5(signStr)
+        const res = await hrAuth({ sign, timestamp })
 
-      const res = await hrAuth({ sign, timestamp })
+        accessToken.value = res.accessToken
+        userIdentity.value = res.userIdentity
+      }
+      catch {
+        accessToken.value = ''
+        userIdentity.value = ''
 
-      setHuarunAuth(res.accessToken, res.userIdentity)
+        throw new Error('鉴权失败')
+      }
     }
 
     // 授权登录
@@ -119,9 +114,6 @@ const useAuthStore = defineStore(
 
       clear,
       initHuarunAuth,
-      setLoginStatus,
-      setUserAuth,
-      setHuarunAuth,
       silentLogin,
       login,
     }

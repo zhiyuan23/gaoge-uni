@@ -6,40 +6,51 @@ import { Loading, reLaunch, Toast } from '@/utils'
 
 const http = new Request()
 
-// 添加华润鉴权状态管理
-let hrAuthPromise: Promise<void> | null = null
-let isHrAuthReady = false
+// ==================== 刷新鉴权相关状态 ====================
+let isRefreshing = false
+let failedQueue: Array<{ resolve: (value: any) => void; reject: (reason?: any) => void }> = []
 
-// 确保华润鉴权完成
-const ensureHrAuth = async (): Promise<void> => {
+const processQueue = (error: any = null) => {
+  failedQueue.forEach((prom) => {
+    if (error) prom.reject(error)
+    else prom.resolve(null)
+  })
+  failedQueue = []
+}
+
+// 确保鉴权完成
+const ensureHrAuth = (): Promise<void> => {
   const auth = useAuthStore()
 
-  // 如果已经就绪且有 accessToken，直接返回
-  if (isHrAuthReady && auth.accessToken) {
-    return
+  // 如果已经有有效的 accessToken 和 userIdentity，直接通过
+  if (auth.accessToken && auth.userIdentity) {
+    return Promise.resolve()
   }
 
-  // 如果已经有进行中的鉴权请求，等待它完成
-  if (hrAuthPromise) {
-    return hrAuthPromise
+  // 如果正在刷新中，则等待队列
+  if (isRefreshing) {
+    return new Promise((resolve, reject) => {
+      failedQueue.push({ resolve, reject })
+    })
   }
 
-  // 创建新的鉴权请求
-  hrAuthPromise = (async () => {
-    try {
-      // 调用华润鉴权方法
-      await auth.initHuarunAuth()
-      isHrAuthReady = true
-    }
-    catch (error) {
-      // 鉴权失败，重置状态
-      hrAuthPromise = null
-      isHrAuthReady = false
-      throw error
-    }
-  })()
+  // 开始刷新
+  isRefreshing = true
 
-  return hrAuthPromise
+  return new Promise((resolve, reject) => {
+    auth.initHuarunAuth()
+      .then(() => {
+        processQueue()
+        resolve()
+      })
+      .catch((err) => {
+        processQueue(err)
+        reject(err)
+      })
+      .finally(() => {
+        isRefreshing = false
+      })
+  })
 }
 
 // ==================== 全局默认配置 ====================
