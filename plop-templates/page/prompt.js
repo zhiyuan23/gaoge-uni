@@ -1,14 +1,18 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
-function getFolder(path) {
+function getFolder(dirPath) {
   const components = []
-  const files = fs.readdirSync(path)
+  // 确保目录存在
+  if (!fs.existsSync(dirPath)) return components
+
+  const files = fs.readdirSync(dirPath)
   files.forEach((item) => {
-    const stat = fs.lstatSync(`${path}/${item}`)
-    if (stat.isDirectory() === true && item !== 'components') {
-      components.push(`${path}/${item}`)
-      components.push(...getFolder(`${path}/${item}`))
+    const fullPath = path.join(dirPath, item)
+    const stat = fs.lstatSync(fullPath)
+    if (stat.isDirectory() && item !== 'components') {
+      components.push(fullPath)
+      components.push(...getFolder(fullPath))
     }
   })
   return components
@@ -26,27 +30,29 @@ export default {
     {
       type: 'input',
       name: 'name',
-      message: '请输入文件名',
+      message: '请输入组件/文件名 (kebab-case)',
       validate: (v) => {
-        if (!v || v.trim === '') {
+        if (!v || v.trim() === '') {
           return '文件名不能为空'
         }
-        else {
-          return true
-        }
+        return true
       },
     },
   ],
   actions: (data) => {
     const relativePath = path.relative('src/pages', data.path)
-    const actions = [
+
+    // 自动在所选目录下创建一个以 name 命名的文件夹，并生成 index.vue
+    // 这种结构在 uniapp 中更有利于组织 components 文件夹
+    return [
       {
         type: 'add',
-        path: `${data.path}/{{dotCase name}}.vue`,
+        path: `${data.path}/{{kebabCase name}}/index.vue`,
         templateFile: 'plop-templates/page/index.hbs',
-        data: { componentName: `${relativePath} ${data.name}` },
+        data: {
+          componentName: `${relativePath} ${data.name}`,
+        },
       },
     ]
-    return actions
   },
 }

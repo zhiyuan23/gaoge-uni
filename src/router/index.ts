@@ -13,7 +13,7 @@ interface PageJson {
 
 // 路径常量
 export const HOME_PATH = '/pages/home/index'
-export const LOGIN_PATH = '/pages/common/login/index'
+export const LOGIN_PATH = '/pages/login/index'
 export const ERROR404_PATH = '/pages/common/404/index'
 
 const pagesJson = rawPagesJson as PageJson
@@ -23,7 +23,7 @@ const pagesJson = rawPagesJson as PageJson
  * @param {object} pagesJson
  * @returns [{"path": "/pages/home/index","needLogin": false},...]
  */
-function parseRoutes(pagesJson: any = {}) {
+const parseRoutes = (pagesJson: any = {}) => {
   if (!pagesJson.pages) {
     pagesJson.pages = []
   }
@@ -31,7 +31,7 @@ function parseRoutes(pagesJson: any = {}) {
     pagesJson.subPackages = []
   }
 
-  function parsePages(pages = [] as any, rootPath = '') {
+  const parsePages = (pages = [] as any, rootPath = '') => {
     const routes = []
     for (let i = 0; i < pages.length; i++) {
       routes.push({
@@ -42,7 +42,7 @@ function parseRoutes(pagesJson: any = {}) {
     return routes
   }
 
-  function parseSubPackages(subPackages = [] as any) {
+  const parseSubPackages = (subPackages = [] as any) => {
     const routes = []
     for (let i = 0; i < subPackages.length; i++) {
       routes.push(...parsePages(subPackages[i].pages, subPackages[i].root))
@@ -61,7 +61,7 @@ export const routes = parseRoutes(pagesJson)
  * 当前路由
  * @returns {string} 当前路由
  */
-export function currentRoute() {
+export const currentRoute = () => {
   // getCurrentPages() 至少有1个元素，所以不再额外判断
   const pages = getCurrentPages()
   const currentPage = pages[pages.length - 1] as any
@@ -73,7 +73,7 @@ export function currentRoute() {
  * @param {string} path
  * @returns {string} 去除查询字符串后的路径
  */
-export function removeQueryString(path = '') {
+export const removeQueryString = (path = '') => {
   return path.split('?')[0]
 }
 
@@ -82,7 +82,7 @@ export function removeQueryString(path = '') {
  * @param {string} path
  * @returns {boolean} 路径是否存在
  */
-export function isPathExists(path = '') {
+export const isPathExists = (path = '') => {
   const cleanPath = removeQueryString(path)
   return routes.some(item => item.path === cleanPath)
 }
@@ -92,7 +92,7 @@ export function isPathExists(path = '') {
  * @param {string} path
  * @returns {boolean} 是否是tabbar页面
  */
-export function isTabBarPath(path = '') {
+export const isTabBarPath = (path = '') => {
   const cleanPath = removeQueryString(path)
   return (
     pagesJson.tabBar?.list?.some(

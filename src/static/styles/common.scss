@@ -1,9 +1,10 @@
 page {
+  min-height: 100vh;
   font-size: $u-font-base;
   color: $u-main-color;
-  background-color: $u-bg-color;
-  min-height: 100vh;
 }
+
+/* background-color: $u-bg-color; */
 
 uni-page-body {
   min-height: auto !important;
@@ -13,24 +14,67 @@ uni-image {
   display: block !important;
 }
 
+uni-modal {
+  z-index: 99999;
+}
+
 image {
   display: block;
 }
 
+input {
+  height: 96rpx;
+  line-height: 96rpx;
+}
+
+/* 设置页面最小高度，兼容H5自定义导航条 */
+.page {
+  min-height: calc(100vh - var(--window-top)) !important;
+}
+
 .button {
-  background-color: $u-primary !important;
-  border-radius: 100rpx;
   display: flex;
-  justify-content: center;
   align-items: center;
-  color: #fff;
+  justify-content: center;
+  font-size: 32rpx;
+  border-style: solid;
+  border-width: 2rpx;
+  border-radius: 100rpx
+}
+
+.u-button--default {
+  background-color: #FFF;
 }
 
 .u-button::after {
   border: 0;
+}
+
+.u-button--circle::after {
   border-radius: 100rpx;
 }
 
 .u-button--default::after {
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border: 1px solid rgb(0 0 0 / 20%);
+}
+
+/* uView 风格点击反馈 */
+.u-press, .button {
+  position: relative;
+  overflow: hidden;
+}
+
+/* 按下时加一层黑色遮罩 */
+.u-press::after, .button::after {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  content: '';
+  background: rgb(0 0 0 / 12%);
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+
+.u-press:active::after, .button:active::after {
+  opacity: 1;
 }

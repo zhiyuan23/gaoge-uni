@@ -6,8 +6,6 @@ import type { PluginOption } from 'vite'
 import uniPlugin from '@dcloudio/vite-plugin-uni'
 import ViteRestart from 'vite-plugin-restart'
 import { AutoImportDeps } from './autoImport'
-// import { ConfigImageminPlugin } from './imagemin';
-// import { ReplaceUrlPlugin } from './replaceUrl';
 import { AutoRegistryComponents } from './component'
 import { ConfigUnoCSSPlugin } from './unocss'
 
@@ -17,7 +15,7 @@ export default function createVitePlugins(isBuild: boolean) {
     ConfigUnoCSSPlugin(),
     // 自动按需引入依赖
     AutoImportDeps(),
-    // 自动按需引入组件(注意：需注册至 uni 之前，否则不会生效)
+    // 自动按需引入组件
     AutoRegistryComponents(),
     // uni支持(兼容性写法，当type为module时，必须要这样写)
     (uniPlugin as any).default(),

@@ -23,7 +23,7 @@ export default antfu(
       // 允许console
       'no-console': 'off',
       // 需要分号
-      'style/semi': ['error', 'never'],
+      '@stylistic/semi': ['error', 'never'],
       // 块内的空行
       'padded-blocks': ['error', 'never'],
       // 顶级函数应使用 function 关键字声明
@@ -33,7 +33,7 @@ export default antfu(
       // 禁止未使用的捕获组
       'regexp/no-unused-capturing-group': 'off',
       // 允许接口和类型别名中的成员之间使用三个分隔符
-      'style/member-delimiter-style': ['error', {
+      '@stylistic/member-delimiter-style': ['error', {
         multiline: {
           delimiter: 'semi',
           requireLast: true,
@@ -47,6 +47,13 @@ export default antfu(
       'object-curly-newline': 'off',
       // if 语句后需要换行
       'antfu/if-newline': 'off',
+      // 关闭变量在使用前定义检查
+      'no-use-before-define': 'off',
+      '@typescript-eslint/no-use-before-define': 'off',
+      // 强制 defineProps 使用类型声明风格
+      'vue/define-props-declaration': ['error', 'type-based'],
+      // 强制 defineEmits 使用类型声明风格
+      'vue/define-emits-declaration': ['error', 'type-based'],
     },
   },
 )

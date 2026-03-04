@@ -1,0 +1,342 @@
+<template>
+  <view v-if="showSearch" class="fixed z-9 w-100vw flex-center-center bg-white h-104 border-b-1-solid-#e6e6e6 border-t-1-solid-#e6e6e6">
+    <SearchBar
+      v-model="searchText"
+      :city-name="selectedRegion?.city?.name || '请选择'"
+      :default-area="[
+        selectedRegion?.province?.code,
+        selectedRegion?.city?.code,
+      ]"
+      placeholder="输入兑奖点名称或地址搜索"
+      @search="onSearch"
+      @region-confirm="onRegionConfirm"
+    />
+  </view>
+
+  <view class="fixed flex-col overflow-hidden inset-0">
+    <!-- 地图区域（可拖拽调整高度） -->
+    <view
+      class="relative flex-shrink-0 transition-all duration-300"
+      :style="{ height: `${mapHeight}px` }"
+    >
+      <map
+        id="map"
+        class="h-full w-full"
+        :latitude="center.lat"
+        :longitude="center.lng"
+        :scale="15"
+        :markers="markers"
+        show-location
+        @markertap="onMarkerTap"
+      />
+
+      <!-- 回到当前位置按钮 -->
+      <view
+        class="absolute z-20 size-48 flex-center rounded-full bg-white shadow-lg right-16 bottom-80"
+        @click.stop="reLocate"
+      >
+        <u-icon name="map" size="32" color="#07c160" />
+      </view>
+    </view>
+
+    <!-- 拖拽把手 -->
+    <PopupHeader
+      title="为您找到附近最近的兑奖点"
+      title-size="36"
+      @touchstart.stop="onTouchStart"
+      @touchmove.stop.prevent="onTouchMove"
+      @touchend.stop="onTouchEnd"
+    />
+
+    <!-- 门店列表 -->
+    <scroll-view
+      scroll-y
+      class="flex-1 bg-white"
+      :style="{ height: `calc(100vh - ${mapHeight}px - 48px)` }"
+      @scrolltolower="onReachBottom"
+    >
+      <view class="pb-50">
+        <view
+          v-for="store in shopList"
+          :key="store.id"
+          class="flex-center mx-25 py-20 border-b-1-solid-#e0e0e0 last:border-b-0"
+          :class="{ 'bg-white': currentStoreId === store.id }"
+          @click="selectStore(store)"
+        >
+          <!-- 门店图片 -->
+          <image
+            :src="store.cover || `${IMG_BASE_URL}/shop/img-store-${themeCode}.png`"
+            class="size-144 flex-shrink-0 mr-20 -ml-5"
+          />
+          <view class="flex-1">
+            <!-- 门店信息 -->
+            <view class="flex-center">
+              <view class="font-bold leading-32 text-26">
+                {{ store.name }}
+              </view>
+              <view
+                class="u-press btn flex-center-center flex-shrink-0 rounded-20 ml-10 w-130 h-40 text-20 border-2-solid-#FFF"
+                :data-theme="themeCode"
+                @click.stop="goFeedback(store)"
+              >
+                我要反馈
+              </view>
+            </view>
+
+            <view class="text-secondary mt-5 leading-40 text-22">
+              距您{{ formatDistance(store.distance) }}
+            </view>
+            <view class="text-secondary leading-28 text-22">
+              {{ store.fullAddress }}
+            </view>
+          </view>
+
+          <!-- 导航按钮 -->
+          <view class="flex-col-center-center px-20" @click="navigateToStore(store)">
+            <image :src="`${IMG_BASE_URL}/shop/ic-nav-${themeCode}.png`" class="size-48" />
+            <view class="leading-48 text-22">
+              去导航
+            </view>
+          </view>
+        </view>
+
+        <view v-if="!initialized || loading" class="text-center text-#999 py-40">
+          加载中...
+        </view>
+        <view v-else-if="!loading && shopList.length === 0" class="text-center text-#999 py-20">
+          附近暂无门店
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</template>
+
+<script setup lang="ts">
+import { getShopList } from '@/api'
+import { useCustomerService, useLocation, useTheme } from '@/composables'
+import { IMG_BASE_URL } from '@/constants'
+import { useProfileStore } from '@/store'
+import { formatDistance } from '@/utils'
+
+const SCREEN_HEIGHT = uni.getSystemInfoSync().windowHeight
+const { themeCode, color } = useTheme()
+const { openCustomerService } = useCustomerService()
+const profileStore = useProfileStore()
+
+const popBgColor = themeCode.value === 'zbqr' ? '#F1D64B' : color
+const popTitColor = themeCode.value === 'zbqr' ? color : '#FFFFFF'
+const mapCtx = ref<any>(null)
+
+// 搜索
+const showSearch = ref(false)
+const searchText = ref('')
+const selectedRegion = ref<any>({
+  province: { code: '', name: '' },
+  city: { code: '', name: '' },
+})
+
+// 地图高度拖拽
+const mapHeight = ref(SCREEN_HEIGHT * 0.4)
+const MIN_HEIGHT = SCREEN_HEIGHT * 0.1
+const MID_HEIGHT = SCREEN_HEIGHT * 0.4
+const MAX_HEIGHT = SCREEN_HEIGHT * 0.7
+let startY = 0
+
+// 定位 & 地图中心
+const location = reactive({ lat: 0, lng: 0 })
+const center = reactive({ lat: 0, lng: 0 })
+
+// 门店列表 & 分页
+const initialized = ref(false)
+const shopList = ref<any[]>([])
+const page = ref(1)
+const pageSize = 30
+const hasMore = ref(true)
+const loading = ref(false)
+const currentStoreId = ref<number | null>(null)
+
+// 地图标记点
+const markers: any = computed(() => {
+  return shopList.value.map((store, index) => ({
+    id: index,
+    latitude: Number(store.latitude),
+    longitude: Number(store.longitude),
+    iconPath: `${IMG_BASE_URL}/shop/ic-map-mark.png`,
+    width: 40,
+    height: 40,
+    callout: {
+      content: store.name,
+      color: popTitColor,
+      bgColor: popBgColor,
+      padding: 4,
+      borderRadius: 20,
+      fontSize: '20rpx',
+      display: 'ALWAYS',
+      textAlign: 'center',
+    },
+  }))
+})
+
+onReady(() => {
+  mapCtx.value = uni.createMapContext('map')
+})
+
+onLoad(() => {
+  initPage()
+})
+
+// 初始化数据
+const initPage = async () => {
+  const { lat, lng, province } = await useLocation()
+
+  center.lat = Number(lat)
+  center.lng = Number(lng)
+  location.lat = Number(lat)
+  location.lng = Number(lng)
+  profileStore.addressInfo.province = province.name
+
+  initialized.value = true
+
+  fetchList(true)
+}
+
+// 确认搜索
+const onSearch = () => {
+  fetchList(true)
+}
+
+// 确认选择城市
+const onRegionConfirm = (region: any) => {
+  selectedRegion.value = {
+    province: region[0],
+    city: region[1],
+  }
+
+  fetchList(true)
+}
+
+// 上拉加载分页
+const onReachBottom = () => {
+  if (!hasMore.value || loading.value) return
+  fetchList(false)
+}
+
+// 加载列表
+const fetchList = async (reset = false) => {
+  if (loading.value) return
+
+  if (reset) {
+    page.value = 1
+    shopList.value = []
+    hasMore.value = true
+  }
+
+  loading.value = true
+  try {
+    const params = {
+      longitude: location.lng,
+      latitude: location.lat,
+    }
+    const list = await getShopList(params)
+
+    if (reset) {
+      shopList.value = list
+    }
+    else {
+      shopList.value.push(...list)
+    }
+
+    hasMore.value = list.length === pageSize
+
+    if (list.length > 0) {
+      page.value += 1
+    }
+  }
+  finally {
+    loading.value = false
+  }
+}
+
+// 点击列表门店
+const selectStore = (store: any) => {
+  currentStoreId.value = store.id
+  center.lat = Number(store.latitude)
+  center.lng = Number(store.longitude)
+}
+
+// 点击地图标记点
+const onMarkerTap = (e: any) => {
+  const index = e.detail.markerId
+  const store = shopList.value[index]
+  if (store) selectStore(store)
+}
+
+// 重新定位
+const reLocate = async () => {
+  if (mapCtx.value) {
+    mapCtx.value.moveToLocation()
+  }
+}
+
+// 前往导航
+const navigateToStore = (store: any) => {
+  uni.openLocation({
+    latitude: Number(store.latitude),
+    longitude: Number(store.longitude),
+    name: store.name,
+    address: store.address,
+    scale: 15,
+  })
+}
+
+// 问题反馈
+const goFeedback = async ({ name, code }: any) => {
+  openCustomerService({ storeName: name, storeCode: code })
+}
+
+// 拖拽调整地图高度
+const onTouchStart = (e: TouchEvent) => {
+  startY = e.touches[0].pageY
+}
+
+const onTouchMove = (e: TouchEvent) => {
+  const deltaY = e.touches[0].pageY - startY
+  let newHeight = mapHeight.value + deltaY
+
+  if (newHeight < MIN_HEIGHT) newHeight = MIN_HEIGHT
+  if (newHeight > MAX_HEIGHT) newHeight = MAX_HEIGHT
+
+  mapHeight.value = newHeight
+  startY = e.touches[0].pageY
+}
+
+const onTouchEnd = () => {
+  const diff = 50
+  if (mapHeight.value < MID_HEIGHT - diff) {
+    mapHeight.value = MIN_HEIGHT
+  }
+  else if (mapHeight.value > MID_HEIGHT + diff) {
+    mapHeight.value = MAX_HEIGHT
+  }
+  else {
+    mapHeight.value = MID_HEIGHT
+  }
+}
+</script>
+
+ <style scoped>
+.btn[data-theme='ml'] {
+  color: #F77600;
+  border-color: #F77600;
+}
+
+.btn[data-theme='zbqr'] {
+  color: #864228;
+  border-color: #864228;
+}
+
+.btn[data-theme='zwcs'] {
+  color: #473729;
+  border-color: #473729;
+}
+ </style>

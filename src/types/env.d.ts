@@ -11,6 +11,8 @@ interface ImportMetaEnv {
   VITE_APP_PROXY: string;
   /** API代理前缀 */
   VITE_API_PREFIX: string;
+  /** 小程序版本 */
+  VITE_WX_ENV_VERSION: 'develop' | 'trial' | 'release';
   /** 删除console */
   VITE_DROP_CONSOLE: string;
 }

@@ -1,4 +1,5 @@
-import * as CommonApi from './common'
-import * as DemoApi from './demo'
-
-export { CommonApi, DemoApi }
+export * from './modules/auth'
+export * from './modules/common'
+export * from './modules/lottery'
+export * from './modules/profile'
+export * from './modules/series'

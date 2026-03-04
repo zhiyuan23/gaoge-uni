@@ -1,0 +1,43 @@
+{
+  // 禁用 prettier，使用 eslint 的代码格式化
+  "prettier.enable": false,
+  // 保存时自动格式化
+  "editor.formatOnSave": false,
+  // 保存时自动修复
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "never"
+  },
+  "eslint.run": "onType",
+  "eslint.workingDirectories": [{ "mode": "auto" }],
+  // 禁用 ESLint 的后台任务（如全量扫描），仅保留编辑器基本功能
+  "eslint.lintTask.enable": false,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "vue",
+    "html",
+    "markdown",
+    "json",
+    "jsonc",
+    "yaml"
+  ],
+  "search.exclude": {
+    "**/unpackage": true,
+    "**/dist": true
+  },
+  // 消除json文件中的注释警告
+  "files.associations": {
+    "manifest.json": "jsonc",
+    "pages.json": "jsonc"
+  },
+  "files.watcherExclude": {
+    "**/unpackage/**": true,
+    "**/dist/**": true,
+    "**/node_modules/**": true
+  },
+  // 消除Unknown at rule @apply警告
+  "css.customData": [".vscode/unocss.json"]
+}

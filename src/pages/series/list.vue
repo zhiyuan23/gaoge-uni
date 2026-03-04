@@ -1,95 +1,109 @@
 <template>
-  <!-- 顶部区域 -->
-  <view class="relative w-100vw mb-15 h-550">
-    <image
-      class="h-100% w-100%"
-      src="@/static/images/home/bg-main.png"
-    />
-    <view class="border-2-solid-white relative flex-center-between rounded-1.5 mx-25 w-694 h-160 -mt-204">
+  <StatusPage
+    v-if="isRequestFail"
+    type="netError"
+    @click="refresh"
+  />
+  <template v-else>
+    <!-- 顶部区域 -->
+    <view class="relative w-100vw bg-#F3ECC2 pt-80">
+      <image
+        class="w-full h-500"
+        :src="`${IMG_BASE_URL}/home/bg-header.png`"
+      />
       <!-- 个人信息 -->
-      <view class="flex-center-start color-white" @click="goUserPage">
-        <image
-          class="size-120 pl-32 pr-25"
-          src="@/static/images/icons/ic-avatar.png"
-        />
+      <view class="w-full flex-center-start rounded-t-6 bg-#FEFBF2 h-146 -mt-110" @click="goUserPage">
+        <view class="pl-50 pr-20">
+          <u-avatar
+            :src="userInfo?.avatarUrl"
+            :default-url="`${IMG_BASE_URL}/icons/ic-avatar.png`"
+            size="55"
+          />
+        </view>
         <view class="flex-col-center">
-          <view class="pb-5 text-30">
-            {{ userInfo.nickName }}
+          <view class="font-bold pb-5 text-34">
+            <text v-if="isLogin">
+              Hey, {{ userInfo?.nickName }}
+            </text>
+            <text v-else>
+              去登录
+            </text>
           </view>
-          <view>{{ userInfo.userName }}</view>
         </view>
       </view>
-      <view class="relative mt-100 w-150 h-40">
-        <image
-          class="h-100% w-100%"
-          src="@/static/images/home/ic-wdjp.png"
-        />
-        <view class="flext-center absolute color-primary h-40 leading-40 top-0 right-14 text-22">
-          我的奖品
-        </view>
-      </view>
+    <!-- /个人信息 -->
     </view>
-  </view>
 
-  <!-- 系列列表 -->
-  <view
-    v-for="{ code, name } in seriesList"
-    :key="code"
-    class="rounded-1.25 bg-background mx-25 mb-20"
-    @click="goDetail(code)"
-  >
-    <image
-      class="w-100%"
-      :src="`/static/images/series/banner-${code}.png`"
-      mode="widthFix"
-    />
-    <view class="flex-center-between px-16 h-80">
-      <view class="color-primary font-bold pl-14 text-34">
-        {{ name }}1元畅饮赢大奖
+    <!-- 系列列表 -->
+    <PressFeedback v-for="item in seriesList" :key="item.code">
+      <view
+        class="relative overflow-hidden rounded-2.5 mx-32 mt-60 w-686 h-294"
+        @click="goDetail(item.code)"
+      >
+        <image
+          class="w-full bg-gray-100"
+          :src="item.activityEntryImg"
+          mode="widthFix"
+        />
       </view>
-      <view class="rounded-3 bg-primary color-white px-15 leading-48 text-22">
-        立即参与
-      </view>
-    </view>
-  </view>
-  <view class="pb-30" />
+    </PressFeedback>
+    <view class="h-60" />
+  </template>
 </template>
 
-<script setup lang='ts'>
-import { seriesList } from '@/constants/modules/serices'
-import useSeriesStore from '@/store/modules/series'
-import { goto } from '@/utils/navigate'
+<script setup lang="ts">
+import type { SeriesKey } from '@/types'
+import { IMG_BASE_URL } from '@/constants'
+import { useAuthStore, useProfileStore, useSeriesStore } from '@/store'
+import { navigateTo, storage } from '@/utils'
 
+const authStore = useAuthStore()
+const profileStore = useProfileStore()
 const seriesStore = useSeriesStore()
 
-// 登录状态
-const isLogin = ref(false)
+const { isLogin } = storeToRefs(authStore)
+const { userInfo } = storeToRefs(profileStore)
+const { seriesList, isRequestFail } = storeToRefs(seriesStore)
 
-// 个人信息
-const userInfo = ref({
-  nickName: '用户名称',
-  userName: 'HY00002',
+onLoad(async () => {
+  getSeriesList()
+  getProfile()
 })
+
+// 获取主题列表
+const getSeriesList = () => {
+  seriesStore.fetchSeriesList()
+}
+
+// 获取用户信息
+const getProfile = () => {
+  const sessionKey = storage.get('sessionKey')
+
+  if (isLogin.value && sessionKey) {
+    profileStore.fetchProfile()
+  }
+}
 
 // 查看个人信息
-function goUserPage() {
+const goUserPage = () => {
   const url = isLogin.value
-    ? '/pages/user/index'
-    : '/pages/common/login/index'
+    ? '/pages/profile/index'
+    : '/pages/login/index'
 
-  goto(url)
+  navigateTo(url)
 }
 
-// 跳转系列页
-function goDetail(type: string) {
-  seriesStore.seriesCode = type
+// 跳转系列详情页
+const goDetail = (code: SeriesKey) => {
+  seriesStore.setThemeCode(code)
+  seriesStore.setSeriesDetail(code)
 
-  uni.navigateTo({
-    url: `/pages/series/${type}/index`,
-  })
+  navigateTo(`/pages/series/${code}/index`)
 }
 
-onLoad(() => {
-  console.log('query')
-})
+// 刷新
+const refresh = async () => {
+  authStore.silentLogin()
+  seriesStore.fetchSeriesList(true)
+}
 </script>

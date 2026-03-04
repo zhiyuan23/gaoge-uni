@@ -1,0 +1,61 @@
+/* stylelint-disable-next-line font-family-no-missing-generic-family-keyword */
+@font-face {
+  font-family: "Source Han Sans CN";
+  font-style: normal;
+  font-weight: 400;
+  src: url("@/static/fonts/SourceHanSansCN-Regular.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Source Han Sans CN";
+  font-style: normal;
+  font-weight: 500;
+  src: url("@/static/fonts/SourceHanSansCN-Medium.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Source Han Sans CN";
+  font-style: normal;
+  font-weight: 700;
+  src: url("@/static/fonts/SourceHanSansCN-Bold.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Source Han Sans CN";
+  font-style: normal;
+  font-weight: 800;
+  src: url("@/static/fonts/SourceHanSansCN-Heavy.woff2") format("woff2");
+  font-display: swap;
+}
+
+/* 常规体 */
+.text-regular {
+  font-family: "Source Han Sans CN";
+  font-weight: 400;
+  transform: translateY(-4rpx);
+}
+
+/* 中等体 */
+.text-medium {
+  font-family: "Source Han Sans CN";
+  font-weight: 500;
+  transform: translateY(-4rpx);
+}
+
+/* 粗体 */
+.text-bold {
+  font-family: "Source Han Sans CN";
+  font-weight: 700;
+  transform: translateY(-4rpx);
+}
+
+
+/* 粗体 */
+.text-heavy {
+  font-family: "Source Han Sans CN";
+  font-weight: 900;
+  transform: translateY(-4rpx);
+}

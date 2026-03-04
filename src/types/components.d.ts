@@ -8,13 +8,23 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    AgreePrivacy: typeof import('./../components/agree-privacy/index.vue')['default']
-    AreaPicker: typeof import('./../components/area-picker/index.vue')['default']
-    Copyright: typeof import('./../components/copyright/index.vue')['default']
-    LangSelect: typeof import('./../components/lang-select/index.vue')['default']
-    PrivacyPopup: typeof import('./../components/privacy-popup/index.vue')['default']
-    ResultDialog: typeof import('./../components/result-dialog/index.vue')['default']
+    LangSelect: typeof import('./../components/common/LangSelect.vue')['default']
+    LotteryDraw: typeof import('./../components/lottery/LotteryDraw.vue')['default']
+    LotteryMyPrize: typeof import('./../components/lottery/LotteryMyPrize.vue')['default']
+    LotteryPoster: typeof import('./../components/lottery/LotteryPoster.vue')['default']
+    LotteryResult: typeof import('./../components/lottery/LotteryResult.vue')['default']
+    LotteryRule: typeof import('./../components/lottery/LotteryRule.vue')['default']
+    LotteryService: typeof import('./../components/lottery/LotteryService.vue')['default']
+    LotteryWinner: typeof import('./../components/lottery/LotteryWinner.vue')['default']
+    MainButton: typeof import('./../components/base/MainButton.vue')['default']
+    PopupHeader: typeof import('./../components/base/PopupHeader.vue')['default']
+    PressFeedback: typeof import('./../components/base/PressFeedback.vue')['default']
+    PrivacyInfo: typeof import('./../components/privacy/PrivacyInfo.vue')['default']
+    PrivacyPopup: typeof import('./../components/privacy/PrivacyPopup.vue')['default']
+    RegionPicker: typeof import('./../components/common/RegionPicker.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SearchBar: typeof import('./../components/base/SearchBar.vue')['default']
+    StatusPage: typeof import('./../components/common/StatusPage.vue')['default']
   }
 }

@@ -1,6 +1,8 @@
-<script setup lang='ts'>
-onLaunch(() => {
+<script setup lang="ts">
+import { useAuthStore } from '@/store'
 
+onLaunch(async () => {
+  useAuthStore().silentLogin()
 })
 
 onShow(() => {
@@ -16,4 +18,5 @@ onHide(() => {
 /* 每个页面公共css */
 // @import 'uview-plus/index.scss';
 @import '@/static/styles/common.scss';
+@import '@/static/styles/font.scss';
 </style>

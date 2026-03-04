@@ -5,11 +5,13 @@ import { createPersistedState } from 'pinia-plugin-persistedstate'
 
 // 导入子模块
 import useAppStore from './modules/app'
-import useHomeStore from './modules/home'
+import useAuthStore from './modules/auth'
+import useConfigStore from './modules/config'
+import useProfileStore from './modules/profile'
 import useSeriesStore from './modules/series'
 
 // 安装pinia状态管理插件
-function setupStore(app: App) {
+const setupStore = (app: App) => {
   const store = createPinia()
 
   const piniaPersist = createPersistedState({
@@ -26,7 +28,10 @@ function setupStore(app: App) {
 // 导出模块
 export {
   useAppStore,
-  useHomeStore,
+  useAuthStore,
+  useConfigStore,
+  useProfileStore,
   useSeriesStore,
 }
+
 export default setupStore

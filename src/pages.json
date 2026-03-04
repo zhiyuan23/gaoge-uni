@@ -29,30 +29,60 @@
       }
     },
     {
+      "path": "pages/series/detail",
+      "style": {
+        "navigationBarTitleText": "系列详情"
+      }
+    },
+    {
       "path": "pages/series/ml/index",
       "style": {
-        "navigationBarTitleText": "1元畅饮赢大奖",
-        "backgroundColor": "#ffffff"
+        "navigationBarTitleText": "1元畅饮赢大奖"
       }
     },
     {
       "path": "pages/series/zbqr/index",
       "style": {
-        "navigationBarTitleText": "1元畅饮赢大奖",
-        "backgroundColor": "#ffffff"
+        "navigationBarTitleText": "1元畅饮赢大奖"
       }
     },
     {
       "path": "pages/series/zwcs/index",
       "style": {
-        "navigationBarTitleText": "1元畅饮赢大奖",
-        "backgroundColor": "#ffffff"
+        "navigationBarTitleText": "1元畅饮赢大奖"
       }
     },
     {
-      "path": "pages/demo/index",
+      "path": "pages/login/index",
       "style": {
-        "navigationBarTitleText": "demo示例"
+        "navigationBarTitleText": "登录授权",
+        "backgroundColor": "#f3f5f7"
+      }
+    },
+    {
+      "path": "pages/profile/index",
+      "style": {
+        "navigationBarTitleText": "个人信息",
+        "backgroundColor": "#f3f4f5"
+      }
+    },
+    {
+      "path": "pages/profile/agreement",
+      "style": {
+        "navigationBarTitleText": "协议与说明",
+        "backgroundColor": "#f3f4f5"
+      }
+    },
+    {
+      "path": "pages/reward/shop/index",
+      "style": {
+        "navigationBarTitleText": "兑奖点"
+      }
+    },
+    {
+      "path": "pages/reward/prize/redeem",
+      "style": {
+        "navigationBarTitleText": "兑奖信息"
       }
     }
   ],
@@ -61,15 +91,9 @@
       "root": "pages/common",
       "pages": [
         {
-          "path": "login/index",
-          "style": {
-            "navigationBarTitleText": "登录授权"
-          }
-        },
-        {
           "path": "webview/index",
           "style": {
-            "navigationBarTitleText": "网页"
+            "navigationBarTitleText": ""
           }
         },
         {
@@ -90,9 +114,8 @@
   },
   "globalStyle": {
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "怡宝家园",
+    "navigationBarTitleText": "畅饮怡刻",
     "navigationBarBackgroundColor": "#ffffff",
-    "navigationBarColor": "#202020",
-    "backgroundColor": "#F3F4F6"
+    "backgroundColor": "#ffffff"
   }
 }

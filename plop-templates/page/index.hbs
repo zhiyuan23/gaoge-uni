@@ -1,20 +1,22 @@
 <template>
-  <view>
-
+  <view class="page">
+    <view class="flex-center">
+      \{{ pageTitle }}
+    </view>
   </view>
 </template>
 
-<script setup lang='ts'>
-import use{{pascalCase name}}Store from '@/store/modules/{{kebabCase name}}'
+<script setup lang="ts">
 
-const {{camelCase name}}Store = use{{pascalCase name}}Store()
-const {  } = storeToRefs({{camelCase name}}Store)
-
-function {{camelCase name}}() {
-
-}
-
-onMounted(() => {
-
+// 页面加载逻辑 (uniapp 推荐使用 onLoad 获取参数)
+onLoad((options) => {
+  console.log('Page onLoad:', options)
 })
+
+/**
+ * 处理业务逻辑
+ */
+const initData = () => {
+  // {{camelCase name}}Store.fetchData()
+}
 </script>

@@ -11,36 +11,66 @@ import { darkTheme, lightTheme } from './themes'
 
 const { presetWeappAttributify, transformerAttributify } = extractorAttributify()
 
+const rpxPropsMap: Record<string, string[]> = {
+  'm': ['margin'],
+  'mx': ['margin-left', 'margin-right'],
+  'my': ['margin-top', 'margin-bottom'],
+  'ml': ['margin-left'],
+  'mr': ['margin-right'],
+  'mt': ['margin-top'],
+  'mb': ['margin-bottom'],
+  'p': ['padding'],
+  'px': ['padding-left', 'padding-right'],
+  'py': ['padding-top', 'padding-bottom'],
+  'pl': ['padding-left'],
+  'pr': ['padding-right'],
+  'pt': ['padding-top'],
+  'pb': ['padding-bottom'],
+  'gap': ['gap'],
+  'w': ['width'],
+  'h': ['height'],
+  'min-w': ['min-width'],
+  'max-w': ['max-width'],
+  'min-h': ['min-height'],
+  'max-h': ['max-height'],
+  'top': ['top'],
+  'right': ['right'],
+  'bottom': ['bottom'],
+  'left': ['left'],
+  'inset': ['top', 'right', 'bottom', 'left'],
+  'leading': ['line-height'],
+  'text': ['font-size'],
+}
+
 // 设置rpx为默认单位
-function createRpxRules(prefix: string, properties: string[]): any[] {
-  return [
-    [
+const generateRpxRules = (map: Record<string, string[]>) => {
+  const rules: any[] = []
+
+  Object.entries(map).forEach(([prefix, props]) => {
+    // 正数
+    rules.push([
       new RegExp(`^${prefix}-(-?[\\d.]+)$`),
-      (match: string[]) => {
-        const value = match[1]
-        return Object.fromEntries(properties.map(prop => [prop, `${value}rpx`]))
-      },
+      (match: string[]) => Object.fromEntries(props.map(p => [p, `${match[1]}rpx`])),
       { autocomplete: `${prefix}-<num>` },
-    ],
-    // 支持负值写法（如 -ml-20）
-    [
+    ])
+    // 负数
+    rules.push([
       new RegExp(`^-${prefix}-(-?[\\d.]+)$`),
-      (match: string[]) => {
-        const value = match[1]
-        return Object.fromEntries(properties.map(prop => [prop, `-${value}rpx`]))
-      },
+      (match: string[]) => Object.fromEntries(props.map(p => [p, `-${match[1]}rpx`])),
       { autocomplete: `-${prefix}-<num>` },
-    ],
-  ]
+    ])
+  })
+
+  return rules
 }
 
 export default defineConfig({
   content: {
     pipeline: {
       include: [
-        /\.(vue|svelte|[jt]sx|mdx?|astro|elm|php|phtml|html)($|\?)/,
-        'src/**/*.{js,ts}',
+        'src/**/*.{vue,ts,js,html}',
       ],
+      exclude: ['node_modules', '.git', 'dist', 'unpackage'],
     },
   },
   presets: [
@@ -55,53 +85,12 @@ export default defineConfig({
       },
     }),
   ],
-  safelist: [
-    'h-100',
-    'h-126',
-    'h-160',
-  ],
   /**
    * 自定义快捷语句
    * @see https://github.com/unocss/unocss#shortcuts
    */
   rules: [
-    // 边距
-    ...createRpxRules('m', ['margin']),
-    ...createRpxRules('mx', ['margin-left', 'margin-right']),
-    ...createRpxRules('my', ['margin-top', 'margin-bottom']),
-    ...createRpxRules('ml', ['margin-left']),
-    ...createRpxRules('mr', ['margin-right']),
-    ...createRpxRules('mt', ['margin-top']),
-    ...createRpxRules('mb', ['margin-bottom']),
-
-    // 内边距
-    ...createRpxRules('p', ['padding']),
-    ...createRpxRules('px', ['padding-left', 'padding-right']),
-    ...createRpxRules('py', ['padding-top', 'padding-bottom']),
-    ...createRpxRules('pl', ['padding-left']),
-    ...createRpxRules('pr', ['padding-right']),
-    ...createRpxRules('pt', ['padding-top']),
-    ...createRpxRules('pb', ['padding-bottom']),
-    ...createRpxRules('gap', ['gap']),
-
-    // 尺寸
-    ...createRpxRules('w', ['width']),
-    ...createRpxRules('h', ['height']),
-    ...createRpxRules('min-w', ['min-width']),
-    ...createRpxRules('max-w', ['max-width']),
-    ...createRpxRules('min-h', ['min-height']),
-    ...createRpxRules('max-h', ['max-height']),
-    ...createRpxRules('leading', ['line-height']),
-
-    // 定位
-    ...createRpxRules('top', ['top']),
-    ...createRpxRules('right', ['right']),
-    ...createRpxRules('bottom', ['bottom']),
-    ...createRpxRules('left', ['left']),
-    ...createRpxRules('inset', ['top', 'right', 'bottom', 'left']),
-
-    // 字体大小（可选）
-    [/^text-(\d+)$/, ([, d]) => ({ 'font-size': `${d}rpx` })],
+    ...generateRpxRules(rpxPropsMap),
 
     // 边框
     [/^border-(\d+)-(solid|dashed|dotted)-(.+)$/, ([, w, style, color]) => ({
@@ -109,24 +98,32 @@ export default defineConfig({
       'border-style': style,
       'border-color': color,
     })],
+    // 单独设置边框的方向（如上下左右），例如 border-t-2-solid-#e0e0e0
+    [/^border-([trblxy])-(\d+)-(solid|dashed|dotted)-(.+)$/, ([, direction, w, style, color]) => {
+      const directions: any = {
+        t: 'top',
+        r: 'right',
+        b: 'bottom',
+        l: 'left',
+        x: 'left right',
+        y: 'top bottom',
+      }
+      const borderSide = directions[direction]
+      return {
+        [`border-${borderSide}-width`]: `${w}rpx`,
+        [`border-${borderSide}-style`]: style,
+        [`border-${borderSide}-color`]: color,
+      }
+    }],
   ],
   shortcuts: [
     [/^flex-?(col)?-(start|end|center|baseline|stretch)-?(start|end|center|between|around|evenly|left|right)?$/, ([, col, items, justify]) => {
-      const cls = ['flex']
-      if (col === 'col') {
-        cls.push('flex-col')
-      }
-      if (items === 'center' && !justify) {
-        cls.push('items-center')
-        cls.push('justify-center')
-      }
-      else {
-        cls.push(`items-${items}`)
-        if (justify) {
-          cls.push(`justify-${justify}`)
-        }
-      }
-      return cls.join(' ')
+      return [
+        'flex',
+        col ? 'flex-col' : '',
+        items ? `items-${items}` : '',
+        justify ? `justify-${justify}` : '',
+      ].filter(Boolean).join(' ')
     }],
   ],
   theme: {
@@ -136,8 +133,10 @@ export default defineConfig({
       default: lightTheme['--text-primary'],
       secondary: lightTheme['--text-secondary'],
       background: lightTheme['--bg-container'],
+      bgSecondary: lightTheme['--bg-secondary'],
       border: lightTheme['--border-base'],
       wechat: lightTheme['--wechat-primary'],
+      textTheme: lightTheme['--text-theme'],
     },
     spacing: { row: { base: '20rpx' } },
   },

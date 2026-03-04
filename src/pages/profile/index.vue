@@ -1,0 +1,218 @@
+<template>
+  <view class="page container">
+    <view class="w-full h-20" />
+
+    <!-- 个人信息卡片 -->
+    <view class="card">
+      <!-- 头像 -->
+      <view class="row avatar relative">
+        <text>头像</text>
+        <image
+          class="size-120 rounded-full"
+          :src="userInfo.avatarUrl || `${IMG_BASE_URL}/icons/ic-avatar.png`"
+          mode="aspectFill"
+        />
+        <button
+          class="absolute opacity-0 w-650 h-120"
+          open-type="chooseAvatar"
+          @chooseavatar="onChooseAvatar"
+        />
+        <view class="icon">
+          <u-icon name="arrow-right" color="#909399" />
+        </view>
+      </view>
+      <view class="line" />
+
+      <!-- 用户名（不可编辑） -->
+      <view class="row">
+        <text>用户名</text>
+        <view>{{ userInfo.userName || '未设置' }}</view>
+      </view>
+      <view class="line" />
+
+      <!-- 昵称 -->
+      <view class="row">
+        <text>昵称</text>
+        <input
+          v-model="userInfo.nickName"
+          type="nickname"
+          placeholder="请输入昵称"
+          class="flex-1 text-right text-26"
+          @blur="onChangeNickname"
+        >
+        <view class="icon">
+          <u-icon name="arrow-right" color="#909399" />
+        </view>
+      </view>
+      <view class="line" />
+
+      <!-- 手机号（不可编辑） -->
+      <view class="row">
+        <text>手机号</text>
+        <view>{{ userInfo.mobilePhone }}</view>
+      </view>
+    </view>
+
+    <!-- 更多信息卡片 -->
+    <view class="card">
+      <!-- 性别 -->
+      <view class="row" @tap="handleEditGender">
+        <text>性别</text>
+        <view>{{ userInfo.genderName || '去完善' }}</view>
+        <view class="icon">
+          <u-icon name="arrow-right" color="#909399" />
+        </view>
+      </view>
+      <view class="line" />
+
+      <!-- 生日 -->
+      <view class="row" @tap="handleEditBirthday">
+        <text>生日</text>
+        <view>{{ userInfo.birthDate || '去完善' }}</view>
+        <view class="icon">
+          <u-icon name="arrow-right" color="#909399" />
+        </view>
+      </view>
+
+      <!-- 日期选择器 -->
+      <u-datetime-picker
+        v-model="birthdayTimestamp"
+        :show="showDatePicker"
+        title="选择生日"
+        mode="date"
+        :min-date="minDate"
+        :max-date="maxDate"
+        confirm-color="var(--primary)"
+        @cancel="showDatePicker = false"
+        @close="showDatePicker = false"
+        @confirm="onConfirmBirthday"
+      />
+    </view>
+
+    <!-- 协议与说明 -->
+    <view class="card">
+      <view class="row" @tap="gotoAgreement">
+        <text>协议与说明</text>
+        <view class="icon">
+          <u-icon name="arrow-right" color="#909399" />
+        </view>
+      </view>
+
+      <template v-if="!isProduction">
+        <view class="line" />
+        <view class="row" @tap="handleLogout">
+          <text>退出登录</text>
+          <view class="icon">
+            <u-icon name="arrow-right" color="#909399" />
+          </view>
+        </view>
+      </template>
+    </view>
+  </view>
+</template>
+
+<script setup lang="ts">
+import { uploadFile } from '@/api'
+import { IMG_BASE_URL } from '@/constants'
+// import { useAgreement } from '@/composables'
+import { useAuthStore, useProfileStore } from '@/store'
+import { formatTime, navigateTo, reLaunch } from '@/utils'
+
+// const { showSelector } = useAgreement()
+const isProduction = import.meta.env.PROD
+
+const profileStore = useProfileStore()
+const { userInfo } = storeToRefs(profileStore)
+
+const genderOptions = ['女', '男']
+
+// 生日选择器
+const showDatePicker = ref(false)
+const birthdayTimestamp = ref(Date.now())
+const minDate = new Date('1900-01-01').getTime()
+const maxDate = Date.now()
+
+// 修改头像
+const onChooseAvatar = async (e: any) => {
+  const { avatarUrl } = e.detail
+  if (!avatarUrl) return
+
+  const { previewURL } = await uploadFile({ filePath: avatarUrl })
+  await profileStore.updateProfile({ avatarUrl: previewURL })
+}
+
+// 修改昵称（失去焦点时保存）
+const onChangeNickname = async () => {
+  if (!userInfo.value.nickName.trim()) return
+
+  await profileStore.updateProfile({ nickName: userInfo.value.nickName })
+}
+
+// 修改性别
+const handleEditGender = async () => {
+  const { tapIndex } = await uni.showActionSheet({ itemList: genderOptions })
+
+  const genderName = genderOptions[tapIndex]
+  const gender = tapIndex === 0 ? 0 : 1
+
+  await profileStore.updateProfile({ gender, genderName })
+}
+
+// 打开生日选择器
+const handleEditBirthday = () => {
+  const birth = userInfo.value.birthDate
+  birthdayTimestamp.value = birth ? new Date(birth).getTime() : Date.now()
+  showDatePicker.value = true
+}
+
+// 确认生日
+const onConfirmBirthday = async ({ value }: any) => {
+  const birthDate = formatTime(value, { format: 'YYYY-MM-DD' })
+  await profileStore.updateProfile({ birthDate })
+  showDatePicker.value = false
+}
+
+// 查看协议与说明
+const gotoAgreement = () => {
+  navigateTo('/pages/profile/agreement')
+}
+
+// 退出登录
+const handleLogout = () => {
+  useAuthStore().logout()
+  useAuthStore().silentLogin()
+  reLaunch('/pages/home/index')
+}
+</script>
+
+<style scoped lang="scss">
+page {
+  @apply bg-bgSecondary;
+}
+
+.container {
+  @apply px-24 bg-bgSecondary text-26 color-#353535;
+}
+
+.card {
+  @apply rounded-1.5 bg-background mb-20;
+}
+
+.row {
+  @apply flex-center-between pl-28 pr-58 h-96 relative;
+  text {
+    @apply color-secondary;
+  }
+  .icon {
+    @apply absolute right-20;
+  }
+}
+
+.avatar {
+  @apply h-148;
+}
+
+.line {
+  @apply mx-24 h-1 bg-border;
+}
+</style>
