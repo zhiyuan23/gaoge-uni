@@ -83,7 +83,7 @@
           @click="goExchange"
         />
       </view>
-      <view class="tips mt-20 text-14" :data-theme="themeCode">
+      <view class="tips mt-20 text-14" :class="`tips-${themeCode}`">
         参与活动有机会赢随机红包或加1元换购同产品
       </view>
     </view>
@@ -115,13 +115,12 @@
       @action="handlePrizeAction"
     />
 
-    <u-overlay opacity="0.8" :show="showOverlay">
+    <t-overlay background-color="rgba(0, 0, 0, 0.8)" :visible="showOverlay">
       <!-- 开奖弹窗 -->
       <LotteryDraw
         ref="drawLotteryRef"
         v-model="showDraw"
         :loading="drawLoading"
-        loading-text="开奖中..."
         @confirm="drawLottery"
         @finished="finishedDraw"
       />
@@ -132,7 +131,7 @@
         :prize-info="drawResultInfo"
         @confirm="handlePrizeAction"
       />
-    </u-overlay>
+    </t-overlay>
 
     <!-- 提现成功分享海报 -->
     <LotteryPoster
@@ -541,12 +540,8 @@ onUnmounted(() => {
 })
 </script>
 
-<style scoped>
-:deep(uni-page-wrapper) {
-  overflow: hidden;
-}
-
-.tips[data-theme='ml'] { color: rgb(0 0 0 / 30%); }
-.tips[data-theme='zbqr'] { color: #EBD670; }
-.tips[data-theme='zwcs'] { color: #BDCD5E; }
+<style>
+.tips-ml { color: rgb(0 0 0 / 30%); }
+.tips-zbqr { color: #EBD670; }
+.tips-zwcs { color: #BDCD5E; }
 </style>

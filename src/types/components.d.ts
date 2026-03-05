@@ -21,7 +21,6 @@ declare module 'vue' {
     PressFeedback: typeof import('./../components/base/PressFeedback.vue')['default']
     PrivacyInfo: typeof import('./../components/privacy/PrivacyInfo.vue')['default']
     PrivacyPopup: typeof import('./../components/privacy/PrivacyPopup.vue')['default']
-    RegionPicker: typeof import('./../components/common/RegionPicker.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SearchBar: typeof import('./../components/base/SearchBar.vue')['default']

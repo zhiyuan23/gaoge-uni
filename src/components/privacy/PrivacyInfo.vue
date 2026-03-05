@@ -1,14 +1,18 @@
 <template>
-  <u-checkbox-group
-    :model-value="checkboxValue"
-    shape="circle"
-    :active-color="activeColor"
+  <t-checkbox-group
+    :value="checkboxValue"
+    borderless
+    :custom-style="{
+      '--td-checkbox-icon-checked-color': activeColor,
+      '--td-checkbox-icon-size': '32rpx',
+    }"
     @change="handleChange"
   >
     <view class="flex-center-center text-24">
-      <u-checkbox
-        name="1"
-        :custom-style="{ fontSize: '22rpx' }"
+      <t-checkbox
+        borderless
+        value="1"
+        :custom-style="{ padding: '0', marginRight: '8rpx' }"
       />
       <text
         :style="{ color: textColor }"
@@ -30,7 +34,7 @@
         《隐私政策》
       </text>
     </view>
-  </u-checkbox-group>
+  </t-checkbox-group>
 </template>
 
 <script setup lang="ts">
@@ -76,13 +80,13 @@ const linkColor = computed(() => {
   return THEME_COLORS[props.themeCode].link
 })
 
-const handleChange = (val: string[]) => {
-  agree.value = val.includes('1')
+const handleChange = (context: { value: Array<string | number | boolean> }) => {
+  agree.value = context.value.includes('1')
 }
 </script>
 
-<style lang="scss" scoped>
-.u-checkbox-group--row {
+<style lang="scss">
+.t-checkbox-group {
   display: block;
 }
 </style>

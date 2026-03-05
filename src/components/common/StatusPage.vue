@@ -18,7 +18,7 @@
     <slot name="action">
       <view
         v-if="state.btnText"
-        class="u-press h-80rpx w-240rpx flex-center-center rounded-40rpx bg-white text-#353535 text-32 border-2-solid-#B2B2B2"
+        class="t-press h-80rpx w-240rpx flex-center-center rounded-40rpx bg-white text-#353535 text-32 border-2-solid-#B2B2B2"
         @tap="onBtnClick"
       >
         {{ state.btnText }}

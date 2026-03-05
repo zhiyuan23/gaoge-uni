@@ -1,7 +1,7 @@
 # 五码合一营销系统 · 消费者端小程序
 
 **技术栈**：
-`Vue 3.5` · `Vite 5` · `TypeScript` · `uniapp` · `uview-plus` · `UnoCSS`
+`Vue 3.5` · `Vite 5` · `TypeScript` · `uniapp` · `tdesign-uniapp` · `UnoCSS`
 
 ## 特性
 
@@ -11,7 +11,7 @@
 - [x] 支持`Typescript`
 - [x] 支持自动加载组件
 - [x] 自动校验`git`提交代码格式
-- [x] 集成`uview-plus3.0 ui`库
+- [x] 集成`tdesign-uniapp`组件库
 - [x] 集成`ESLint`、`StyleLint`、`EditorConfig`代码格式规范
 - [x] 集成`UnoCSS`
 - [x] 集成`iconify`图标库

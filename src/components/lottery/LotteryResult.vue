@@ -1,11 +1,11 @@
 <template>
-  <u-popup
-    :show="show"
-    mode="center"
-    bg-color="transparent"
-    overlay-opacity="0.0"
+  <t-popup
+    :visible="show"
+    placement="center"
+    :custom-style="{ background: 'transparent' }"
+    :overlay-props="{ backgroundColor: 'rgba(0, 0, 0, 0)' }"
     :safe-area-inset-bottom="false"
-    :close-on-click-overlay="false"
+    :close-on-overlay-click="false"
   >
     <view class="flex-col-center text-26 -mt-240">
       <view
@@ -107,7 +107,7 @@
         <view class="mx-110 mt-50 leading-50" :style="{ color: tipsColor }">
           <view v-if="isStoreUser" class="flex-center-center gap-10" @click="handleGoStore">
             我是商户我要兑奖
-            <u-icon name="arrow-right-double" :color="tipsColor" size="16" />
+            <t-icon name="arrow-right-double" :color="tipsColor" size="16" />
           </view>
           <text v-else>
             {{ displayTipsText }}
@@ -123,7 +123,7 @@
     >
       <image :src="`${IMG_BASE_URL}/lottery/win-cart-${themeCode}.png`" mode="widthFix" class="w-full" @click="handleGoShop" />
     </view>
-  </u-popup>
+  </t-popup>
 </template>
 
 <script setup lang="ts">
@@ -142,6 +142,8 @@ const emit = defineEmits<{
   close: [];
   confirm: [string, any];
 }>()
+
+const formatStr = 'YYYY年MM月DD日 HH:mm:ss'
 
 const show = defineModel<boolean>({ required: true })
 const seriesStore = useSeriesStore()
@@ -186,7 +188,6 @@ const displayErrorText = computed(() => {
 // 显示的时间逻辑
 const timeLines = computed(() => {
   const p = prizeInfo.value
-  const targetFormat = 'YYYY年MM月DD日 HH:mm:ss'
 
   const configs = [
     { key: 'scanTime', label: '扫码时间' },
@@ -204,7 +205,7 @@ const timeLines = computed(() => {
       const rawValue = p[key as keyof PrizeInfo]
 
       if (rawValue) {
-        const formatted = formatTime(rawValue, { format: targetFormat })
+        const formatted = formatTime(rawValue, { format: formatStr })
         const displayLabel = typeof label === 'function' ? label() : label
         return `${displayLabel}：${formatted}`
       }
@@ -219,8 +220,10 @@ const displayTipsText = computed(() => {
 
   const unitText = memExchangeTimeUnit === 'day' ? '天' : '小时'
   const deadline = memExchangeTimeLimit + unitText
-  const exchangeEndDate = exchangeEndTime.substring(0, 11)
   const expiredTips = '逾期未兑换将视为自动放弃领奖，不予补发'
+  const exchangeEndDate = exchangeEndTime
+    ? formatTime(exchangeEndTime, { format: formatStr }).slice(0, 10)
+    : ''
 
   // 逾期未兑奖
   if (isExpired.value) {
@@ -327,7 +330,7 @@ const handleGoStore = () => {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .anim-prize-fade {
   opacity: 0;
   animation: prizeFade .8s ease-out forwards;

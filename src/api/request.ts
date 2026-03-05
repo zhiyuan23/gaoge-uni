@@ -1,44 +1,54 @@
-import type { HttpRequestConfig } from 'uview-plus/libs/luch-request'
 import { md5 } from 'js-md5'
-import Request from 'uview-plus/libs/luch-request'
 import { APP_ID, CenterService, PREFIX } from '@/constants'
 import { Loading, reLaunch, storage, Toast } from '@/utils'
 
-const http = new Request()
+type RequestMethod = 'GET' | 'POST' | 'UPLOAD' | 'DOWNLOAD'
+
+interface RequestCustom {
+  loading?: boolean;
+  toast?: boolean;
+  json?: boolean;
+  skipHRAuth?: boolean;
+  skipAuthCheck?: boolean;
+}
+
+interface RequestOption {
+  timeout?: number;
+  header?: Record<string, string>;
+  custom?: RequestCustom;
+  filePath?: string;
+  name?: string;
+}
+
+interface InternalRequestConfig extends RequestOption {
+  url: string;
+  method: RequestMethod;
+  data?: any;
+}
+
+interface RequestResult<T = any> {
+  code: string;
+  content?: T;
+  msg?: string;
+}
 
 const accessToken = ref<string>('')
 const userIdentity = ref<string>('')
+const defaultTimeout = 10000
 
 // ==================== 鉴权刷新 Promise 锁 ====================
-/**
- * 刷新中的鉴权 Promise
- * - 存在：说明正在刷新，所有请求复用它
- * - 为 null：说明当前无刷新任务
- */
 let refreshPromise: Promise<void> | null = null
 
-/**
- * 确保华润鉴权已完成
- * - 已有 token：直接通过
- * - 刷新中：复用 Promise
- * - 否则：发起一次刷新
- */
 const ensureHrAuth = (): Promise<void> => {
-  // 已有有效鉴权
   if (accessToken.value && userIdentity.value) {
     return Promise.resolve()
   }
 
-  // 如果已有刷新任务，直接等待
   if (refreshPromise) {
     return refreshPromise
   }
 
-  // 创建新的刷新任务
   refreshPromise = initHuarunAuth()
-    .catch((err) => {
-      throw err
-    })
     .finally(() => {
       refreshPromise = null
     })
@@ -46,54 +56,26 @@ const ensureHrAuth = (): Promise<void> => {
   return refreshPromise
 }
 
-// ==================== 全局默认配置 ====================
-http.setConfig((config: HttpRequestConfig) => {
-  config.baseURL = import.meta.env.VITE_API_BASE_URL
-  config.timeout = 10000
-  config.header = {
-    'content-type': 'application/x-www-form-urlencoded',
-    ...config.header,
-  }
+const normalizeBaseUrl = (centerPath?: string) => {
+  let baseURL = import.meta.env.VITE_API_BASE_URL
 
-  // H5 环境代理配置
   // #ifdef H5
   if (import.meta.env.VITE_APP_PROXY === 'true') {
-    config.baseURL = import.meta.env.VITE_API_PREFIX
+    baseURL = import.meta.env.VITE_API_PREFIX
   }
   // #endif
 
-  return config
-})
+  return `${baseURL}${centerPath || CenterService.Activity}`
+}
 
-// ==================== 请求拦截器 ====================
-/**
- * 请求头
- * appKey: dicp
- * Authorization: bearer (accessToken)
- * cpm-user-identity: (userIdentity)
- * cpm-client-type: web
- * thirdSessionKey (sessionKey)
- */
-http.interceptors.request.use(async (config: HttpRequestConfig) => {
-  // 确保鉴权完成
-  if (!config.custom?.skipHRAuth) {
-    try {
-      await ensureHrAuth()
-    }
-    catch {
-      Toast('系统初始化失败，请稍后重试')
-      return Promise.reject(new Error('华润鉴权失败'))
-    }
+const createHeaders = (config: InternalRequestConfig) => {
+  const headers: Record<string, string> = {
+    'content-type': 'application/x-www-form-urlencoded',
+    ...(config.header || {}),
   }
-
-  const headers = config.header = config.header ?? {}
 
   if (config.custom?.json) {
     headers['content-type'] = 'application/json;charset=UTF-8'
-  }
-
-  if (config.custom?.loading) {
-    Loading.show()
   }
 
   if (accessToken.value) {
@@ -106,110 +88,142 @@ http.interceptors.request.use(async (config: HttpRequestConfig) => {
     })
   }
 
-  // 拼接微服务路径
+  return headers
+}
+
+const parseResponseData = (raw: any): RequestResult => {
+  if (typeof raw === 'string') {
+    try {
+      return JSON.parse(raw)
+    }
+    catch {
+      return { code: '50000', msg: raw }
+    }
+  }
+  return raw || { code: '50000', msg: '请求失败' }
+}
+
+const requestCore = async <T = any>(config: InternalRequestConfig): Promise<T> => {
+  if (!config.custom?.skipHRAuth) {
+    try {
+      await ensureHrAuth()
+    }
+    catch {
+      Toast('系统初始化失败，请稍后重试')
+      return Promise.reject(new Error('华润鉴权失败'))
+    }
+  }
+
+  if (config.custom?.loading) {
+    Loading.show()
+  }
+
   const centerPath = config.data?._center ?? CenterService.Activity
-  config.baseURL = import.meta.env.VITE_API_BASE_URL + centerPath
+  const baseURL = normalizeBaseUrl(centerPath)
+  const headers = createHeaders(config)
+  const timeout = config.timeout ?? defaultTimeout
 
-  return config
-})
+  try {
+    let response: any
 
-// ==================== 响应拦截器 ====================
-/**
- * 响应拦截：统一处理成功/失败逻辑
- * - 成功（code === 0 或 '00000'）：直接返回 content（业务数据）
- * - 失败：toast 提示并 reject
- */
-http.interceptors.response.use(
-  async (res: any) => {
-    const custom = (res.config as HttpRequestConfig).custom
-    if (custom?.loading) {
-      Loading.hide()
+    if (config.method === 'UPLOAD') {
+      response = await new Promise<UniApp.UploadFileSuccessCallbackResult>((resolve, reject) => {
+        uni.uploadFile({
+          url: `${baseURL}${config.url}`,
+          filePath: config.filePath || '',
+          name: config.name || 'file',
+          formData: config.data,
+          header: headers,
+          timeout,
+          success: resolve,
+          fail: reject,
+        })
+      })
+    }
+    else if (config.method === 'DOWNLOAD') {
+      response = await new Promise<UniApp.DownloadSuccessData>((resolve, reject) => {
+        uni.downloadFile({
+          url: `${baseURL}${config.url}`,
+          timeout,
+          success: resolve,
+          fail: reject,
+        })
+      })
+    }
+    else {
+      const method = config.method as 'GET' | 'POST'
+      response = await new Promise<UniApp.RequestSuccessCallbackResult>((resolve, reject) => {
+        uni.request({
+          url: `${baseURL}${config.url}`,
+          method,
+          data: config.data,
+          header: headers,
+          timeout,
+          success: resolve,
+          fail: reject,
+        })
+      })
     }
 
-    const { code, content, msg } = res.data as {
-      code: string;
-      content?: any;
-      msg?: string;
-    }
+    const resData = parseResponseData((response as any).data)
+    const { code, content, msg } = resData
 
-    // 鉴权错误，进行重新鉴权
-    const authErrors = [
-      // 'Connection refused',
+    const isAuthError = [
       'Full authentication is required to access this resource',
       '访问的接口没有权限',
-    ]
-    const isAuthError = authErrors.some(term => msg?.includes(term))
+    ].some(term => msg?.includes(term))
 
-    if (isAuthError && !custom?.skipHRAuth) {
+    if (isAuthError && !config.custom?.skipHRAuth) {
       accessToken.value = ''
       userIdentity.value = ''
-
-      try {
-        await ensureHrAuth()
-
-        // 鉴权成功后，重新发起当前请求
-        return http.request(res.config)
-      }
-      catch (authErr) {
-        return Promise.reject(authErr)
-      }
+      await ensureHrAuth()
+      return requestCore<T>(config)
     }
 
     if (code === '00000') {
-      return content
+      return content as T
     }
 
     if (code === '50040') {
-      if (!custom?.skipAuthCheck) {
+      if (!config.custom?.skipAuthCheck) {
         Toast('登录过期，请重新登录')
         setTimeout(() => {
           reLaunch('/pages/login/index?reload=1')
         }, 2000)
       }
-
-      return Promise.reject(res.data)
+      return Promise.reject(resData)
     }
 
-    if (custom?.toast !== false) {
+    if (config.custom?.toast !== false) {
       Toast(msg || '请求失败')
     }
-
-    return Promise.reject(res.data)
-  },
-  (err: any) => {
-    const custom = (err.config as HttpRequestConfig)?.custom
-
-    if (custom?.loading !== false) {
-      Loading.hide()
-    }
-
-    if (custom?.toast !== false) {
+    return Promise.reject(resData)
+  }
+  catch (err: any) {
+    if (config.custom?.toast !== false) {
       Toast('网络开小差了')
     }
     return Promise.reject(err)
-  },
-)
+  }
+  finally {
+    if (config.custom?.loading) {
+      Loading.hide()
+    }
+  }
+}
 
-// ==================== 请求方法封装（支持泛型）====================
-type RequestOption = Omit<HttpRequestConfig, 'url' | 'method' | 'data'>
-
-/**
- * 核心请求函数
- * @template T 业务返回数据类型
- * @returns Promise<T> 成功时直接返回 content（业务数据）
- */
 const request = <T = any>(
   url: string,
-  method: 'GET' | 'POST' | 'UPLOAD' | 'DOWNLOAD',
+  method: RequestMethod,
   data?: any,
   options?: RequestOption,
 ): Promise<T> => {
-  return http.request<T>({
+  return requestCore<T>({
     url,
     method,
     data,
     ...options,
-  }) as Promise<T>
+  })
 }
 
 export const upload = <T = any>(
@@ -257,38 +271,26 @@ export const jsonPost = <T = any>(
   })
 }
 
-// ==================== 私有辅助方法 (Private Helpers) ====================
-
-/**
- * 初始化华润鉴权信息
- */
 async function initHuarunAuth() {
   const timestamp = Math.floor(Date.now() / 1000).toString()
   const signStr = PREFIX + APP_ID + timestamp
   const sign = md5(signStr)
 
-  try {
-    const res: any = await portalAuth({ sign, timestamp })
-    accessToken.value = res.accessToken
-    userIdentity.value = res.userIdentity
-  }
-  catch (err) {
-    console.error('鉴权初始化失败:', err)
-    throw err
-  }
+  const res: any = await portalAuth({ sign, timestamp })
+  accessToken.value = res.accessToken
+  userIdentity.value = res.userIdentity
 }
 
-/**
- * 内部鉴权接口请求
- */
 function portalAuth(data: { sign: string; timestamp: string }) {
-  return http.request<any>({
-    url: '/wx/mem/userAuth/portal/auth',
-    method: 'POST',
+  return request<any>(
+    '/wx/mem/userAuth/portal/auth',
+    'POST',
     data,
-    custom: {
-      skipHRAuth: true,
-      toast: false,
+    {
+      custom: {
+        skipHRAuth: true,
+        toast: false,
+      },
     },
-  })
+  )
 }

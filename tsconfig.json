@@ -10,7 +10,7 @@
       "@/*": ["src/*"]
     },
     "resolveJsonModule": true,
-    "types": ["@dcloudio/types", "@uni-helper/uni-app-types", "miniprogram-api-typings", "uview-plus/types"],
+    "types": ["@dcloudio/types", "@uni-helper/uni-app-types", "miniprogram-api-typings"],
     "allowJs": true,
     "strict": true,
     "strictNullChecks": true,
@@ -27,7 +27,8 @@
     "src/**/*.ts",
     "src/**/*.d.ts",
     "src/**/*.tsx",
-    "src/**/*.vue"
+    "src/**/*.vue",
+    "node_modules/tdesign-uniapp/global.d.ts"
   ],
   "exclude": ["dist", "node_modules", "uni_modules"]
 }

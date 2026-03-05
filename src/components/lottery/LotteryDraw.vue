@@ -1,11 +1,11 @@
 <template>
-  <u-popup
-    :show="show"
-    mode="center"
-    bg-color="transparent"
-    overlay-opacity="0.0"
+  <t-popup
+    :visible="show"
+    placement="center"
+    :custom-style="{ background: 'transparent' }"
+    :overlay-props="{ backgroundColor: 'rgba(0, 0, 0, 0)' }"
     :safe-area-inset-bottom="false"
-    :close-on-click-overlay="false"
+    :close-on-overlay-click="false"
   >
     <view v-if="show" class="relative h-screen w-screen overflow-hidden">
       <view
@@ -52,17 +52,17 @@
         />
 
         <view v-if="!isLogin && !authLoading" class="z-10 opacity-0 -mt-120">
-          <u-button v-if="!isAgree" :custom-style="loginBtnStyle" @click="showPrivacy = true" />
+          <t-button v-if="!isAgree" :custom-style="loginBtnStyle" @click="showPrivacy = true" />
           <block v-else>
-            <u-button v-if="isMember" :custom-style="loginBtnStyle" @click.stop="handleLogin" />
-            <u-button v-else :custom-style="loginBtnStyle" open-type="getPhoneNumber" @getphonenumber="handleLogin" />
+            <t-button v-if="isMember" :custom-style="loginBtnStyle" @click.stop="handleLogin" />
+            <t-button v-else :custom-style="loginBtnStyle" open-type="getPhoneNumber" @getphonenumber="handleLogin" />
           </block>
         </view>
 
         <PrivacyInfo v-if="!isLogin" v-model="isAgree" :theme-code="themeCode" label-color="white" class="mt-30" />
       </view>
     </view>
-  </u-popup>
+  </t-popup>
 
   <PrivacyPopup v-model="showPrivacy" @agree="isAgree = true" />
 </template>
@@ -195,7 +195,7 @@ const clearAllTasks = () => {
 defineExpose({ playDrawAnim })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .btn-fade-out {
   animation: fadeOut 0.6s ease-out forwards;
   pointer-events: none;

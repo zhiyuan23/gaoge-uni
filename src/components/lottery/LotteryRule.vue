@@ -1,12 +1,12 @@
 <template>
-  <u-popup
-    :show="show"
-    mode="center"
-    bg-color="transparent"
-    overlay-opacity="0.8"
+  <t-popup
+    :visible="show"
+    placement="center"
+    :custom-style="{ background: 'transparent' }"
+    :overlay-props="{ backgroundColor: 'rgba(0, 0, 0, 0.8)' }"
     :safe-area-inset-bottom="false"
-    :close-on-click-overlay="true"
-    @close="show = false"
+    :close-on-overlay-click="true"
+    @visible-change="onVisibleChange"
   >
     <view class="flex-col-center -mt-100">
       <!-- 关闭按钮 -->
@@ -35,7 +35,7 @@
         </view>
       </view>
     </view>
-  </u-popup>
+  </t-popup>
 </template>
 
 <script setup lang="ts">
@@ -51,6 +51,12 @@ const show = defineModel<boolean>({ required: true })
 const formattedRuleInfo = computed(() => {
   return formatRichText(props.ruleInfo)
 })
+
+const onVisibleChange = ({ visible }: { visible: boolean }) => {
+  if (!visible) {
+    show.value = false
+  }
+}
 
 const handleClose = () => {
   show.value = false

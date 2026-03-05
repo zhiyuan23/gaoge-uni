@@ -1,9 +1,10 @@
 <template>
-  <u-popup
-    :show="show"
-    round="20"
+  <t-popup
+    :visible="show"
+    placement="bottom"
+    :custom-style="{ borderRadius: '20rpx 20rpx 0 0' }"
     :safe-area-inset-bottom="false"
-    @close="handleClose"
+    @visible-change="onVisibleChange"
   >
     <view class="px-45 text-30">
       <view class="pt-50 leading-30">
@@ -28,59 +29,56 @@
 
       <view class="flex-center-center pt-120 pb-20 gap-30">
         <view class="w-300">
-          <u-button
-            type="default"
+          <t-button
+            theme="default"
             shape="square"
             :custom-style="btnStyle"
             @click="handleDisagree"
           >
             以后再说
-          </u-button>
+          </t-button>
         </view>
         <view class="w-300">
           <template v-if="props.needAuth">
             <!-- 手机号授权登录 -->
-            <u-button
+            <t-button
               v-if="!isMember"
-              type="primary"
+              theme="primary"
               shape="square"
-              color="var(--wechat-primary)"
-              :custom-style="btnStyle"
+              :custom-style="{ ...btnStyle, backgroundColor: 'var(--wechat-primary)', borderColor: 'var(--wechat-primary)' }"
               open-type="getPhoneNumber"
               @getphonenumber="getPhoneNumer"
             >
               允许
-            </u-button>
+            </t-button>
 
             <!-- 静默登录 -->
-            <u-button
+            <t-button
               v-else
-              type="primary"
+              theme="primary"
               shape="square"
-              color="var(--wechat-primary)"
-              :custom-style="btnStyle"
+              :custom-style="{ ...btnStyle, backgroundColor: 'var(--wechat-primary)', borderColor: 'var(--wechat-primary)' }"
               @click="handeLogin"
             >
               允许
-            </u-button>
+            </t-button>
           </template>
 
           <!-- 非授权操作 -->
-          <u-button
+          <t-button
             v-else
-            type="primary"
+            theme="primary"
             shape="square"
-            color="var(--wechat-primary)"
-            :custom-style="btnStyle"
+            :custom-style="{ ...btnStyle, backgroundColor: 'var(--wechat-primary)', borderColor: 'var(--wechat-primary)' }"
             @click="handleAgree"
           >
             允许
-          </u-button>
+          </t-button>
         </view>
       </view>
     </view>
     <view class="w-full h-50" />
-  </u-popup>
+  </t-popup>
 </template>
 
 <script setup lang="ts">
@@ -109,6 +107,12 @@ const btnStyle = ref({
   fontSize: '32rpx',
   borderRadius: '10rpx',
 })
+
+const onVisibleChange = ({ visible }: { visible: boolean }) => {
+  if (!visible) {
+    handleClose()
+  }
+}
 
 // 手机号一键登录
 const getPhoneNumer = async (e: any) => {

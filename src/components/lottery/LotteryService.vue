@@ -1,12 +1,12 @@
 <template>
-  <u-popup
-    :show="show"
-    mode="bottom"
-    bg-color="transparent"
-    overlay-opacity="0.6"
+  <t-popup
+    :visible="show"
+    placement="bottom"
+    :custom-style="{ background: 'transparent' }"
+    :overlay-props="{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }"
     :safe-area-inset-bottom="false"
-    :close-on-click-overlay="true"
-    @close="show = false"
+    :close-on-overlay-click="true"
+    @visible-change="onVisibleChange"
   >
     <view class="flex-col-center">
       <!-- 主体区域 -->
@@ -56,7 +56,7 @@
         </view>
       </view>
     </view>
-  </u-popup>
+  </t-popup>
 </template>
 
 <script setup lang="ts">
@@ -68,6 +68,12 @@ const { openCustomerService } = useCustomerService()
 
 const show = defineModel<boolean>({ required: true })
 const iconPath = computed(() => themeCode.value === 'ml' ? '-ml' : '')
+
+const onVisibleChange = ({ visible }: { visible: boolean }) => {
+  if (!visible) {
+    show.value = false
+  }
+}
 
 // 在线客户
 const handleGoOnline = () => {

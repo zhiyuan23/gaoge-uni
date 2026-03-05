@@ -14,10 +14,9 @@
       <!-- 个人信息 -->
       <view class="w-full flex-center-start rounded-t-6 bg-#FEFBF2 h-146 -mt-110" @click="goUserPage">
         <view class="pl-50 pr-20">
-          <u-avatar
-            :src="userInfo?.avatarUrl"
-            :default-url="`${IMG_BASE_URL}/icons/ic-avatar.png`"
-            size="55"
+          <t-avatar
+            :image="userInfo?.avatarUrl || `${IMG_BASE_URL}/icons/ic-avatar.png`"
+            size="55px"
           />
         </view>
         <view class="flex-col-center">

@@ -16,14 +16,14 @@
       <!-- 左侧图标区域 -->
       <view class="flex-center">
         <view v-if="props.loading" class="mr-10">
-          <u-loading-icon
+          <t-loading
             size="26"
-            mode="semicircle"
-            :color="loadingColor"
+            theme="spinner"
+            :custom-style="{ color: loadingColor }"
           />
         </view>
 
-        <u-icon
+        <t-icon
           v-else-if="iconName"
           :name="iconName"
           color="#fff"
@@ -69,7 +69,7 @@ const type = computed(() => props.type || 'main')
 const width = computed(() => props.width || '540')
 const height = computed(() => props.height || '102')
 const iconName = computed(() => props.iconUrl || '')
-const iconSize = computed(() => props.iconSize || '60rpx')
+const iconSize = computed(() => props.iconSize || '60px')
 const btnStyle = computed(() => props.btnStyle || [])
 const fontStyle = computed(() => props.fontStyle || [])
 const fontColor = computed(() => props.fontColor || 'FFFFFF')

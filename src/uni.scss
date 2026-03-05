@@ -1,58 +1,52 @@
-@import 'uview-plus/theme.scss';
+:root,
+page {
+  --app-font-base: 28rpx;
+  --app-text-main: #000;
+  --app-bg-color: #f3f4f6;
+  --app-primary: #007e41;
+  --td-brand-color-1: #e6f4ec;
+  --td-brand-color-2: #c6e6d5;
+  --td-brand-color-3: #9fd4b7;
+  --td-brand-color-4: #73c095;
+  --td-brand-color-5: #46ab73;
+  --td-brand-color-6: #2f985f;
+  --td-brand-color-7: #007e41;
+  --td-brand-color-8: #006635;
+  --td-brand-color-9: #004f2a;
+  --td-brand-color-10: #003920;
+  --td-primary-color-1: var(--td-brand-color-1);
+  --td-primary-color-2: var(--td-brand-color-2);
+  --td-primary-color-3: var(--td-brand-color-3);
+  --td-primary-color-4: var(--td-brand-color-4);
+  --td-primary-color-5: var(--td-brand-color-5);
+  --td-primary-color-6: var(--td-brand-color-6);
+  --td-primary-color-7: var(--td-brand-color-7);
+  --td-primary-color-8: var(--td-brand-color-8);
+  --td-primary-color-9: var(--td-brand-color-9);
+  --td-primary-color-10: var(--td-brand-color-10);
+  --td-brand-color: var(--td-primary-color-7);
+  --td-brand-color-active: var(--td-primary-color-8);
+  --td-brand-color-disabled: var(--td-primary-color-3);
+  --td-brand-color-focus: var(--td-primary-color-1);
+  --td-brand-color-light: var(--td-primary-color-1);
+  --td-brand-color-light-active: var(--td-primary-color-2);
+}
 
-/* 颜色变量 */
-$u-primary: #007E41;
-$u-primary-dark: #76a3fd;
-$u-success: #3ed268;
-$u-warning: #fe9831;
-$u-error: #fa4e62;
-
-/* 文字基本颜色 */
-$u-main-color: #000;
-$u-content-color: #60687e;
-$u-tips-color: #7e869a;
-$u-light-color: #bdc3d2;
-$u-disabled-color: #dce0eb;
-
-/* 背景颜色 */
-$u-bg-color: #F3F4F6;
-$u-panel-color: #242831;
-
-/* 尺寸变量 */
-
-/* 文字尺寸 */
-$u-font-sm: 24rpx;
-$u-font-base: 28rpx;
-$u-font-lg: 30rpx;
-
-/* 图片尺寸 */
-$u-img-sm: 40rpx;
-$u-img-base: 52rpx;
-$u-img-lg: 80rpx;
-
-/* Border Radius */
-$u-border-radius-sm: 4rpx;
-$u-border-radius-base: 6rpx;
-$u-border-radius-lg: 12rpx;
-$u-border-radius-btn: 50rpx;
-$u-border-radius-circle: 50%;
-
-/* 按钮样式 */
-$u-button-height: 80rpx;
-$u-button-font-size: 32rpx;
-$u-button-border-radius: 40rpx;
-$u-button-text-color: #fff;
-$u-button-bg-color: #007E41;
-
-/* 水平间距 */
-$u-spacing-row-sm: 10rpx;
-$u-spacing-row-base: 20rpx;
-$u-spacing-row-lg: 30rpx;
-
-/* 垂直间距 */
-$u-spacing-col-sm: 8rpx;
-$u-spacing-col-base: 16rpx;
-$u-spacing-col-lg: 24px;
-
-/* 透明度 */
-$u-opacity-disabled: 0.3;
+@media (prefers-color-scheme: dark) {
+  :root,
+  page {
+    --app-text-main: #f5f7fa;
+    --app-bg-color: #161a20;
+    --app-primary: #46ab73;
+    --td-brand-color-1: #12221b;
+    --td-brand-color-2: #173126;
+    --td-brand-color-3: #1b4232;
+    --td-brand-color-4: #20533f;
+    --td-brand-color-5: #26654d;
+    --td-brand-color-6: #2f7a5c;
+    --td-brand-color-7: #46ab73;
+    --td-brand-color-8: #68bf8f;
+    --td-brand-color-9: #8dd4ad;
+    --td-brand-color-10: #b3e9cb;
+  }
+}

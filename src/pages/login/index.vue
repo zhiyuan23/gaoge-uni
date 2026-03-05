@@ -15,39 +15,37 @@
       怡宝畅饮站
     </view>
     <view class="relative mt-260 mb-160 w-540 text-32">
-      <u-button
+      <t-button
         v-if="!isAgree"
-        type="primary"
+        theme="primary"
         shape="circle"
         :custom-style="btnStyle"
         @click="showPrivacy = true"
       >
         {{ isMember ? '微信登录' : '一键登录' }}
-      </u-button>
+      </t-button>
       <block v-else>
-        <u-button
+        <t-button
           v-if="isMember"
-          type="primary"
+          theme="primary"
           shape="circle"
           :custom-style="btnStyle"
           :loading="loading"
-          loading-text="登录中"
           @click="handleLogin"
         >
           微信登录
-        </u-button>
-        <u-button
+        </t-button>
+        <t-button
           v-else
-          type="primary"
+          theme="primary"
           shape="circle"
           :custom-style="btnStyle"
           :loading="loading"
-          loading-text="登录中"
           open-type="getPhoneNumber"
           @getphonenumber="handleLogin"
         >
           一键登录
-        </u-button>
+        </t-button>
       </block>
     </view>
 
@@ -79,8 +77,14 @@ onLoad((options: any) => {
 
 // 提交按钮相关
 const btnStyle = reactive({
+  width: '540rpx',
   fontSize: '32rpx',
   height: '80rpx',
+  lineHeight: '80rpx',
+  borderRadius: '40rpx',
+  backgroundColor: 'var(--wechat-primary)',
+  borderColor: 'var(--wechat-primary)',
+  color: '#fff',
 })
 
 // 点击登录
@@ -99,8 +103,9 @@ const onAgree = () => {
 }
 </script>
 
-<style scpoed>
-:deep(.u-checkbox__label-wrap text) {
-  font-size: 24rpx !important;
+<style scoped>
+:deep(.t-button__text) {
+  font-size: 32rpx;
+  font-weight: 500;
 }
 </style>

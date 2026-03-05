@@ -1,12 +1,12 @@
 <template>
-  <u-popup
-    :show="show"
-    mode="bottom"
-    bg-color="transparent"
-    overlay-opacity="0.0"
+  <t-popup
+    :visible="show"
+    placement="bottom"
+    :custom-style="{ background: 'transparent' }"
+    :overlay-props="{ backgroundColor: 'rgba(0, 0, 0, 0)' }"
     :safe-area-inset-bottom="false"
-    :close-on-click-overlay="true"
-    @close="handleClose"
+    :close-on-overlay-click="true"
+    @visible-change="onVisibleChange"
   >
     <view class="flex-col-center">
       <view class="relative w-full overflow-hidden">
@@ -60,7 +60,7 @@
                 <view v-if="item.status === 'to_be_exchange'" class="flex-col-start-center">
                   <view
                     v-if="item.prizeType === 'small_red_envelope'"
-                    class="u-press btn"
+                    class="t-press btn"
                     :style="{ backgroundColor: color }"
                     @click="handleAction('withdraw', item.id)"
                   >
@@ -68,7 +68,7 @@
                   </view>
                   <view
                     v-else-if="item.prizeType === 'large_red_envelope'"
-                    class="btn u-press"
+                    class="btn t-press"
                     :style="{ backgroundColor: color }"
                     @click="handleAction('fillInfo', item.id)"
                   >
@@ -76,7 +76,7 @@
                   </view>
                   <view
                     v-else-if="item.prizeType === 'one_yuan_exchange'"
-                    class="btn u-press"
+                    class="btn t-press"
                     :style="{ backgroundColor: color }"
                     @click="handleAction('nearbyStore', item.id)"
                   >
@@ -120,7 +120,7 @@
         </scroll-view>
       </view>
     </view>
-  </u-popup>
+  </t-popup>
 </template>
 
 <script setup lang="ts">
@@ -142,6 +142,12 @@ const emit = defineEmits<{
 
 const { color } = useTheme()
 const show = defineModel<boolean>({ required: true })
+
+const onVisibleChange = ({ visible }: { visible: boolean }) => {
+  if (!visible) {
+    handleClose()
+  }
+}
 
 // 关闭弹窗
 const handleClose = () => {

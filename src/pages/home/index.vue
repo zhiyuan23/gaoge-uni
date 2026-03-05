@@ -3,13 +3,13 @@
     <SeriesList />
 
     <!-- 微信扫一扫未匹配到主题进入首页弹出扫码结果 -->
-    <u-overlay opacity="0.8" :show="showResult">
+    <t-overlay background-color="rgba(0, 0, 0, 0.8)" :visible="showResult">
       <LotteryResult
         v-model="showResult"
         :prize-info="drawResultInfo"
         @confirm="onScan"
       />
-    </u-overlay>
+    </t-overlay>
   </view>
 </template>
 

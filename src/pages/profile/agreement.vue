@@ -18,7 +18,7 @@
           </text>
         </view>
         <view class="absolute right-20">
-          <u-icon name="arrow-right" color="#909399" />
+          <t-icon name="chevron-right" color="#909399" />
         </view>
       </view>
 
@@ -37,7 +37,7 @@
           </text>
         </view>
         <view class="absolute right-20">
-          <u-icon name="arrow-right" color="#909399" />
+          <t-icon name="chevron-right" color="#909399" />
         </view>
       </view>
     </view>

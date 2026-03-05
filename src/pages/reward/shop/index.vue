@@ -35,7 +35,7 @@
         class="absolute z-20 size-48 flex-center rounded-full bg-white shadow-lg right-16 bottom-80"
         @click.stop="reLocate"
       >
-        <u-icon name="map" size="32" color="#07c160" />
+        <t-icon name="map" size="32" color="#07c160" />
       </view>
     </view>
 
@@ -75,7 +75,7 @@
                 {{ store.name }}
               </view>
               <view
-                class="u-press btn flex-center-center flex-shrink-0 rounded-20 ml-10 w-130 h-40 text-20 border-2-solid-#FFF"
+                class="t-press btn flex-center-center flex-shrink-0 rounded-20 ml-10 w-130 h-40 text-20 border-2-solid-#FFF"
                 :data-theme="themeCode"
                 @click.stop="goFeedback(store)"
               >

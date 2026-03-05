@@ -84,7 +84,7 @@
 
         <view v-if="!isSubmitted" class="w-full flex-center-center pt-33">
           <view
-            class="u-press flex-center-center rounded-4 color-white w-460 h-70"
+            class="t-press flex-center-center rounded-4 color-white w-460 h-70"
             :style="{ background: color }"
             @click="handleSubmit"
           >

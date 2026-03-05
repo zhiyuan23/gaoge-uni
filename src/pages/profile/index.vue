@@ -18,7 +18,7 @@
           @chooseavatar="onChooseAvatar"
         />
         <view class="icon">
-          <u-icon name="arrow-right" color="#909399" />
+          <t-icon name="chevron-right" color="#909399" />
         </view>
       </view>
       <view class="line" />
@@ -41,7 +41,7 @@
           @blur="onChangeNickname"
         >
         <view class="icon">
-          <u-icon name="arrow-right" color="#909399" />
+          <t-icon name="chevron-right" color="#909399" />
         </view>
       </view>
       <view class="line" />
@@ -60,7 +60,7 @@
         <text>性别</text>
         <view>{{ userInfo.genderName || '去完善' }}</view>
         <view class="icon">
-          <u-icon name="arrow-right" color="#909399" />
+          <t-icon name="chevron-right" color="#909399" />
         </view>
       </view>
       <view class="line" />
@@ -70,19 +70,18 @@
         <text>生日</text>
         <view>{{ userInfo.birthDate || '去完善' }}</view>
         <view class="icon">
-          <u-icon name="arrow-right" color="#909399" />
+          <t-icon name="chevron-right" color="#909399" />
         </view>
       </view>
 
       <!-- 日期选择器 -->
-      <u-datetime-picker
-        v-model="birthdayTimestamp"
-        :show="showDatePicker"
+      <t-date-time-picker
+        v-model:value="birthdayTimestamp"
+        :visible="showDatePicker"
         title="选择生日"
         mode="date"
-        :min-date="minDate"
-        :max-date="maxDate"
-        confirm-color="var(--primary)"
+        :start="minDate"
+        :end="maxDate"
         @cancel="showDatePicker = false"
         @close="showDatePicker = false"
         @confirm="onConfirmBirthday"
@@ -94,7 +93,7 @@
       <view class="row" @tap="gotoAgreement">
         <text>协议与说明</text>
         <view class="icon">
-          <u-icon name="arrow-right" color="#909399" />
+          <t-icon name="chevron-right" color="#909399" />
         </view>
       </view>
 
@@ -103,7 +102,7 @@
         <view class="row" @tap="handleLogout">
           <text>退出登录</text>
           <view class="icon">
-            <u-icon name="arrow-right" color="#909399" />
+            <t-icon name="chevron-right" color="#909399" />
           </view>
         </view>
       </template>

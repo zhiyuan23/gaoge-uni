@@ -25,7 +25,7 @@
         @confirm="emit('search', searchValue)"
       >
 
-      <u-icon
+      <t-icon
         v-if="searchValue"
         name="close-circle-fill"
         size="20"
@@ -35,13 +35,6 @@
       />
     </view>
   </view>
-
-  <RegionPicker
-    v-model:show="showCityPicker"
-    :default-value="selectedArea"
-    :level="2"
-    @confirm="onSelectCity"
-  />
 </template>
 
 <script setup lang="ts">
@@ -81,21 +74,6 @@ const displayCityName = computed(() => {
   }
   return '请选择省市'
 })
-
-// 选择确认回调
-const onSelectCity = (value: any) => {
-  const provinceItem = value?.[0] || { name: '', code: '' }
-  const cityItem = value?.[1] || { name: '', code: '' }
-
-  const provinceCode = provinceItem.code || ''
-  const cityCode = cityItem.code || ''
-
-  selectedArea.value = [provinceCode, cityCode]
-
-  emit('regionConfirm', value)
-
-  showCityPicker.value = false
-}
 
 // 搜索相关
 const onInput = () => {
